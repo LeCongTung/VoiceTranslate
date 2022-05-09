@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.activities.Show_Content"
+
+    android:background="@color/backgroundColor">
+
+    <RelativeLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:padding="25dp">
+
+        <RelativeLayout
+            android:id="@+id/controller"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/btn_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+
+                android:drawableStart="@drawable/ic_back"
+                android:drawablePadding="3dp"
+
+                android:fontFamily="@font/poppins_medium"
+                android:lineHeight="30dp"
+                android:text="Back"
+                android:textColor="@color/heading_listitem"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/title_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/poppins_medium"
+                android:lineHeight="30dp"
+                android:text="@string/restorePurchase"
+                android:textColor="@color/word"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/btn_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+
+                android:fontFamily="@font/poppins_medium"
+                android:lineHeight="24dp"
+                android:text="Done"
+                android:textColor="@color/heading_listitem"
+                android:textSize="16dp" />
+        </RelativeLayout>
+
+
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/controller"
+
+            android:layout_marginTop="10dp"
+
+            android:background="@drawable/bg_search_radius"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="10dp"
+
+            android:fontFamily="@font/poppins_medium"
+            android:lineHeight="24dp"
+            android:padding="10dp"
+            android:text="Search"
+            android:textColor="@color/styleSearch"
+            android:textSize="16dp" />
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/appBar"
+
+        android:scrollbars="none"
+
+        android:background="@color/white"
+        tools:listitem="@layout/item_content" />
+</RelativeLayout>

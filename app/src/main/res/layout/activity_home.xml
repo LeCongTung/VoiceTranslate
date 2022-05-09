@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screens.Home"
+
+    android:padding="30dp"
+
+    android:background="@color/backgroundColor">
+
+<!--    Navigation-->
+    <LinearLayout
+        android:id="@+id/navigationbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="4"
+        android:orientation="horizontal"
+
+
+
+        android:background="@color/backgroundColor">
+
+        <ImageButton
+            android:id="@+id/nav_offlinePhrasebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="1"
+
+            android:background="@drawable/bg_item_nav_effect"
+            android:padding="5dp"
+            android:src="@drawable/nav_ic_offlinephrasebook" />
+
+        <ImageButton
+            android:id="@+id/nav_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:background="@drawable/bg_item_nav_effect"
+
+            android:padding="5dp"
+            android:src="@drawable/nav_ic_camera" />
+
+        <ImageButton
+            android:id="@+id/nav_another"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:background="@drawable/bg_item_nav_effect"
+
+            android:padding="5dp"
+            android:src="@drawable/nav_ic_cubes" />
+
+        <ImageButton
+            android:id="@+id/nav_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:background="@drawable/bg_item_nav_effect"
+
+            android:padding="5dp"
+            android:src="@drawable/nav_ic_setting" />
+    </LinearLayout>
+
+<!--    Content-->
+    <RelativeLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/btn_speakingMain"
+        android:layout_below="@id/navigationbar"
+
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bg_white_radius"
+
+        android:padding="30dp">
+
+        <!--        The word need be translate-->
+        <RelativeLayout
+            android:id="@+id/fromLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/flagLanguageFrom"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+
+                android:src="@drawable/ic_flag_american" />
+
+            <TextView
+                android:id="@+id/nameLanguageFrom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+
+                android:layout_toRightOf="@id/flagLanguageFrom"
+
+                android:fontFamily="@font/poppins_medium"
+                android:text="English"
+                android:textColor="@color/word"
+                android:textSize="20sp" />
+
+            <ImageButton
+                android:id="@+id/btn_speakingFrom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+
+                android:background="@drawable/bg_item_btn_effect"
+                android:src="@drawable/ic_speaking" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/valueFrom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/fromLanguage"
+
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_white_radius">
+
+            <EditText
+                android:id="@+id/value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:background="@color/white"
+
+                android:fontFamily="@font/poppins_medium"
+                android:hint="Enter text here"
+                android:lineHeight="30dp"
+                android:textColor="@color/word"
+                android:textSize="20sp" />
+        </RelativeLayout>
+
+        <!--        Swap-->
+        <RelativeLayout
+            android:id="@+id/contentSwap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="5dp"
+                android:layout_centerVertical="true"
+
+                android:background="@drawable/img_line" />
+
+            <ImageButton
+                android:id="@+id/btn_swap"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+
+                android:layout_centerInParent="true"
+
+                android:background="@drawable/bg_item_btn_effect"
+
+                android:padding="10dp"
+                android:paddingHorizontal="20dp"
+                android:src="@drawable/ic_exchange" />
+
+        </RelativeLayout>
+
+        <!--        The word was translated-->
+        <RelativeLayout
+            android:id="@+id/toLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contentSwap"
+
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/flagLanguageTo"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+
+                android:src="@drawable/ic_flag_spanish" />
+
+            <TextView
+                android:id="@+id/nameLanguage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+
+                android:layout_toRightOf="@id/flagLanguageTo"
+
+                android:fontFamily="@font/poppins_medium"
+                android:text="Spanish"
+                android:textColor="@color/word"
+                android:textSize="20sp" />
+
+            <ImageButton
+                android:id="@+id/btn_speakingTo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+
+                android:background="@drawable/bg_item_btn_effect"
+                android:src="@drawable/ic_speaking" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/valueFromTo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/toLanguage"
+
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_white_radius">
+
+            <TextView
+                android:id="@+id/valueTo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/btn_moreInfo"
+
+                android:background="@color/white"
+
+                android:fontFamily="@font/poppins_medium"
+
+                android:hint="Spanish"
+                android:lineHeight="30dp"
+                android:paddingEnd="10dp"
+                android:textColor="@color/word"
+                android:textSize="20sp" />
+
+            <ImageButton
+                android:id="@+id/btn_moreInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+
+                android:background="@drawable/bg_item_btn_effect"
+                android:src="@drawable/ic_more" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+<!--    Speaking-->
+    <RelativeLayout
+        android:id="@+id/btn_speakingMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+
+        android:layout_marginTop="30dp">
+
+        <LinearLayout
+            android:id="@+id/contentBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:layout_centerVertical="true"
+
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_speakFromBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:layout_weight="1"
+
+                android:background="@drawable/btn_speaking_left"
+
+                android:text="English"
+                android:textAllCaps="false"
+                android:fontFamily="@font/poppins_medium"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/btn_speakToBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="55dp"
+                android:layout_weight="1"
+
+                android:background="@drawable/btn_speaking_right"
+
+                android:text="Spanish"
+                android:textAllCaps="false"
+                android:fontFamily="@font/poppins_medium"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btn_speak"
+            android:layout_width="63dp"
+            android:layout_height="63dp"
+            android:layout_centerInParent="true"
+
+            android:background="@drawable/btn_speaking_center"
+            android:paddingHorizontal="15dp"
+
+            android:paddingVertical="5dp"
+            android:src="@drawable/ic_voice" />
+    </RelativeLayout>
+</RelativeLayout>
