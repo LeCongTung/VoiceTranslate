@@ -74,10 +74,11 @@
             android:drawableStart="@drawable/ic_search"
             android:drawablePadding="10dp"
 
+            android:maxLines="1"
             android:fontFamily="@font/poppins_medium"
+            android:hint="Search"
             android:lineHeight="24dp"
             android:padding="10dp"
-            android:hint="Search"
             android:textColor="@color/styleSearch"
             android:textSize="16dp" />
     </RelativeLayout>

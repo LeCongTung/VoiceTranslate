@@ -19,8 +19,9 @@
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/activity_home.xml" value="0.31666666666666665" />
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/activity_setting.xml" value="0.33" />
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/activity_show_content.xml" value="0.31666666666666665" />
-        <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/activity_show_offline_phrase_book.xml" value="0.31666666666666665" />
+        <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/activity_show_offline_phrase_book.xml" value="0.33" />
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/item_content.xml" value="0.31666666666666665" />
+        <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/item_topic.xml" value="0.5" />
       </map>
     </option>
   </component>

@@ -17,6 +17,10 @@ class ShowContent : AppCompatActivity() {
         val tvTitle: TextView = findViewById(R.id.title_content)
         val btnDone: TextView = findViewById(R.id.btn_done)
 
+//        Get data from previous screen
+        val title = intent.getStringExtra("title").toString()
+        tvTitle.setText(title)
+
 //        Excute button -- when click button
         btnBack.setOnClickListener {
 
