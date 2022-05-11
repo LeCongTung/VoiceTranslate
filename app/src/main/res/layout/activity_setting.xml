@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
 
             android:background="@drawable/bg_item_btn_effect"
-            android:src="@drawable/ic_close" />
+            android:src="@drawable/ic_lose" />
 
         <TextView
             android:id="@+id/title_lastestupdate"

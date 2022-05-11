@@ -7,7 +7,6 @@
 
             <solid
                 android:color="@color/backgroundColor"/>
-
             <corners
                 android:radius="20px"/>
         </shape>
@@ -18,8 +17,7 @@
         <shape android:shape="rectangle">
 
             <solid
-                android:color="@color/effectClick"/>
-
+                android:color="@color/white"/>
             <corners
                 android:radius="20px"/>
         </shape>

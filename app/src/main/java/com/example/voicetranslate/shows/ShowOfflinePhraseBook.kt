@@ -1,24 +1,25 @@
-package com.example.voicetranslate.screens
+package com.example.voicetranslate.shows
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import com.example.voicetranslate.R
 
-class Setting : AppCompatActivity() {
+class ShowOfflinePhraseBook : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_setting)
+        setContentView(R.layout.activity_show_offline_phrase_book)
 
 //        Init
-        val btnClose: ImageButton = findViewById(R.id.btn_close)
+        val btnDone: TextView = findViewById(R.id.btn_done)
 
 //        Excute event -- when click button
-        btnClose.setOnClickListener {
+        btnDone.setOnClickListener {
 
-            val intent = Intent(this, Home::class.java)
+            val intent = Intent(this, ShowContent::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
         }
@@ -33,7 +34,7 @@ class Setting : AppCompatActivity() {
 
 //    Function -- Toast
     private fun show(message: String) {
-        Toast.makeText(this,message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
     }
 
 }

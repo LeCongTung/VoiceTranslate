@@ -18,8 +18,6 @@
         android:weightSum="4"
         android:orientation="horizontal"
 
-
-
         android:background="@color/backgroundColor">
 
         <ImageButton
@@ -115,7 +113,7 @@
                 android:layout_centerVertical="true"
 
                 android:background="@drawable/bg_item_btn_effect"
-                android:src="@drawable/ic_speaking" />
+                android:src="@drawable/ic_volume" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -146,27 +144,26 @@
             android:id="@+id/contentSwap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true">
+            android:layout_centerInParent="true">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
+                android:layout_height="3dp"
                 android:layout_centerVertical="true"
 
                 android:background="@drawable/img_line" />
 
             <ImageButton
                 android:id="@+id/btn_swap"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
                 android:layout_centerInParent="true"
 
                 android:background="@drawable/bg_item_btn_effect"
-
-                android:padding="10dp"
+                android:paddingVertical="10dp"
                 android:paddingHorizontal="20dp"
-                android:src="@drawable/ic_exchange" />
+                android:src="@drawable/ic_swap" />
 
         </RelativeLayout>
 
@@ -208,7 +205,7 @@
                 android:layout_centerVertical="true"
 
                 android:background="@drawable/bg_item_btn_effect"
-                android:src="@drawable/ic_speaking" />
+                android:src="@drawable/ic_volume" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -244,7 +241,7 @@
                 android:layout_centerVertical="true"
 
                 android:background="@drawable/bg_item_btn_effect"
-                android:src="@drawable/ic_more" />
+                android:src="@drawable/ic_moreinfo"/>
         </RelativeLayout>
     </RelativeLayout>
 
@@ -299,14 +296,12 @@
 
         <ImageButton
             android:id="@+id/btn_speak"
-            android:layout_width="63dp"
-            android:layout_height="63dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:layout_centerInParent="true"
 
             android:background="@drawable/btn_speaking_center"
-            android:paddingHorizontal="15dp"
 
-            android:paddingVertical="5dp"
             android:src="@drawable/ic_voice" />
     </RelativeLayout>
 </RelativeLayout>

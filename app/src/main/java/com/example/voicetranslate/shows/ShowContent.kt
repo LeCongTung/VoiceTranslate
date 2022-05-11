@@ -1,24 +1,26 @@
-package com.example.voicetranslate.screens
+package com.example.voicetranslate.shows
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import com.example.voicetranslate.R
 
-class Setting : AppCompatActivity() {
+class ShowContent : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_setting)
+        setContentView(R.layout.activity_show_content)
 
 //        Init
-        val btnClose: ImageButton = findViewById(R.id.btn_close)
+        val btnBack: TextView = findViewById(R.id.btn_back)
+        val tvTitle: TextView = findViewById(R.id.title_content)
+        val btnDone: TextView = findViewById(R.id.btn_done)
 
-//        Excute event -- when click button
-        btnClose.setOnClickListener {
+//        Excute button -- when click button
+        btnBack.setOnClickListener {
 
-            val intent = Intent(this, Home::class.java)
+            val intent = Intent(this, ShowOfflinePhraseBook::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
         }
