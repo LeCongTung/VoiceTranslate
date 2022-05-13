@@ -12,7 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
+import android.text.Editable
 import android.view.View
 import android.view.translation.Translator
 import android.widget.*
@@ -29,12 +32,14 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_home.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 class Home : AppCompatActivity() {
 
 //    Camera
     private val CAMERA_REQUEST_CODE = 1
     private val GALLERY_REQUEST_CODE = 2
+    private val RECORD_SPEECH_TEXT = 102
 
     var backPressedTime: Long = 0
 
@@ -104,38 +109,14 @@ class Home : AppCompatActivity() {
             valueLFrom.setText("")
         }
 
-        var code_changeColor = 1
-        btnSpeakingBottom.setOnClickListener {
-
-            if (code_changeColor == 1){
-
-                val colorWhite = "#FFFFFF"
-                btnSpeakingBottomFrom.setBackgroundResource(R.drawable.btn_speaking_left)
-                btnSpeakingBottomFrom.setTextColor(Color.parseColor(colorWhite))
-                btnSpeakingBottomTo.setBackgroundResource(R.drawable.btn_speaking_right)
-                btnSpeakingBottomTo.setTextColor(Color.parseColor(colorWhite))
-
-                code_changeColor = 0
-            }else{
-
-                val colorWord = "#262C30"
-                btnSpeakingBottomFrom.setBackgroundResource(R.drawable.btn_speaking_default)
-                btnSpeakingBottomFrom.setTextColor(Color.parseColor(colorWord))
-                btnSpeakingBottomTo.setBackgroundResource(R.drawable.btn_speaking_default)
-                btnSpeakingBottomTo.setTextColor(Color.parseColor(colorWord))
-
-                code_changeColor = 1
-            }
-        }
-
 //        Swap between languages each other
         btnSwap.setOnClickListener {
+
+            valueLFrom.setText(valueLTo.text.toString())
 
             var positionFrom = nameLFrom.getSelectedItemPosition() ;
             var positionTo = nameLTo.getSelectedItemPosition() ;
             swapLanguage(positionFrom, positionTo)
-
-            valueLFrom.setText(valueLTo.text.toString())
         }
 
 //        Enter text you wanna translate
@@ -164,8 +145,7 @@ class Home : AppCompatActivity() {
 
                 languageTypeFrom = detectLanguage(arrayLanguage[position])
                 var value = valueLFrom.text.toString()
-                if (value != "")
-                    translateValue(value, languageTypeFrom, languageTypeTo)
+                translateValue(value, languageTypeFrom, languageTypeTo)
 
                 var changeLanguage = nameLFrom.selectedItem.toString()
                 displayFlagFrom(changeLanguage)
@@ -183,8 +163,7 @@ class Home : AppCompatActivity() {
 
                 languageTypeTo = detectLanguage(arrayLanguage[position])
                 var value = valueLFrom.text.toString()
-                if (value != "")
-                    translateValue(value, languageTypeFrom, languageTypeTo)
+                translateValue(value, languageTypeFrom, languageTypeTo)
 
                 var changeLanguage = nameLTo.selectedItem.toString()
                 displayFlagTo(changeLanguage)
@@ -219,6 +198,32 @@ class Home : AppCompatActivity() {
                     speaker.speak(valueLTo.text.toString(), TextToSpeech.QUEUE_ADD, null)
                 }
             })
+        }
+
+        var code_changeColor = 1
+        btnSpeakingBottom.setOnClickListener {
+
+            if (code_changeColor == 1){
+
+                val colorWhite = "#FFFFFF"
+                btnSpeakingBottomFrom.setBackgroundResource(R.drawable.btn_speaking_left)
+                btnSpeakingBottomFrom.setTextColor(Color.parseColor(colorWhite))
+                btnSpeakingBottomTo.setBackgroundResource(R.drawable.btn_speaking_right)
+                btnSpeakingBottomTo.setTextColor(Color.parseColor(colorWhite))
+
+                code_changeColor = 0
+            }else{
+
+                val colorWord = "#262C30"
+                btnSpeakingBottomFrom.setBackgroundResource(R.drawable.btn_speaking_default)
+                btnSpeakingBottomFrom.setTextColor(Color.parseColor(colorWord))
+                btnSpeakingBottomTo.setBackgroundResource(R.drawable.btn_speaking_default)
+                btnSpeakingBottomTo.setTextColor(Color.parseColor(colorWord))
+
+                code_changeColor = 1
+            }
+
+            SpeechText()
         }
     }
 
@@ -300,8 +305,19 @@ class Home : AppCompatActivity() {
 //                        transformations(CircleCropTransformation())
 //                    }
                 }
+
+                RECORD_SPEECH_TEXT -> {
+
+                    if (requestCode == Activity.RESULT_OK && null != data){
+
+                        val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) as ArrayList<Editable>
+                        valueFrom.text = result[0]
+                    }
+                }
             }
         }
+
+
     }
 
     private fun showRotationalDialogForPermission() {
@@ -439,6 +455,22 @@ class Home : AppCompatActivity() {
             "Vietnamese" -> {languageType = Locale.forLanguageTag(VIETNAMESE)}
         }
         return languageType
+    }
+
+//    Speech to text
+    private fun SpeechText(){
+        if (!SpeechRecognizer.isRecognitionAvailable(this))
+
+            show("Error")
+        else{
+
+            val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+            i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say something!")
+            startActivityForResult(i, RECORD_SPEECH_TEXT)
+        }
+
     }
 }
 

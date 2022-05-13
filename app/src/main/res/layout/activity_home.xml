@@ -62,7 +62,7 @@
             android:background="@drawable/bg_item_nav_effect"
 
             android:padding="5dp"
-            android:src="@drawable/nav_ic_setting" />
+            android:src="@drawable/nav_ic_settingapp"/>
     </LinearLayout>
 
 <!--    Content-->
@@ -264,7 +264,8 @@
                 android:background="@drawable/bg_item_btn_effect"
 
                 android:paddingEnd="10dp"
-                android:src="@drawable/ic_moreinfo" />
+                android:src="@drawable/ic_moreinfo"
+                android:visibility="invisible"/>
         </RelativeLayout>
     </RelativeLayout>
 
