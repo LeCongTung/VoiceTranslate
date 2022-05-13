@@ -8,6 +8,9 @@ import android.widget.Toast
 import com.example.voicetranslate.R
 
 class Setting : AppCompatActivity() {
+
+    var backPressedTime: Long = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
@@ -27,11 +30,17 @@ class Setting : AppCompatActivity() {
 //    Function -- Click back button to close app
     override fun onBackPressed() {
 
-        super.onBackPressed();
-        finishAffinity();
+        if (backPressedTime + 3000 > System.currentTimeMillis()) {
+            super.onBackPressed()
+            finishAffinity();
+        } else {
+            show("Press back again to leave the app")
+        }
+        backPressedTime = System.currentTimeMillis()
     }
 
-//    Function -- Toast
+
+    //    Function -- Toast
     private fun show(message: String) {
         Toast.makeText(this,message, Toast.LENGTH_SHORT).show()
     }

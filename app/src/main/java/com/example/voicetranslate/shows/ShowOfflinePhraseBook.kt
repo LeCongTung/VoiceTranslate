@@ -10,8 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.voicetranslate.R
 import com.example.voicetranslate.adapters.AdapterTopic
 import com.example.voicetranslate.models.Topic
+import com.example.voicetranslate.screens.Home
 
 class ShowOfflinePhraseBook : AppCompatActivity() {
+
+
 
     lateinit var imageShow: Array<Int>
     lateinit var titleShow: Array<String>
@@ -22,13 +25,9 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
         setContentView(R.layout.activity_show_offline_phrase_book)
 
 //        Init
-        val btnDone: TextView = findViewById(R.id.btn_done)
         val listItem: RecyclerView = findViewById(R.id.list_item)
 
 //        Excute event -- when click button
-//        btnDone.setOnClickListener {
-//
-//        }
 
 //        Array of a logo per topic
         imageShow = arrayOf(
@@ -79,8 +78,17 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
     //    Function -- Click back button to close app
     override fun onBackPressed() {
 
-        super.onBackPressed();
-        finishAffinity();
+//        if (backPressedTime + 3000 > System.currentTimeMillis()) {
+//            super.onBackPressed()
+//            finishAffinity();
+//        } else {
+//            show("Press back again to leave the app")
+//        }
+//        backPressedTime = System.currentTimeMillis()
+
+        val intent = Intent(this@ShowOfflinePhraseBook, Home::class.java)
+        startActivity(intent)
+        overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
     }
 
     //    Function -- Toast

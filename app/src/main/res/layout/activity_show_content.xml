@@ -30,7 +30,7 @@
                 android:drawablePadding="3dp"
 
                 android:fontFamily="@font/poppins_medium"
-                android:lineHeight="30dp"
+                android:lineHeight="24dp"
                 android:text="Back"
                 android:textColor="@color/heading_listitem"
                 android:textSize="16dp" />
@@ -42,8 +42,7 @@
 
                 android:layout_centerInParent="true"
                 android:fontFamily="@font/poppins_medium"
-                android:lineHeight="30dp"
-                android:text="@string/restorePurchase"
+                android:text="@string/offlinePhraseBook"
                 android:textColor="@color/word"
                 android:textSize="20sp" />
 

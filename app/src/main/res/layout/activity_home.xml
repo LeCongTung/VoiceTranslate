@@ -29,7 +29,7 @@
 
             android:background="@drawable/bg_item_nav_effect"
             android:padding="5dp"
-            android:src="@drawable/nav_ic_offlinephrasebook" />
+            android:src="@drawable/nav_ic_phrasebook" />
 
         <ImageButton
             android:id="@+id/nav_camera"
@@ -82,7 +82,7 @@
         <RelativeLayout
             android:id="@+id/fromLanguage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="30dp">
 
             <ImageView
                 android:id="@+id/flagLanguageFrom"
@@ -90,15 +90,18 @@
                 android:layout_height="20dp"
                 android:layout_centerVertical="true"
 
+                android:background="@color/white"
+
+                android:scaleType="centerCrop"
                 android:src="@drawable/ic_flag_american" />
 
-            <TextView
+            <Spinner
                 android:id="@+id/nameLanguageFrom"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-
+                android:layout_height="match_parent"
                 android:layout_toRightOf="@id/flagLanguageFrom"
+
+                android:paddingStart="5dp"
 
                 android:fontFamily="@font/poppins_medium"
                 android:text="English"
@@ -108,16 +111,18 @@
             <ImageButton
                 android:id="@+id/btn_speakingFrom"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
 
                 android:background="@drawable/bg_item_btn_effect"
+
+                android:paddingHorizontal="10dp"
                 android:src="@drawable/ic_volume" />
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/valueFrom"
+            android:id="@+id/formFrom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/fromLanguage"
@@ -126,7 +131,7 @@
             android:background="@drawable/bg_white_radius">
 
             <EditText
-                android:id="@+id/value"
+                android:id="@+id/valueFrom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -137,6 +142,19 @@
                 android:lineHeight="30dp"
                 android:textColor="@color/word"
                 android:textSize="20sp" />
+
+            <ImageButton
+                android:id="@+id/btn_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/bg_item_btn_effect"
+
+                android:paddingEnd="10dp"
+
+                android:src="@drawable/ic_lose"
+                android:visibility="invisible" />
         </RelativeLayout>
 
         <!--        Swap-->
@@ -159,10 +177,9 @@
                 android:layout_height="wrap_content"
 
                 android:layout_centerInParent="true"
-
                 android:background="@drawable/bg_item_btn_effect"
+                android:paddingHorizontal="10dp"
                 android:paddingVertical="10dp"
-                android:paddingHorizontal="20dp"
                 android:src="@drawable/ic_swap" />
 
         </RelativeLayout>
@@ -171,7 +188,7 @@
         <RelativeLayout
             android:id="@+id/toLanguage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_below="@id/contentSwap"
 
             android:layout_marginTop="10dp">
@@ -182,15 +199,18 @@
                 android:layout_height="20dp"
                 android:layout_centerVertical="true"
 
-                android:src="@drawable/ic_flag_spanish" />
+                android:background="@color/white"
 
-            <TextView
-                android:id="@+id/nameLanguage"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_flag_american" />
+
+            <Spinner
+                android:id="@+id/nameLanguageTo"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-
+                android:layout_height="match_parent"
                 android:layout_toRightOf="@id/flagLanguageTo"
+
+                android:paddingStart="5dp"
 
                 android:fontFamily="@font/poppins_medium"
                 android:text="Spanish"
@@ -200,16 +220,18 @@
             <ImageButton
                 android:id="@+id/btn_speakingTo"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
 
                 android:background="@drawable/bg_item_btn_effect"
+
+                android:paddingHorizontal="10dp"
                 android:src="@drawable/ic_volume" />
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/valueFromTo"
+            android:id="@+id/formTo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/toLanguage"
@@ -227,7 +249,6 @@
 
                 android:fontFamily="@font/poppins_medium"
 
-                android:hint="Spanish"
                 android:lineHeight="30dp"
                 android:paddingEnd="10dp"
                 android:textColor="@color/word"
@@ -236,12 +257,14 @@
             <ImageButton
                 android:id="@+id/btn_moreInfo"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
 
                 android:background="@drawable/bg_item_btn_effect"
-                android:src="@drawable/ic_moreinfo"/>
+
+                android:paddingEnd="10dp"
+                android:src="@drawable/ic_moreinfo" />
         </RelativeLayout>
     </RelativeLayout>
 
@@ -269,12 +292,12 @@
                 android:layout_height="55dp"
                 android:layout_weight="1"
 
-                android:background="@drawable/btn_speaking_left"
+                android:background="@drawable/btn_speaking_default"
 
                 android:text="English"
                 android:textAllCaps="false"
                 android:fontFamily="@font/poppins_medium"
-                android:textColor="@color/white"
+                android:textColor="@color/word"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
 
@@ -284,12 +307,12 @@
                 android:layout_height="55dp"
                 android:layout_weight="1"
 
-                android:background="@drawable/btn_speaking_right"
+                android:background="@drawable/btn_speaking_default"
 
                 android:text="Spanish"
                 android:textAllCaps="false"
                 android:fontFamily="@font/poppins_medium"
-                android:textColor="@color/white"
+                android:textColor="@color/word"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
         </LinearLayout>
