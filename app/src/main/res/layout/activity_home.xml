@@ -132,8 +132,11 @@
 
             <EditText
                 android:id="@+id/valueFrom"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/btn_clear"
+
+                android:paddingEnd="10dp"
 
                 android:background="@color/white"
 
@@ -265,7 +268,7 @@
 
                 android:paddingEnd="10dp"
                 android:src="@drawable/ic_moreinfo"
-                android:visibility="invisible"/>
+                android:visibility="invisible" />
         </RelativeLayout>
     </RelativeLayout>
 
@@ -297,7 +300,7 @@
 
                 android:text="English"
                 android:textAllCaps="false"
-                android:fontFamily="@font/poppins_medium"
+                android:fontFamily="@font/poppins_regular"
                 android:textColor="@color/word"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
@@ -312,7 +315,7 @@
 
                 android:text="Spanish"
                 android:textAllCaps="false"
-                android:fontFamily="@font/poppins_medium"
+                android:fontFamily="@font/poppins_regular"
                 android:textColor="@color/word"
                 android:textStyle="bold"
                 android:textSize="16sp"/>

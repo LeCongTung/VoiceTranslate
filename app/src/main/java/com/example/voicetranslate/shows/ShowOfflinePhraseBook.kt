@@ -3,7 +3,6 @@ package com.example.voicetranslate.shows
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,8 +12,6 @@ import com.example.voicetranslate.models.Topic
 import com.example.voicetranslate.screens.Home
 
 class ShowOfflinePhraseBook : AppCompatActivity() {
-
-
 
     lateinit var imageShow: Array<Int>
     lateinit var titleShow: Array<String>
@@ -118,6 +115,5 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
                 overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
             }
         })
-
     }
 }

@@ -62,7 +62,7 @@
             android:lineHeight="24dp"
             android:maxLines="1"
             android:padding="10dp"
-            android:textColor="@color/styleSearch"
+            android:textColor="@color/word"
             android:textSize="16dp" />
 
         <TextView

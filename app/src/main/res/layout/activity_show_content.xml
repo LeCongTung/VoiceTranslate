@@ -67,18 +67,18 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/controller"
 
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
 
             android:background="@drawable/bg_search_radius"
             android:drawableStart="@drawable/ic_search"
             android:drawablePadding="10dp"
 
-            android:maxLines="1"
             android:fontFamily="@font/poppins_medium"
             android:hint="Search"
             android:lineHeight="24dp"
+            android:maxLines="1"
             android:padding="10dp"
-            android:textColor="@color/styleSearch"
+            android:textColor="@color/word"
             android:textSize="16dp" />
     </RelativeLayout>
 
@@ -88,8 +88,8 @@
         android:layout_height="match_parent"
         android:layout_below="@id/appBar"
 
-        android:scrollbars="none"
-
         android:background="@color/white"
+
+        android:scrollbars="none"
         tools:listitem="@layout/item_content" />
 </RelativeLayout>

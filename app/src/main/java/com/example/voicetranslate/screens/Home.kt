@@ -15,9 +15,7 @@ import android.provider.Settings
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
-import android.text.Editable
 import android.view.View
-import android.view.translation.Translator
 import android.widget.*
 import androidx.core.widget.doAfterTextChanged
 import com.example.voicetranslate.R
@@ -32,7 +30,6 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_home.*
 import java.util.*
-import kotlin.collections.ArrayList
 
 class Home : AppCompatActivity() {
 
@@ -41,17 +38,15 @@ class Home : AppCompatActivity() {
     private val GALLERY_REQUEST_CODE = 2
     private val RECORD_SPEECH_TEXT = 102
 
-    var backPressedTime: Long = 0
-
     var languageTypeFrom = TranslateLanguage.ENGLISH
     var languageTypeTo = TranslateLanguage.VIETNAMESE
-
-//    Firebase
-    lateinit var translator: Translator
 
 //    Value
     val arrayLanguage = arrayOf("English", "Spanish", "Chinese", "Italian", "French", "German", "Hindi", "Japanese", "Korean", "Russian", "Vietnamese")
     lateinit var speaker: TextToSpeech
+    var backPressedTime: Long = 0
+    val colorWhite = "#FFFFFF"
+    val colorWord = "#262C30"
 
     @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,7 +107,8 @@ class Home : AppCompatActivity() {
 //        Swap between languages each other
         btnSwap.setOnClickListener {
 
-            valueLFrom.setText(valueLTo.text.toString())
+            valueLFrom.setText("")
+            valueLTo.setText("")
 
             var positionFrom = nameLFrom.getSelectedItemPosition() ;
             var positionTo = nameLTo.getSelectedItemPosition() ;
@@ -124,9 +120,15 @@ class Home : AppCompatActivity() {
 
             var value = valueLFrom.text.toString()
             if (value != ""){
+
                 btnClear.visibility = View.VISIBLE
                 btnMore.visibility = View.VISIBLE
                 translateValue(value, languageTypeFrom, languageTypeTo)
+
+                btnSpeakingBottomFrom.setBackgroundResource(R.drawable.btn_speaking_default)
+                btnSpeakingBottomFrom.setTextColor(Color.parseColor(colorWord))
+                btnSpeakingBottomTo.setBackgroundResource(R.drawable.btn_speaking_default)
+                btnSpeakingBottomTo.setTextColor(Color.parseColor(colorWord))
             }else{
 
                 valueLTo.setText("")
@@ -156,7 +158,7 @@ class Home : AppCompatActivity() {
         val adapterLanguageTo = ArrayAdapter(this, R.layout.item_language, arrayLanguage)
         adapterLanguageTo.setDropDownViewResource(R.layout.item_language)
         nameLTo.adapter = adapterLanguageTo
-        nameLTo.setSelection(1)
+        nameLTo.setSelection(1) //Get default value in array of languages
         nameLTo.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
@@ -200,30 +202,16 @@ class Home : AppCompatActivity() {
             })
         }
 
-        var code_changeColor = 1
+//        var code_changeColor = 1
         btnSpeakingBottom.setOnClickListener {
 
-            if (code_changeColor == 1){
+            btnSpeakingBottomFrom.setBackgroundResource(R.drawable.btn_speaking_left)
+            btnSpeakingBottomFrom.setTextColor(Color.parseColor(colorWhite))
+            btnSpeakingBottomTo.setBackgroundResource(R.drawable.btn_speaking_right)
+            btnSpeakingBottomTo.setTextColor(Color.parseColor(colorWhite))
 
-                val colorWhite = "#FFFFFF"
-                btnSpeakingBottomFrom.setBackgroundResource(R.drawable.btn_speaking_left)
-                btnSpeakingBottomFrom.setTextColor(Color.parseColor(colorWhite))
-                btnSpeakingBottomTo.setBackgroundResource(R.drawable.btn_speaking_right)
-                btnSpeakingBottomTo.setTextColor(Color.parseColor(colorWhite))
-
-                code_changeColor = 0
-            }else{
-
-                val colorWord = "#262C30"
-                btnSpeakingBottomFrom.setBackgroundResource(R.drawable.btn_speaking_default)
-                btnSpeakingBottomFrom.setTextColor(Color.parseColor(colorWord))
-                btnSpeakingBottomTo.setBackgroundResource(R.drawable.btn_speaking_default)
-                btnSpeakingBottomTo.setTextColor(Color.parseColor(colorWord))
-
-                code_changeColor = 1
-            }
-
-            SpeechText()
+            var changeLanguage = nameLFrom.selectedItem.toString()
+            SpeechText(detectVoiceWithLanguage(changeLanguage))
         }
     }
 
@@ -305,19 +293,14 @@ class Home : AppCompatActivity() {
 //                        transformations(CircleCropTransformation())
 //                    }
                 }
-
-                RECORD_SPEECH_TEXT -> {
-
-                    if (requestCode == Activity.RESULT_OK && null != data){
-
-                        val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS) as ArrayList<Editable>
-                        valueFrom.text = result[0]
-                    }
-                }
             }
         }
 
+        if (requestCode == RECORD_SPEECH_TEXT && resultCode == Activity.RESULT_OK){
 
+            val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            valueFrom.setText(result?.get(0).toString())
+        }
     }
 
     private fun showRotationalDialogForPermission() {
@@ -385,7 +368,7 @@ class Home : AppCompatActivity() {
 //    Detect a language
     private fun detectLanguage(language: String): String{
 
-        var languageType = TranslateLanguage.ENGLISH
+        var languageType = ""
         when (language){
 
             "English" -> {languageType = TranslateLanguage.ENGLISH}
@@ -439,18 +422,18 @@ class Home : AppCompatActivity() {
 //    Get voice to speak
     private fun detectVoiceWithLanguage(language: String): Locale{
 
-        var languageType = Locale.ENGLISH
+        var languageType = Locale.getDefault()
         when (language){
 
-            "English" -> {languageType = Locale.ENGLISH}
-            "Chinese" -> {languageType = Locale.CHINESE}
+            "English" -> {languageType = Locale.forLanguageTag(ENGLISH)}
+            "Chinese" -> {languageType = Locale.forLanguageTag(CHINESE)}
             "Spanish" -> {languageType = Locale.forLanguageTag(SPANISH)}
-            "French" -> {languageType = Locale.FRENCH}
-            "Japanese" -> {languageType = Locale.JAPANESE}
-            "German" -> {languageType = Locale.GERMAN}
+            "French" -> {languageType = Locale.forLanguageTag(FRENCH)}
+            "Japanese" -> {languageType = Locale.forLanguageTag(JAPANESE)}
+            "German" -> {languageType = Locale.forLanguageTag(GERMAN)}
             "Hindi" -> {languageType = Locale.forLanguageTag(HINDI)}
-            "Italian" -> {languageType = Locale.ITALIAN}
-            "Korean" -> {languageType = Locale.KOREAN}
+            "Italian" -> {languageType = Locale.forLanguageTag(ITALIAN)}
+            "Korean" -> {languageType = Locale.forLanguageTag(KOREAN)}
             "Russian" -> {languageType = Locale.forLanguageTag(RUSSIAN)}
             "Vietnamese" -> {languageType = Locale.forLanguageTag(VIETNAMESE)}
         }
@@ -458,7 +441,8 @@ class Home : AppCompatActivity() {
     }
 
 //    Speech to text
-    private fun SpeechText(){
+    private fun SpeechText(voice: Locale){
+
         if (!SpeechRecognizer.isRecognitionAvailable(this))
 
             show("Error")
@@ -466,11 +450,10 @@ class Home : AppCompatActivity() {
 
             val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
             i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-            i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say something!")
+            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, voice)
+            i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say something by " + voice.toString() + " !")
             startActivityForResult(i, RECORD_SPEECH_TEXT)
         }
-
     }
 }
 
