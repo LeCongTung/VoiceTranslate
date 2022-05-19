@@ -52,16 +52,19 @@
             android:layout_below="@id/controller"
 
             android:layout_marginTop="10dp"
-
             android:background="@drawable/bg_search_radius"
-            android:drawableStart="@drawable/ic_search"
-            android:drawablePadding="10dp"
 
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="15dp"
             android:fontFamily="@font/poppins_medium"
+            android:gravity="center_vertical"
             android:hint="Search"
-            android:lineHeight="24dp"
+
             android:maxLines="1"
-            android:padding="10dp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:queryBackground="@android:color/transparent"
+
             android:textColor="@color/word"
             android:textSize="16dp" />
 
@@ -72,6 +75,7 @@
             android:layout_below="@id/et_search"
 
             android:layout_marginTop="25dp"
+            android:paddingStart="5dp"
 
             android:fontFamily="@font/poppins_medium"
             android:lineHeight="24dp"

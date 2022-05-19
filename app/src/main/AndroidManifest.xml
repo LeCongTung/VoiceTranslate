@@ -2,12 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.voicetranslate">
 
-    <uses-permission android:name= "android.permission.CAMERA"/>
-    <uses-permission android:name= "android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name= "android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name= "android.permission.INTERNET"/>
-    <uses-permission android:name= "android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name= "android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -15,12 +16,17 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:requestLegacyExternalStorage="true"
         android:theme="@style/Theme.VoiceTranslate">
         <activity
-            android:name="com.example.voicetranslate.shows.ShowOfflinePhraseBook"
+            android:name=".shows.ShowImage"
+            android:exported="false"
+            android:theme="@style/Theme.GetImage"/>
+        <activity
+            android:name=".shows.ShowOfflinePhraseBook"
             android:exported="false" />
         <activity
-            android:name="com.example.voicetranslate.shows.ShowContent"
+            android:name=".shows.ShowContent"
             android:exported="false" />
         <activity
             android:name=".screens.Setting"
@@ -34,6 +40,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="ocr" />
     </application>
 
 </manifest>

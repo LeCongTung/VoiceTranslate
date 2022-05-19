@@ -12,15 +12,18 @@
 
 <!--    basic color-->
     <color name="backgroundColor">#f2f2f2</color>
+    <color name="backgroundSearch">#DFDFE0</color>
     <color name="effectClick">#6E6D71</color>
+    <color name="backgroundButtonCamera">#2D2C2C</color>
+
     <color name="icon">#2E373E</color>
     <color name="word">#262C30</color>
     <color name="heading_listitem">#1565F8</color>
-    <color name="backgroundSearch">#DFDFE0</color>
     <color name="styleSearch">#7D7D81</color>
 
 <!--    special color-->
     <color name="btn_speak_left">#9844fd</color>
     <color name="btn_speak_right">#34b8fa</color>
+    <color name="btn_color_camera_noclick">#989898</color>
 
 </resources>

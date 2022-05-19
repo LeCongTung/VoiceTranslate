@@ -3,29 +3,40 @@ package com.example.voicetranslate.shows
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.voicetranslate.R
+import com.example.voicetranslate.adapters.AdapterExample
 import com.example.voicetranslate.adapters.AdapterTopic
 import com.example.voicetranslate.models.Topic
 import com.example.voicetranslate.screens.Home
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ShowOfflinePhraseBook : AppCompatActivity() {
 
     lateinit var imageShow: Array<Int>
     lateinit var titleShow: Array<String>
-    private lateinit var newArrayList: ArrayList<Topic>
+    val newArrayList: ArrayList<Topic> = arrayListOf()
+
+    val myAdapter: AdapterTopic by lazy { AdapterTopic(newArrayList) } //Chi khoi tao khi duoc goi
+    var dataList = ArrayList<Topic>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_offline_phrase_book)
 
 //        Init
+        val etSearch: EditText = findViewById(R.id.et_search)
         val listItem: RecyclerView = findViewById(R.id.list_item)
 
 //        Excute event -- when click button
-
 //        Array of a logo per topic
         imageShow = arrayOf(
             R.drawable.ic_topic_bank,
@@ -65,48 +76,48 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
             "Traveling"
         )
 
+        val valueSearch = etSearch.text.toString()
+        etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+                filters(p0.toString())
+                if (valueSearch.equals(""))
+                    getData()
+
+            }
+        })
+
 //        Format recycleview topic
         listItem.layoutManager = GridLayoutManager(this, 2)
         listItem.setHasFixedSize(true)
-        newArrayList = arrayListOf<Topic>()
         getData()
     }
 
     //    Function -- Click back button to close app
     override fun onBackPressed() {
 
-//        if (backPressedTime + 3000 > System.currentTimeMillis()) {
-//            super.onBackPressed()
-//            finishAffinity();
-//        } else {
-//            show("Press back again to leave the app")
-//        }
-//        backPressedTime = System.currentTimeMillis()
-
         val intent = Intent(this@ShowOfflinePhraseBook, Home::class.java)
         startActivity(intent)
         overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
     }
 
-    //    Function -- Toast
-    private fun show(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
     //    Show data to recycleview
     private fun getData() {
-
-        var tradeadapter = AdapterTopic(newArrayList)
         val listItem: RecyclerView = findViewById(R.id.list_item)
         for (i in imageShow.indices) {
-
             val topics = Topic(titleShow[i], imageShow[i])
             newArrayList.add(topics)
         }
-
-        listItem.adapter = tradeadapter
-        tradeadapter.setOnItemClickListener(object : AdapterTopic.onItemClickListener{
-
+        listItem.adapter = myAdapter
+        myAdapter.setOnItemClickListener(object : AdapterTopic.onItemClickListener {
             override fun onItemClick(position: Int) {
 
                 val intent = Intent(this@ShowOfflinePhraseBook, ShowContent::class.java)
@@ -115,5 +126,14 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
                 overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
             }
         })
+    }
+
+    private fun filters(text: String) {
+
+        val filteredNames = ArrayList<Topic>()
+        dataList.filterTo(filteredNames) {
+            it.title.toString().lowercase().contains(text.lowercase())
+        }
+        myAdapter.filterList(filteredNames)
     }
 }

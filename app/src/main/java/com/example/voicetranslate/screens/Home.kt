@@ -19,6 +19,7 @@ import android.view.View
 import android.widget.*
 import androidx.core.widget.doAfterTextChanged
 import com.example.voicetranslate.R
+import com.example.voicetranslate.shows.ShowImage
 import com.example.voicetranslate.shows.ShowOfflinePhraseBook
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.TranslateLanguage.*
@@ -76,6 +77,11 @@ class Home : AppCompatActivity() {
         val btnMore: ImageButton = findViewById(R.id.btn_moreInfo)
         val btnSwap: ImageButton = findViewById(R.id.btn_swap)
 
+//        Get text from image
+        val valueImage = intent.getStringExtra("valueImage").toString()
+        if (!valueImage.equals("null")){
+            valueLFrom.setText(valueImage)}
+
 //        Excute event -- when click button
 //        ===========Navigation
         btnOfflinePhraseBook.setOnClickListener {
@@ -87,7 +93,10 @@ class Home : AppCompatActivity() {
 
         btnCamera.setOnClickListener {
 
-            cameraCheckPermission()
+            val intent = Intent(this, ShowImage::class.java)
+            startActivity(intent)
+            overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
+
         }
 
         btnSetting.setOnClickListener {
@@ -125,16 +134,17 @@ class Home : AppCompatActivity() {
                 btnMore.visibility = View.VISIBLE
                 translateValue(value, languageTypeFrom, languageTypeTo)
 
-                btnSpeakingBottomFrom.setBackgroundResource(R.drawable.btn_speaking_default)
-                btnSpeakingBottomFrom.setTextColor(Color.parseColor(colorWord))
-                btnSpeakingBottomTo.setBackgroundResource(R.drawable.btn_speaking_default)
-                btnSpeakingBottomTo.setTextColor(Color.parseColor(colorWord))
             }else{
 
                 valueLTo.setText("")
                 btnClear.visibility = View.INVISIBLE
                 btnMore.visibility = View.INVISIBLE
             }
+
+            btnSpeakingBottomFrom.setBackgroundResource(R.drawable.btn_speaking_default)
+            btnSpeakingBottomFrom.setTextColor(Color.parseColor(colorWord))
+            btnSpeakingBottomTo.setBackgroundResource(R.drawable.btn_speaking_default)
+            btnSpeakingBottomTo.setTextColor(Color.parseColor(colorWord))
         }
 
 //        Choose language
@@ -202,7 +212,6 @@ class Home : AppCompatActivity() {
             })
         }
 
-//        var code_changeColor = 1
         btnSpeakingBottom.setOnClickListener {
 
             btnSpeakingBottomFrom.setBackgroundResource(R.drawable.btn_speaking_left)
@@ -233,97 +242,14 @@ class Home : AppCompatActivity() {
     }
 
 //    Function -- Check permission to use camera
-    private fun cameraCheckPermission() {
-
-    Dexter.withContext(this)
-        .withPermissions(
-            android.Manifest.permission.READ_EXTERNAL_STORAGE,
-            android.Manifest.permission.CAMERA).withListener(
-
-            object : MultiplePermissionsListener {
-                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                    report?.let {
-
-                        if (report.areAllPermissionsGranted()) {
-                            camera()
-                        }
-
-                    }
-                }
-
-                override fun onPermissionRationaleShouldBeShown(
-                    p0: MutableList<com.karumi.dexter.listener.PermissionRequest>?,
-                    p1: PermissionToken?
-                ) {
-                    showRotationalDialogForPermission()
-                }
-
-            }
-        ).onSameThread().check()
-    }
-
-    private fun camera() {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(intent, CAMERA_REQUEST_CODE)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode == Activity.RESULT_OK) {
-
-            when (requestCode) {
-
-                CAMERA_REQUEST_CODE -> {
-
-                    val bitmap = data?.extras?.get("data") as Bitmap
-
-//                    binding.imageView.load(bitmap) {
-//                        crossfade(true)
-//                        crossfade(1000)
-//                        transformations(CircleCropTransformation())
-//                    }
-                }
-
-                GALLERY_REQUEST_CODE -> {
-
-//                    binding.imageView.load(data?.data) {
-//                        crossfade(true)
-//                        crossfade(1000)
-//                        transformations(CircleCropTransformation())
-//                    }
-                }
-            }
-        }
 
         if (requestCode == RECORD_SPEECH_TEXT && resultCode == Activity.RESULT_OK){
 
             val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             valueFrom.setText(result?.get(0).toString())
         }
-    }
-
-    private fun showRotationalDialogForPermission() {
-        AlertDialog.Builder(this)
-            .setMessage("you have turned off permissions"
-                    + "required for this feature. It can be enable under App settings!")
-
-            .setPositiveButton("Go to settings") { _, _ ->
-
-                try {
-                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                    val uri = Uri.fromParts("package", packageName, null)
-                    intent.data = uri
-                    startActivity(intent)
-
-                } catch (e: ActivityNotFoundException) {
-                    e.printStackTrace()
-                }
-            }
-
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }.show()
     }
 
 //    Display the flag follow a language is chosen
@@ -390,6 +316,7 @@ class Home : AppCompatActivity() {
 //    Translate
     private fun translateValue(value: String, typeFrom: String, typeTo: String){
 
+        val valueFTo: TextView = findViewById(R.id.valueFrom)
         val valueLTo: TextView = findViewById(R.id.valueTo)
         val options = TranslatorOptions.Builder()
             .setSourceLanguage(typeFrom)
@@ -425,7 +352,7 @@ class Home : AppCompatActivity() {
         var languageType = Locale.getDefault()
         when (language){
 
-            "English" -> {languageType = Locale.forLanguageTag(ENGLISH)}
+            "English" -> {languageType = Locale.ENGLISH}
             "Chinese" -> {languageType = Locale.forLanguageTag(CHINESE)}
             "Spanish" -> {languageType = Locale.forLanguageTag(SPANISH)}
             "French" -> {languageType = Locale.forLanguageTag(FRENCH)}
@@ -454,6 +381,7 @@ class Home : AppCompatActivity() {
             i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say something by " + voice.toString() + " !")
             startActivityForResult(i, RECORD_SPEECH_TEXT)
         }
+
     }
 }
 

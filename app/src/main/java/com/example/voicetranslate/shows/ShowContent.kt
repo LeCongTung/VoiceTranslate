@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.voicetranslate.R
 import com.example.voicetranslate.adapters.AdapterExample
 import com.example.voicetranslate.models.DataItem
+import com.example.voicetranslate.models.Topic
 import com.example.voicetranslate.networks.ApiDataItem
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,6 +24,7 @@ class ShowContent : AppCompatActivity() {
     var backPressedTime: Long = 0
 
     lateinit var myAdapter: AdapterExample
+    var dataList = ArrayList <DataItem> ()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,5 +97,17 @@ class ShowContent : AppCompatActivity() {
                 show("Error")
             }
         })
+    }
+//    Function -- Filter
+    private fun filters(text: String){
+
+        val filteredNames = ArrayList<DataItem> ()
+        dataList!!.filterTo(filteredNames) {
+
+            it.title?.toLowerCase()?.contains(text.toLowerCase())!!
+        }
+        if (filteredNames != null) {
+            myAdapter?.filterList(filteredNames)
+        }
     }
 }

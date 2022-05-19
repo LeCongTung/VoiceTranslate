@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.voicetranslate.R
 import com.example.voicetranslate.models.Topic
 
-class AdapterTopic(private val list: ArrayList<Topic>): RecyclerView.Adapter<AdapterTopic.MyViewHolder>() {
+class AdapterTopic(private var list: ArrayList<Topic>): RecyclerView.Adapter<AdapterTopic.MyViewHolder>() {
 
     //    Choice a product in type
     private lateinit var mListener: onItemClickListener
@@ -53,5 +53,11 @@ class AdapterTopic(private val list: ArrayList<Topic>): RecyclerView.Adapter<Ada
                 listener.onItemClick(adapterPosition)
             }
         }
+    }
+
+    fun filterList(filteredNames: ArrayList<Topic>) {
+
+        this.list = filteredNames
+        notifyDataSetChanged()
     }
 }

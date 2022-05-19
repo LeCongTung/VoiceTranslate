@@ -15,4 +15,9 @@
         <item name="android:windowBackground" tools:targetApi="l">@color/backgroundColor</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Theme.GetImage" parent="Theme.AppCompat.DayNight.NoActionBar">
+
+        <item name="android:statusBarColor" tools:targetApi="l">@color/backgroundButtonCamera</item>
+    </style>
 </resources>

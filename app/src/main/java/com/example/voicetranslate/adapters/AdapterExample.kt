@@ -8,8 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.voicetranslate.R
 import com.example.voicetranslate.models.DataItem
+import com.example.voicetranslate.models.Topic
 
-class AdapterExample(val context: Context, val list: List<DataItem>): RecyclerView.Adapter<AdapterExample.MyViewHolder>() {
+class AdapterExample(val context: Context, var list: List<DataItem>): RecyclerView.Adapter<AdapterExample.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterExample.MyViewHolder {
 
@@ -30,5 +31,10 @@ class AdapterExample(val context: Context, val list: List<DataItem>): RecyclerVi
     class MyViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
 
         val itemexample: TextView = itemView.findViewById(R.id.value)
+    }
+
+    fun filterList(filteredNames: ArrayList<DataItem> ) {
+        this.list = filteredNames
+        notifyDataSetChanged()
     }
 }

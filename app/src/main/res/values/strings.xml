@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">VoiceTranslate</string>
 
-<!-- Setting - data recycleview -->
+    <!-- Setting - data recycleview -->
     <string name="restorePurchase">Restore Purchase</string>
     <string name="share">Share</string>
     <string name="contactUs">Contact us</string>
@@ -9,6 +9,6 @@
     <string name="termOfService">Term of service</string>
     <string name="aboutSubscription">About Subscription</string>
 
-<!-- Offline PhraseBook-->
+    <!-- Offline PhraseBook-->
     <string name="offlinePhraseBook">Offline PhraseBook</string>
 </resources>

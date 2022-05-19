@@ -101,9 +101,9 @@
                 android:layout_height="match_parent"
                 android:layout_toRightOf="@id/flagLanguageFrom"
 
-                android:paddingStart="5dp"
-
                 android:fontFamily="@font/poppins_medium"
+
+                android:paddingStart="5dp"
                 android:text="English"
                 android:textColor="@color/word"
                 android:textSize="20sp" />
@@ -126,25 +126,35 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/fromLanguage"
+            android:layout_above="@id/contentSwap"
 
             android:layout_marginTop="10dp"
+            android:paddingBottom="10dp"
+
             android:background="@drawable/bg_white_radius">
 
-            <EditText
-                android:id="@+id/valueFrom"
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@id/btn_clear"
 
-                android:paddingEnd="10dp"
+                android:scrollbars="none">
 
-                android:background="@color/white"
+                <EditText
+                    android:id="@+id/valueFrom"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
 
-                android:fontFamily="@font/poppins_medium"
-                android:hint="Enter text here"
-                android:lineHeight="30dp"
-                android:textColor="@color/word"
-                android:textSize="20sp" />
+                    android:background="@color/white"
+
+                    android:fontFamily="@font/poppins_medium"
+
+                    android:hint="Enter text here"
+                    android:lineHeight="30dp"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/word"
+                    android:textSize="20sp" />
+            </ScrollView>
 
             <ImageButton
                 android:id="@+id/btn_clear"
@@ -213,9 +223,9 @@
                 android:layout_height="match_parent"
                 android:layout_toRightOf="@id/flagLanguageTo"
 
-                android:paddingStart="5dp"
-
                 android:fontFamily="@font/poppins_medium"
+
+                android:paddingStart="5dp"
                 android:text="Spanish"
                 android:textColor="@color/word"
                 android:textSize="20sp" />
@@ -242,20 +252,28 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/bg_white_radius">
 
-            <TextView
-                android:id="@+id/valueTo"
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@id/btn_moreInfo"
 
-                android:background="@color/white"
+                android:scrollbars="none">
 
-                android:fontFamily="@font/poppins_medium"
+                <TextView
+                    android:id="@+id/valueTo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
 
-                android:lineHeight="30dp"
-                android:paddingEnd="10dp"
-                android:textColor="@color/word"
-                android:textSize="20sp" />
+                    android:background="@color/white"
+
+                    android:fontFamily="@font/poppins_medium"
+
+                    android:lineHeight="30dp"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/word"
+                    android:textSize="20sp" />
+            </ScrollView>
+
 
             <ImageButton
                 android:id="@+id/btn_moreInfo"

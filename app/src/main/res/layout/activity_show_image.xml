@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".shows.ShowImage"
+
+    android:background="@color/backgroundButtonCamera">
+
+    <RelativeLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+
+        android:gravity="center_vertical"
+        android:paddingHorizontal="30dp"
+
+        android:background="@color/backgroundButtonCamera">
+
+        <ImageButton
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+
+            android:padding="10dp"
+
+            android:src="@drawable/ic_close_camera"
+            android:background="@color/backgroundButtonCamera"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/contentBtn"
+        android:layout_below="@id/appBar"
+        android:layout_centerHorizontal="true"
+
+        android:layout_centerVertical="true"
+        android:adjustViewBounds="true"
+        android:background="@color/backgroundButtonCamera" />
+
+    <TextView
+        android:id="@+id/valueAfterDetect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+
+        android:maxLines="1"
+        android:maxWidth="10dp"
+        android:textColor="@color/backgroundButtonCamera"
+        android:textSize="1sp"/>
+
+    <LinearLayout
+        android:id="@+id/contentBtn"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/backgroundButtonCamera"
+        android:gravity="center_vertical"
+
+        android:orientation="horizontal"
+
+        android:weightSum="2">
+
+        <RelativeLayout
+            android:id="@+id/contentCamera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="1"
+            android:background="@color/backgroundButtonCamera">
+
+            <ImageView
+                android:id="@+id/piccam"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_camera_noclick" />
+
+            <Button
+                android:id="@+id/btnCamera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/piccam"
+
+                android:background="@color/backgroundButtonCamera"
+
+                android:fontFamily="@font/poppins_regular"
+                android:text="Instant"
+                android:textAllCaps="false"
+                android:textColor="@color/btn_color_camera_noclick"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/contentGallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="@color/backgroundButtonCamera">
+
+            <ImageView
+                android:id="@+id/picgallery"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_gallery_noclick" />
+
+            <Button
+                android:id="@+id/btnGallery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/picgallery"
+
+                android:background="@color/backgroundButtonCamera"
+
+                android:fontFamily="@font/poppins_regular"
+                android:text="Gallery"
+                android:textAllCaps="false"
+                android:textColor="@color/btn_color_camera_noclick"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+    </LinearLayout>
+</RelativeLayout>
