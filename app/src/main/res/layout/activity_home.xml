@@ -13,11 +13,11 @@
     <LinearLayout
         android:id="@+id/navigationbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:weightSum="4"
+        android:layout_height="32dp"
+        android:background="@color/backgroundColor"
         android:orientation="horizontal"
 
-        android:background="@color/backgroundColor">
+        android:weightSum="4">
 
         <ImageButton
             android:id="@+id/nav_offlinePhrasebook"
@@ -28,7 +28,7 @@
 
             android:background="@drawable/bg_item_nav_effect"
             android:padding="5dp"
-            android:src="@drawable/ic_nav_airport" />
+            android:src="ic_nav" />
 
         <ImageButton
             android:id="@+id/nav_camera"
@@ -61,7 +61,7 @@
             android:background="@drawable/bg_item_nav_effect"
 
             android:padding="5dp"
-            android:src="@drawable/ic_nav_setting"/>
+            android:src="@drawable/ic_nav_setting" />
     </LinearLayout>
 
 <!--    Content-->

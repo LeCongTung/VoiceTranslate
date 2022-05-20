@@ -75,7 +75,7 @@ class ShowImage : AppCompatActivity() {
         val positionF = intent.getStringExtra("positionF")
         val positionT = intent.getStringExtra("positionT")
 
-        show("Choosing the way that you want to add an image")
+        cameraCheckPermission()
 //        Choose language
         val adapterLanguageFrom = ArrayAdapter(this, R.layout.item_language_camera, arrayLanguage)
         adapterLanguageFrom.setDropDownViewResource(R.layout.item_language)
