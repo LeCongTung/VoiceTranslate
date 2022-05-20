@@ -3,6 +3,9 @@ package com.example.voicetranslate.shows
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +26,9 @@ class ShowContent : AppCompatActivity() {
     val BASE_URL = "https://jsonplaceholder.typicode.com/"
     var backPressedTime: Long = 0
 
-    lateinit var myAdapter: AdapterExample
+    var myAdapter: AdapterExample ? = null
+
+    var filteredNames = ArrayList<DataItem>()
     var dataList = ArrayList <DataItem> ()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +41,24 @@ class ShowContent : AppCompatActivity() {
         val btnDone: TextView = findViewById(R.id.btn_done)
         val listItem: RecyclerView = findViewById(R.id.list_item)
 
+        val etSearch: EditText = findViewById(R.id.et_search)
+        etSearch.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+                filters(p0.toString())
+            }
+        })
+
 //        Get data from previous screen
-        val title = intent.getStringExtra("title").toString()
+        val title = intent.getStringExtra("title")
         tvTitle.setText(title)
 
 //        Excute button -- when click button
@@ -49,6 +70,8 @@ class ShowContent : AppCompatActivity() {
         }
 
 //        Api
+        myAdapter = AdapterExample(this, dataList)
+        listItem.adapter = myAdapter
         listItem.layoutManager = LinearLayoutManager(this)
         listItem.setHasFixedSize(true)
         getDataExample()
@@ -86,11 +109,9 @@ class ShowContent : AppCompatActivity() {
         retrofitData.enqueue(object : Callback<List<DataItem>?> {
             override fun onResponse(call: Call<List<DataItem>?>, response: Response<List<DataItem>?>) {
 
-                val responseBody = response.body()!!
+                dataList.addAll(response.body()!!)
+                listItem.adapter!!.notifyDataSetChanged()
 
-                myAdapter = AdapterExample(baseContext, responseBody)
-                myAdapter.notifyDataSetChanged()
-                listItem.adapter = myAdapter
             }
 
             override fun onFailure(call: Call<List<DataItem>?>, t: Throwable) {
@@ -99,15 +120,13 @@ class ShowContent : AppCompatActivity() {
         })
     }
 //    Function -- Filter
-    private fun filters(text: String){
+    private fun filters(text: String) {
 
-        val filteredNames = ArrayList<DataItem> ()
+        filteredNames.clear()
         dataList!!.filterTo(filteredNames) {
 
-            it.title?.toLowerCase()?.contains(text.toLowerCase())!!
+            it.title.lowercase().contains(text.lowercase())
         }
-        if (filteredNames != null) {
-            myAdapter?.filterList(filteredNames)
-        }
+        myAdapter!!.filterList(filteredNames)
     }
 }

@@ -23,10 +23,13 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
 
     lateinit var imageShow: Array<Int>
     lateinit var titleShow: Array<String>
+
     val newArrayList: ArrayList<Topic> = arrayListOf()
+    var searchArrayList: ArrayList<Topic> = arrayListOf()
+
+    var filteredNames = ArrayList<Topic>()
 
     val myAdapter: AdapterTopic by lazy { AdapterTopic(newArrayList) } //Chi khoi tao khi duoc goi
-    var dataList = ArrayList<Topic>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,15 +48,15 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
             R.drawable.ic_topic_callpolice,
             R.drawable.ic_topic_communication,
             R.drawable.ic_topic_food,
-            R.drawable.ic_topic_heathcare,
+            R.drawable.ic_topic_health,
             R.drawable.ic_topic_hotel,
             R.drawable.ic_topic_restaurant,
             R.drawable.ic_topic_transport,
-            R.drawable.ic_topic_repair,
+            R.drawable.ic_topic_repairs,
             R.drawable.ic_topic_shopping,
             R.drawable.ic_topic_sightseeing,
             R.drawable.ic_topic_sport,
-            R.drawable.ic_topic_study,
+            R.drawable.ic_topic_studying,
             R.drawable.ic_topic_traveling,
         )
 
@@ -111,17 +114,29 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
 
     //    Show data to recycleview
     private fun getData() {
+
+        newArrayList.clear()
         val listItem: RecyclerView = findViewById(R.id.list_item)
-        for (i in imageShow.indices) {
+        for (i in titleShow.indices) {
             val topics = Topic(titleShow[i], imageShow[i])
             newArrayList.add(topics)
         }
+
+        searchArrayList = newArrayList
         listItem.adapter = myAdapter
+
+        var titleToContent = ""
         myAdapter.setOnItemClickListener(object : AdapterTopic.onItemClickListener {
             override fun onItemClick(position: Int) {
 
+                if (filteredNames.size == 0)
+                     titleToContent = searchArrayList[position].title.toString()
+                else
+                    titleToContent = filteredNames[position].title.toString()
+
+
                 val intent = Intent(this@ShowOfflinePhraseBook, ShowContent::class.java)
-                intent.putExtra("title", newArrayList[position].title)
+                intent.putExtra("title", titleToContent)
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
             }
@@ -130,8 +145,9 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
 
     private fun filters(text: String) {
 
-        val filteredNames = ArrayList<Topic>()
-        dataList.filterTo(filteredNames) {
+        filteredNames.clear()
+        searchArrayList.filterTo(filteredNames) {
+
             it.title.toString().lowercase().contains(text.lowercase())
         }
         myAdapter.filterList(filteredNames)

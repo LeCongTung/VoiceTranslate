@@ -61,8 +61,8 @@
             android:hint="Search"
 
             android:maxLines="1"
-            android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"
+            android:paddingHorizontal="20dp"
             android:queryBackground="@android:color/transparent"
 
             android:textColor="@color/word"

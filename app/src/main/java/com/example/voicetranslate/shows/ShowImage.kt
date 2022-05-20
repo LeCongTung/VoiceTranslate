@@ -2,9 +2,7 @@ package com.example.voicetranslate.shows
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.ActivityNotFoundException
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -12,11 +10,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.ImageProxy
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import coil.load
@@ -39,6 +37,7 @@ import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.activity_show_image.*
 import java.io.ByteArrayOutputStream
 
+
 class ShowImage : AppCompatActivity() {
 
     private val CAMERA_REQUEST_CODE = 1
@@ -46,9 +45,12 @@ class ShowImage : AppCompatActivity() {
     private val STORAGE_PERMISSION_CODE = 113
 
     var backPressedTime: Long = 0
+    val arrayLanguage = arrayOf("English", "Spanish", "Chinese", "Italian", "French", "German", "Hindi", "Japanese", "Korean", "Russian", "Vietnamese")
 
     lateinit var inputImage: InputImage
     lateinit var textRecognizer: TextRecognizer
+
+    val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,19 +60,63 @@ class ShowImage : AppCompatActivity() {
         val btnClose: ImageView = findViewById(R.id.btn_close)
         val textAfterDetect: TextView = findViewById(R.id.valueAfterDetect)
 
+        val nameLFrom: Spinner = findViewById(R.id.nameLanguageFrom)
+        val nameLTo: Spinner = findViewById(R.id.nameLanguageTo)
+        val btnSwap: ImageButton = findViewById(R.id.btn_swap)
+
         val btnUseCamera: Button = findViewById(R.id.btnCamera)
         val piccam: ImageView = findViewById(R.id.piccam)
 
         val btnUseGallery: Button = findViewById(R.id.btnGallery)
         val picgallery: ImageView = findViewById(R.id.picgallery)
 
+//        Get text from image
         textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+        val positionF = intent.getStringExtra("positionF")
+        val positionT = intent.getStringExtra("positionT")
+
+        show("Choosing the way that you want to add an image")
+//        Choose language
+        val adapterLanguageFrom = ArrayAdapter(this, R.layout.item_language_camera, arrayLanguage)
+        adapterLanguageFrom.setDropDownViewResource(R.layout.item_language)
+        nameLFrom.adapter = adapterLanguageFrom
+
+        if (!positionF.equals(null))
+            nameLFrom.setSelection(positionF.toString().toInt())
+
+        nameLFrom.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+
+            }
+        }
+
+        val adapterLanguageTo = ArrayAdapter(this, R.layout.item_language_camera, arrayLanguage)
+        adapterLanguageTo.setDropDownViewResource(R.layout.item_language)
+        nameLTo.adapter = adapterLanguageTo
+
+        if (!positionT.equals(null))
+            nameLTo.setSelection(positionT.toString().toInt())
+        else
+            nameLTo.setSelection(1) //Get default value in array of languages
+
+        nameLTo.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+
+            }
+        }
 
 //        Excute event
-        btnClose.setOnClickListener{
+        btnClose.setOnClickListener {
+
+            var positionFrom = nameLFrom.getSelectedItemPosition().toString()
+            var positionTo = nameLTo.getSelectedItemPosition().toString()
 
             val intent = Intent(this, Home::class.java)
             intent.putExtra("valueImage", textAfterDetect.text.toString())
+            intent.putExtra("positionF", positionFrom)
+            intent.putExtra("positionT", positionTo)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
         }
@@ -78,19 +124,29 @@ class ShowImage : AppCompatActivity() {
         btnUseCamera.setOnClickListener {
 
             btnUseCamera.setTextColor(Color.parseColor("#5491FF"))
-            piccam.setImageResource(R.drawable.ic_camera_click)
+            piccam.setColorFilter(Color.parseColor("#5491FF"))
             btnUseGallery.setTextColor(Color.parseColor("#989898"))
-            picgallery.setImageResource(R.drawable.ic_gallery_noclick)
+            picgallery.setColorFilter(Color.parseColor("#989898"))
+
             cameraCheckPermission()
+
         }
 
         btnUseGallery.setOnClickListener {
 
             btnUseGallery.setTextColor(Color.parseColor("#5491FF"))
-            picgallery.setImageResource(R.drawable.ic_gallery_click)
+            picgallery.setColorFilter(Color.parseColor("#5491FF"))
             btnCamera.setTextColor(Color.parseColor("#989898"))
-            piccam.setImageResource(R.drawable.ic_camera_noclick)
+            piccam.setColorFilter(Color.parseColor("#989898"))
+
             galleryCheckPermission()
+        }
+
+        btnSwap.setOnClickListener {
+
+            var positionFrom = nameLFrom.getSelectedItemPosition()
+            var positionTo = nameLTo.getSelectedItemPosition()
+            swapLanguage(positionFrom, positionTo)
         }
     }
 
@@ -106,12 +162,12 @@ class ShowImage : AppCompatActivity() {
         backPressedTime = System.currentTimeMillis()
     }
 
-//    Function -- Toast
+    //    Function -- Toast
     private fun show(message: String) {
-        Toast.makeText(this,message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-//    Gallery
+    //    Gallery
     private fun galleryCheckPermission() {
 
         Dexter.withContext(this).withPermission(
@@ -127,7 +183,8 @@ class ShowImage : AppCompatActivity() {
             }
 
             override fun onPermissionRationaleShouldBeShown(
-                p0: PermissionRequest?, p1: PermissionToken?) {
+                p0: PermissionRequest?, p1: PermissionToken?
+            ) {
                 showRotationalDialogForPermission()
             }
         }).onSameThread().check()
@@ -139,13 +196,14 @@ class ShowImage : AppCompatActivity() {
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
 
-//    Camera
+    //    Camera
     private fun cameraCheckPermission() {
 
         Dexter.withContext(this)
             .withPermissions(
                 android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.CAMERA).withListener(
+                android.Manifest.permission.CAMERA
+            ).withListener(
 
                 object : MultiplePermissionsListener {
                     override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
@@ -173,7 +231,7 @@ class ShowImage : AppCompatActivity() {
         startActivityForResult(intent, CAMERA_REQUEST_CODE)
     }
 
-//    Override Activity Result
+    //    Override Activity Result
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -185,17 +243,8 @@ class ShowImage : AppCompatActivity() {
                 CAMERA_REQUEST_CODE -> {
 
                     val bitmap: Bitmap = data?.extras?.get("data") as Bitmap
-//                    imageView.setImageBitmap(bitmap)
-
-                    val bytes = ByteArrayOutputStream()
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-                    val path = MediaStore.Images.Media.insertImage(
-                        applicationContext.getContentResolver(), bitmap, null, null
-                    )
-
-                    val imageUri: Uri = Uri.parse(path)
-                    imageView.load(imageUri)
-                    convertImageToText(imageUri)
+                    imageView.setImageBitmap(bitmap)
+                    convertImageToTextFromBitmap(bitmap)
                     show("Pause Translation")
                 }
 
@@ -203,7 +252,7 @@ class ShowImage : AppCompatActivity() {
 
                     val imageUri = data?.data
                     imageView.load(imageUri)
-                    convertImageToText(imageUri)
+                    convertImageToTextFromURI(imageUri)
                     show("Pause Translation")
                 }
             }
@@ -212,8 +261,10 @@ class ShowImage : AppCompatActivity() {
 
     private fun showRotationalDialogForPermission() {
         AlertDialog.Builder(this)
-            .setMessage("you have turned off permissions"
-                    + "required for this feature. It can be enable under App settings!")
+            .setMessage(
+                "you have turned off permissions"
+                        + "required for this feature. It can be enable under App settings!"
+            )
 
             .setPositiveButton("Go to settings") { _, _ ->
 
@@ -233,8 +284,8 @@ class ShowImage : AppCompatActivity() {
             }.show()
     }
 
-//    Recognize images
-    private fun convertImageToText(imageUri: Uri?){
+    //    Recognize images
+    private fun convertImageToTextFromURI(imageUri: Uri?) {
 
         val textAfterDetect: TextView = findViewById(R.id.valueAfterDetect)
         inputImage = InputImage.fromFilePath(applicationContext, imageUri!!)
@@ -248,14 +299,31 @@ class ShowImage : AppCompatActivity() {
             }
     }
 
-    override fun onResume() {
-        super.onResume()
-        detectCheckPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE, STORAGE_PERMISSION_CODE)
+    private fun convertImageToTextFromBitmap(bitmap: Bitmap) {
+
+        val textAfterDetect: TextView = findViewById(R.id.valueAfterDetect)
+        val image = InputImage.fromBitmap(bitmap, 0)
+        val result = recognizer.process(image)
+            .addOnSuccessListener { visionText ->
+
+                textAfterDetect.text = visionText.text
+            }
+            .addOnFailureListener { e ->
+
+            }
     }
 
-    private fun detectCheckPermission(permisson: String, requestCode: Int){
+    override fun onResume() {
+        super.onResume()
+        detectCheckPermission(
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            STORAGE_PERMISSION_CODE
+        )
+    }
 
-        if (ContextCompat.checkSelfPermission(this, permisson)== PackageManager.PERMISSION_DENIED)
+    private fun detectCheckPermission(permisson: String, requestCode: Int) {
+
+        if (ContextCompat.checkSelfPermission(this, permisson) == PackageManager.PERMISSION_DENIED)
             ActivityCompat.requestPermissions(this, arrayOf(permisson), requestCode)
     }
 
@@ -264,11 +332,12 @@ class ShowImage : AppCompatActivity() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode== STORAGE_PERMISSION_CODE){
+        if (requestCode == STORAGE_PERMISSION_CODE) {
 
-            if (grantResults.isNotEmpty() && grantResults[0]== PackageManager.PERMISSION_GRANTED)
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
 
                 show("Storage Permission Granted")
             else
@@ -276,4 +345,15 @@ class ShowImage : AppCompatActivity() {
                 show("Storage Permission Denied")
         }
     }
+
+//    Function -- Swap language
+//    Swap between languages
+    private fun swapLanguage(positionFrom: Int, positionTo: Int){
+
+        val nameLFrom: Spinner = findViewById(R.id.nameLanguageFrom)
+        val nameLTo: Spinner = findViewById(R.id.nameLanguageTo)
+
+        nameLFrom.setSelection(positionTo)
+        nameLTo.setSelection(positionFrom)
+}
 }

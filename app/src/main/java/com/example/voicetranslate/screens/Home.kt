@@ -2,22 +2,17 @@ package com.example.voicetranslate.screens
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.AlertDialog
-import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
-import android.provider.Settings
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.*
-import androidx.core.widget.doAfterTextChanged
 import com.example.voicetranslate.R
 import com.example.voicetranslate.shows.ShowImage
 import com.example.voicetranslate.shows.ShowOfflinePhraseBook
@@ -25,10 +20,6 @@ import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.TranslateLanguage.*
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
-import com.karumi.dexter.Dexter
-import com.karumi.dexter.MultiplePermissionsReport
-import com.karumi.dexter.PermissionToken
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import kotlinx.android.synthetic.main.activity_home.*
 import java.util.*
 
@@ -79,8 +70,13 @@ class Home : AppCompatActivity() {
 
 //        Get text from image
         val valueImage = intent.getStringExtra("valueImage").toString()
+        val positionF = intent.getStringExtra("positionF")
+        val positionT = intent.getStringExtra("positionT")
+
         if (!valueImage.equals("null")){
-            valueLFrom.setText(valueImage)}
+            valueLFrom.setText(valueImage)
+            btnClear.visibility = View.VISIBLE
+            btnMore.visibility = View.VISIBLE}
 
 //        Excute event -- when click button
 //        ===========Navigation
@@ -93,10 +89,14 @@ class Home : AppCompatActivity() {
 
         btnCamera.setOnClickListener {
 
+            var positionFrom = nameLFrom.getSelectedItemPosition().toString()
+            var positionTo = nameLTo.getSelectedItemPosition().toString()
+
             val intent = Intent(this, ShowImage::class.java)
+            intent.putExtra("positionF", positionFrom)
+            intent.putExtra("positionT", positionTo)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
-
         }
 
         btnSetting.setOnClickListener {
@@ -116,42 +116,58 @@ class Home : AppCompatActivity() {
 //        Swap between languages each other
         btnSwap.setOnClickListener {
 
-            valueLFrom.setText("")
-            valueLTo.setText("")
+            valueLFrom.setText(valueLTo.text.toString())
 
-            var positionFrom = nameLFrom.getSelectedItemPosition() ;
-            var positionTo = nameLTo.getSelectedItemPosition() ;
+            var positionFrom = nameLFrom.getSelectedItemPosition()
+            var positionTo = nameLTo.getSelectedItemPosition()
             swapLanguage(positionFrom, positionTo)
         }
 
 //        Enter text you wanna translate
-        valueFrom.doAfterTextChanged {
 
-            var value = valueLFrom.text.toString()
-            if (value != ""){
+        valueLFrom.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-                btnClear.visibility = View.VISIBLE
-                btnMore.visibility = View.VISIBLE
-                translateValue(value, languageTypeFrom, languageTypeTo)
-
-            }else{
-
-                valueLTo.setText("")
-                btnClear.visibility = View.INVISIBLE
-                btnMore.visibility = View.INVISIBLE
+                btnSpeakingBottomFrom.setBackgroundResource(R.drawable.btn_speaking_default_left)
+                btnSpeakingBottomFrom.setTextColor(Color.parseColor(colorWord))
+                btnSpeakingBottomTo.setBackgroundResource(R.drawable.btn_speaking_default_right)
+                btnSpeakingBottomTo.setTextColor(Color.parseColor(colorWord))
             }
 
-            btnSpeakingBottomFrom.setBackgroundResource(R.drawable.btn_speaking_default)
-            btnSpeakingBottomFrom.setTextColor(Color.parseColor(colorWord))
-            btnSpeakingBottomTo.setBackgroundResource(R.drawable.btn_speaking_default)
-            btnSpeakingBottomTo.setTextColor(Color.parseColor(colorWord))
-        }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun afterTextChanged(p0: Editable?) {
+
+                var value = valueLFrom.text.toString()
+                if (value != ""){
+
+                    btnClear.visibility = View.VISIBLE
+                    btnMore.visibility = View.VISIBLE
+                    translateValue(value, languageTypeFrom, languageTypeTo)
+
+                }else{
+
+                    valueLTo.setText("")
+                    btnClear.visibility = View.INVISIBLE
+                    btnMore.visibility = View.INVISIBLE
+                }
+
+                btnSpeakingBottomFrom.setBackgroundResource(R.drawable.btn_speaking_default_left)
+                btnSpeakingBottomFrom.setTextColor(Color.parseColor(colorWord))
+                btnSpeakingBottomTo.setBackgroundResource(R.drawable.btn_speaking_default_right)
+                btnSpeakingBottomTo.setTextColor(Color.parseColor(colorWord))
+            }
+        })
 
 //        Choose language
         val adapterLanguageFrom = ArrayAdapter(this, R.layout.item_language, arrayLanguage)
             adapterLanguageFrom.setDropDownViewResource(R.layout.item_language)
             nameLFrom.adapter = adapterLanguageFrom
-            nameLFrom.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+        if (!positionF.equals(null))
+            nameLFrom.setSelection(positionF.toString().toInt())
+
+        nameLFrom.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
 
@@ -168,7 +184,12 @@ class Home : AppCompatActivity() {
         val adapterLanguageTo = ArrayAdapter(this, R.layout.item_language, arrayLanguage)
         adapterLanguageTo.setDropDownViewResource(R.layout.item_language)
         nameLTo.adapter = adapterLanguageTo
-        nameLTo.setSelection(1) //Get default value in array of languages
+
+        if (!positionT.equals(null))
+            nameLTo.setSelection(positionT.toString().toInt())
+        else
+            nameLTo.setSelection(1) //Get default value in array of languages
+
         nameLTo.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {

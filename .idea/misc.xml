@@ -11,19 +11,22 @@
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/drawable/bg_item_nav_effect.xml" value="0.194" />
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/drawable/bg_white_radius20.xml" value="0.194" />
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/drawable/btn_speaking_default.xml" value="0.222" />
+        <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/drawable/btn_speaking_default_left.xml" value="0.221" />
+        <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/drawable/btn_speaking_default_right.xml" value="0.221" />
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/drawable/btn_speaking_left.xml" value="0.194" />
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/drawable/btn_speaking_main.xml" value="0.194" />
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/drawable/ic_back.xml" value="0.194" />
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/drawable/item_content.xml" value="0.194" />
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/font/font.xml" value="0.3592592592592593" />
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/font/font_poppin_medium200.xml" value="0.3592592592592593" />
-        <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/activity_home.xml" value="0.3140565639510342" />
+        <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/activity_home.xml" value="0.33" />
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/activity_setting.xml" value="0.25" />
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/activity_show_content.xml" value="0.33" />
-        <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/activity_show_image.xml" value="0.33" />
+        <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/activity_show_image.xml" value="0.25" />
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/activity_show_offline_phrase_book.xml" value="0.3140565639510342" />
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/item_content.xml" value="0.31666666666666665" />
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/item_language.xml" value="0.3180846515604959" />
+        <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/item_language_camera.xml" value="0.3180846515604959" />
         <entry key="..\:/Flutter/VoiceTranslate/app/src/main/res/layout/item_topic.xml" value="0.5" />
       </map>
     </option>

@@ -11,12 +11,69 @@
     <RelativeLayout
         android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
 
+        android:background="@color/backgroundButtonCamera"
         android:gravity="center_vertical"
-        android:paddingHorizontal="30dp"
 
-        android:background="@color/backgroundButtonCamera">
+        android:paddingHorizontal="20dp">
+
+        <ImageButton
+            android:id="@+id/btn_flash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:background="@color/backgroundButtonCamera"
+
+            android:src="@drawable/ic_flash" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginHorizontal="5dp"
+            android:layout_toStartOf="@id/btn_close"
+
+            android:layout_toEndOf="@id/btn_flash">
+
+            <Spinner
+                android:id="@+id/nameLanguageFrom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/btn_swap"
+                android:fontFamily="@font/poppins_medium"
+
+                android:minWidth="50dp"
+
+                android:singleLine="true"
+                android:spinnerMode="dialog"
+                android:text="English"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <ImageButton
+                android:id="@+id/btn_swap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+
+                android:background="@color/backgroundButtonCamera"
+                android:src="@drawable/ic_transfer" />
+
+            <Spinner
+                android:id="@+id/nameLanguageTo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@id/btn_swap"
+                android:fontFamily="@font/poppins_medium"
+
+                android:spinnerMode="dialog"
+
+                android:text="Spanish"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </RelativeLayout>
 
         <ImageButton
             android:id="@+id/btn_close"
@@ -24,10 +81,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
 
-            android:padding="10dp"
+            android:background="@color/backgroundButtonCamera"
 
-            android:src="@drawable/ic_close_camera"
-            android:background="@color/backgroundButtonCamera"/>
+            android:src="@drawable/ic_close_white" />
     </RelativeLayout>
 
     <ImageView
@@ -36,22 +92,23 @@
         android:layout_height="match_parent"
         android:layout_above="@id/contentBtn"
         android:layout_below="@id/appBar"
-        android:layout_centerHorizontal="true"
 
-        android:layout_centerVertical="true"
+        android:layout_centerInParent="true"
         android:adjustViewBounds="true"
-        android:background="@color/backgroundButtonCamera" />
+        android:background="@color/backgroundButtonCamera"
+
+        android:scaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/valueAfterDetect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
 
-        android:maxLines="1"
+        android:layout_centerInParent="true"
         android:maxWidth="10dp"
+        android:maxLines="1"
         android:textColor="@color/backgroundButtonCamera"
-        android:textSize="1sp"/>
+        android:textSize="1sp" />
 
     <LinearLayout
         android:id="@+id/contentBtn"
@@ -79,7 +136,7 @@
                 android:layout_height="22dp"
 
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_camera_noclick" />
+                android:src="@drawable/ic_scancamera_noclick" />
 
             <Button
                 android:id="@+id/btnCamera"
@@ -112,7 +169,7 @@
                 android:layout_height="22dp"
 
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/ic_gallery_noclick" />
+                android:src="@drawable/ic_scangallery_noclick" />
 
             <Button
                 android:id="@+id/btnGallery"

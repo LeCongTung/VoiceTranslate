@@ -77,7 +77,8 @@
             android:hint="Search"
             android:lineHeight="24dp"
             android:maxLines="1"
-            android:padding="10dp"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="20dp"
             android:textColor="@color/word"
             android:textSize="16dp" />
     </RelativeLayout>

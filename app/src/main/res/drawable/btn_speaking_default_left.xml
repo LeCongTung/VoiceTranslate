@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item >
+    <item android:state_pressed="false">
 
         <shape android:shape="rectangle">
 
@@ -9,7 +9,8 @@
                 android:color="@color/backgroundSearch"/>
 
             <corners
-                android:radius="10dp"/>
+                android:topLeftRadius="50dp"
+                android:bottomLeftRadius="50dp"/>
         </shape>
     </item>
 </selector>

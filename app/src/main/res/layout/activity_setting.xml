@@ -28,9 +28,7 @@
             android:layout_height="wrap_content"
 
             android:background="@drawable/bg_item_btn_effect"
-            android:paddingEnd="20dp"
 
-            android:paddingBottom="20dp"
             android:src="@drawable/ic_lose" />
 
         <TextView

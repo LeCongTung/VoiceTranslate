@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -29,7 +28,7 @@
 
             android:background="@drawable/bg_item_nav_effect"
             android:padding="5dp"
-            android:src="@drawable/nav_ic_phrasebook" />
+            android:src="@drawable/ic_nav_airport" />
 
         <ImageButton
             android:id="@+id/nav_camera"
@@ -40,7 +39,7 @@
             android:background="@drawable/bg_item_nav_effect"
 
             android:padding="5dp"
-            android:src="@drawable/nav_ic_camera" />
+            android:src="@drawable/ic_nav_camera" />
 
         <ImageButton
             android:id="@+id/nav_another"
@@ -51,7 +50,7 @@
             android:background="@drawable/bg_item_nav_effect"
 
             android:padding="5dp"
-            android:src="@drawable/nav_ic_cubes" />
+            android:src="@drawable/ic_nav_cube" />
 
         <ImageButton
             android:id="@+id/nav_setting"
@@ -62,7 +61,7 @@
             android:background="@drawable/bg_item_nav_effect"
 
             android:padding="5dp"
-            android:src="@drawable/nav_ic_settingapp"/>
+            android:src="@drawable/ic_nav_setting"/>
     </LinearLayout>
 
 <!--    Content-->
@@ -100,6 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_toRightOf="@id/flagLanguageFrom"
+                android:spinnerMode="dialog"
 
                 android:fontFamily="@font/poppins_medium"
 
@@ -118,7 +118,8 @@
                 android:background="@drawable/bg_item_btn_effect"
 
                 android:paddingHorizontal="10dp"
-                android:src="@drawable/ic_volume" />
+
+                android:src="@drawable/ic_volumn" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -159,12 +160,13 @@
             <ImageButton
                 android:id="@+id/btn_clear"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:background="@drawable/bg_item_btn_effect"
 
-                android:paddingEnd="10dp"
+                android:layout_marginTop="5dp"
+
+                android:background="@drawable/bg_item_btn_effect"
 
                 android:src="@drawable/ic_lose"
                 android:visibility="invisible" />
@@ -191,7 +193,7 @@
 
                 android:layout_centerInParent="true"
                 android:background="@drawable/bg_item_btn_effect"
-                android:paddingHorizontal="10dp"
+                android:paddingHorizontal="8dp"
                 android:paddingVertical="10dp"
                 android:src="@drawable/ic_swap" />
 
@@ -222,6 +224,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_toRightOf="@id/flagLanguageTo"
+                android:spinnerMode="dialog"
 
                 android:fontFamily="@font/poppins_medium"
 
@@ -237,10 +240,11 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
 
+                android:paddingHorizontal="10dp"
+
                 android:background="@drawable/bg_item_btn_effect"
 
-                android:paddingHorizontal="10dp"
-                android:src="@drawable/ic_volume" />
+                android:src="@drawable/ic_volumn" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -278,13 +282,14 @@
             <ImageButton
                 android:id="@+id/btn_moreInfo"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
 
+                android:layout_marginTop="5dp"
+
                 android:background="@drawable/bg_item_btn_effect"
 
-                android:paddingEnd="10dp"
                 android:src="@drawable/ic_moreinfo"
                 android:visibility="invisible" />
         </RelativeLayout>
@@ -302,7 +307,7 @@
         <LinearLayout
             android:id="@+id/contentBtn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:weightSum="2"
             android:layout_centerVertical="true"
 
@@ -311,10 +316,10 @@
             <Button
                 android:id="@+id/btn_speakFromBottom"
                 android:layout_width="wrap_content"
-                android:layout_height="55dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
 
-                android:background="@drawable/btn_speaking_default"
+                android:background="@drawable/btn_speaking_default_left"
 
                 android:text="English"
                 android:textAllCaps="false"
@@ -326,10 +331,10 @@
             <Button
                 android:id="@+id/btn_speakToBottom"
                 android:layout_width="wrap_content"
-                android:layout_height="55dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
 
-                android:background="@drawable/btn_speaking_default"
+                android:background="@drawable/btn_speaking_default_right"
 
                 android:text="Spanish"
                 android:textAllCaps="false"
@@ -343,10 +348,10 @@
             android:id="@+id/btn_speak"
             android:layout_width="65dp"
             android:layout_height="65dp"
+
             android:layout_centerInParent="true"
 
             android:background="@drawable/btn_speaking_center"
-
             android:src="@drawable/ic_voice" />
     </RelativeLayout>
 </RelativeLayout>
