@@ -77,10 +77,10 @@
             android:hint="Search"
             android:lineHeight="24dp"
             android:maxLines="1"
-            android:paddingVertical="10dp"
             android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
             android:textColor="@color/word"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView

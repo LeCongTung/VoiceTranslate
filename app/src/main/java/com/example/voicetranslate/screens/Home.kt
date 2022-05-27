@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
@@ -13,11 +12,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.example.voicetranslate.R
 import com.example.voicetranslate.shows.ShowImage
+import com.example.voicetranslate.shows.ShowLanguage
 import com.example.voicetranslate.shows.ShowOfflinePhraseBook
 import com.google.mlkit.nl.translate.TranslateLanguage
-import com.google.mlkit.nl.translate.TranslateLanguage.*
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import kotlinx.android.synthetic.main.activity_home.*
@@ -25,16 +25,10 @@ import java.util.*
 
 class Home : AppCompatActivity() {
 
-//    Camera
-    private val CAMERA_REQUEST_CODE = 1
-    private val GALLERY_REQUEST_CODE = 2
+    //    Camera
     private val RECORD_SPEECH_TEXT = 102
 
-    var languageTypeFrom = TranslateLanguage.ENGLISH
-    var languageTypeTo = TranslateLanguage.VIETNAMESE
-
-//    Value
-    val arrayLanguage = arrayOf("English", "Spanish", "Chinese", "Italian", "French", "German", "Hindi", "Japanese", "Korean", "Russian", "Vietnamese")
+    //    Value
     lateinit var speaker: TextToSpeech
     var backPressedTime: Long = 0
     val colorWhite = "#FFFFFF"
@@ -48,7 +42,7 @@ class Home : AppCompatActivity() {
 //        Init
         val btnOfflinePhraseBook: ImageButton = findViewById(R.id.nav_offlinePhrasebook)
         val btnCamera: ImageButton = findViewById(R.id.nav_camera)
-        val btn: ImageButton = findViewById(R.id.nav_another)
+//        val btn: ImageButton = findViewById(R.id.nav_another)
         val btnSetting: ImageButton = findViewById(R.id.nav_setting)
 
         val btnSpeakingBottomFrom: Button = findViewById(R.id.btn_speakFromBottom)
@@ -56,11 +50,11 @@ class Home : AppCompatActivity() {
         val btnSpeakingBottom: ImageButton = findViewById(R.id.btn_speak)
 
 //        Choice a language that you have
-        val nameLFrom: Spinner = findViewById(R.id.nameLanguageFrom)
+        val btnChoiceLanguageFrom: ImageButton = findViewById(R.id.btn_choicelanguagefrom)
         val valueLFrom: EditText = findViewById(R.id.valueFrom)
         val btnSpeakingLFrom: ImageButton = findViewById(R.id.btn_speakingFrom)
 
-        val nameLTo: Spinner = findViewById(R.id.nameLanguageTo)
+        val btnChoiceLanguageTo: ImageButton = findViewById(R.id.btn_choicelanguageTo)
         val valueLTo: TextView = findViewById(R.id.valueTo)
         val btnSpeakingLTo: ImageButton = findViewById(R.id.btn_speakingTo)
 
@@ -68,41 +62,77 @@ class Home : AppCompatActivity() {
         val btnMore: ImageButton = findViewById(R.id.btn_moreInfo)
         val btnSwap: ImageButton = findViewById(R.id.btn_swap)
 
+
 //        Get text from image
-        val valueImage = intent.getStringExtra("valueImage").toString()
-        val positionF = intent.getStringExtra("positionF")
-        val positionT = intent.getStringExtra("positionT")
+        val value = intent.getStringExtra("value").toString()
 
-        if (!valueImage.equals("null")){
-            valueLFrom.setText(valueImage)
+        var intentDisplayFrom = intent.getStringExtra("displayFrom")
+
+        var intentLanguageFrom = intent.getStringExtra("languageFrom").toString()
+        var intentFlagFrom = intent.getIntExtra("flagFrom", R.drawable.ic_flag_english)
+
+        var intentDisplayTo = intent.getStringExtra("displayTo")
+        var intentLanguageTo = intent.getStringExtra("languageTo").toString()
+        var intentFlagTo = intent.getIntExtra("flagTo", R.drawable.ic_flag_vietnamese)
+
+//        Set up data for app
+        if (intentDisplayFrom.equals(null)) {
+
+            intentDisplayFrom = "English"
+            intentDisplayTo = "Vietnamese"
+            intentLanguageFrom = TranslateLanguage.ENGLISH
+            intentLanguageTo = TranslateLanguage.VIETNAMESE
+        }
+
+//        Display value
+        swapLanguage(intentDisplayTo, intentFlagTo, intentDisplayFrom, intentFlagFrom)
+
+        if (!value.equals("null")) {
+            valueLFrom.setText(value)
+
+            translateValue(value, intentLanguageFrom, intentLanguageTo)
             btnClear.visibility = View.VISIBLE
-            btnMore.visibility = View.VISIBLE}
+            btnMore.visibility = View.VISIBLE
+        }
 
-//        Excute event -- when click button
+
+//        _________________________________________________________________Excute event -- when click button
 //        ===========Navigation
         btnOfflinePhraseBook.setOnClickListener {
 
             val intent = Intent(this, ShowOfflinePhraseBook::class.java)
             startActivity(intent)
+            finish()
             overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
         }
 
         btnCamera.setOnClickListener {
 
-            var positionFrom = nameLFrom.getSelectedItemPosition().toString()
-            var positionTo = nameLTo.getSelectedItemPosition().toString()
-
             val intent = Intent(this, ShowImage::class.java)
-            intent.putExtra("positionF", positionFrom)
-            intent.putExtra("positionT", positionTo)
+            intent.putExtra("displayFrom", intentDisplayFrom)
+            intent.putExtra("languageFrom", intentLanguageFrom)
+            intent.putExtra("flagFrom", intentFlagFrom)
+
+            intent.putExtra("displayTo", intentDisplayTo)
+            intent.putExtra("languageTo", intentLanguageTo)
+            intent.putExtra("flagTo", intentFlagTo)
             startActivity(intent)
+            finish()
             overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
         }
 
         btnSetting.setOnClickListener {
 
             val intent = Intent(this, Setting::class.java)
+            intent.putExtra("displayFrom", intentDisplayFrom)
+            intent.putExtra("languageFrom", intentLanguageFrom)
+            intent.putExtra("flagFrom", intentFlagFrom)
+
+            intent.putExtra("displayTo", intentDisplayTo)
+            intent.putExtra("languageTo", intentLanguageTo)
+            intent.putExtra("flagTo", intentFlagTo)
             startActivity(intent)
+            finish()
             overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
         }
 
@@ -111,21 +141,31 @@ class Home : AppCompatActivity() {
         btnClear.setOnClickListener {
 
             valueLFrom.setText("")
+            valueLTo.setText("")
         }
 
 //        Swap between languages each other
         btnSwap.setOnClickListener {
 
-            valueLFrom.setText(valueLTo.text.toString())
+            swapLanguage(intentDisplayFrom, intentFlagFrom, intentDisplayTo, intentFlagTo)
 
-            var positionFrom = nameLFrom.getSelectedItemPosition()
-            var positionTo = nameLTo.getSelectedItemPosition()
-            swapLanguage(positionFrom, positionTo)
+            var dataDisplay = intentDisplayFrom
+            intentDisplayFrom = intentDisplayTo
+            intentDisplayTo = dataDisplay
+
+            var dataFlag = intentFlagFrom.toString()
+            intentFlagFrom = intentFlagTo
+            intentFlagTo = dataFlag.toInt()
+
+            var dataSave = intentLanguageFrom
+            intentLanguageFrom = intentLanguageTo
+            intentLanguageTo = dataSave
+
+            translateValue(valueLFrom.text.toString(), intentLanguageFrom, intentLanguageTo)
         }
 
 //        Enter text you wanna translate
-
-        valueLFrom.addTextChangedListener(object: TextWatcher{
+        valueLFrom.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
                 btnSpeakingBottomFrom.setBackgroundResource(R.drawable.btn_speaking_default_left)
@@ -139,13 +179,13 @@ class Home : AppCompatActivity() {
             override fun afterTextChanged(p0: Editable?) {
 
                 var value = valueLFrom.text.toString()
-                if (value != ""){
+                if (value != "") {
 
                     btnClear.visibility = View.VISIBLE
                     btnMore.visibility = View.VISIBLE
-                    translateValue(value, languageTypeFrom, languageTypeTo)
+                    translateValue(value, intentLanguageFrom, intentLanguageTo)
 
-                }else{
+                } else {
 
                     valueLTo.setText("")
                     btnClear.visibility = View.INVISIBLE
@@ -160,77 +200,39 @@ class Home : AppCompatActivity() {
         })
 
 //        Choose language
-        val adapterLanguageFrom = ArrayAdapter(this, R.layout.item_language, arrayLanguage)
-            adapterLanguageFrom.setDropDownViewResource(R.layout.item_language)
-            nameLFrom.adapter = adapterLanguageFrom
+        btnChoiceLanguageFrom.setOnClickListener {
 
-        if (!positionF.equals(null))
-            nameLFrom.setSelection(positionF.toString().toInt())
-
-        nameLFrom.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-
-                languageTypeFrom = detectLanguage(arrayLanguage[position])
-                var value = valueLFrom.text.toString()
-                translateValue(value, languageTypeFrom, languageTypeTo)
-
-                var changeLanguage = nameLFrom.selectedItem.toString()
-                displayFlagFrom(changeLanguage)
-                btnSpeakingBottomFrom.setText(changeLanguage)
-            }
+            val intent = Intent(this, ShowLanguage::class.java)
+            intent.putExtra("typeChoice", "above")
+            intent.putExtra("displayFrom", intentDisplayFrom)
+            intent.putExtra("displayTo", intentDisplayTo)
+            intent.putExtra("value", valueLFrom.text.toString())
+            startActivity(intent)
+            finish()
+            overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
         }
 
-        val adapterLanguageTo = ArrayAdapter(this, R.layout.item_language, arrayLanguage)
-        adapterLanguageTo.setDropDownViewResource(R.layout.item_language)
-        nameLTo.adapter = adapterLanguageTo
+        btnChoiceLanguageTo.setOnClickListener {
 
-        if (!positionT.equals(null))
-            nameLTo.setSelection(positionT.toString().toInt())
-        else
-            nameLTo.setSelection(1) //Get default value in array of languages
-
-        nameLTo.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) {}
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-
-                languageTypeTo = detectLanguage(arrayLanguage[position])
-                var value = valueLFrom.text.toString()
-                translateValue(value, languageTypeFrom, languageTypeTo)
-
-                var changeLanguage = nameLTo.selectedItem.toString()
-                displayFlagTo(changeLanguage)
-                btnSpeakingBottomTo.setText(changeLanguage)
-            }
+            val intent = Intent(this, ShowLanguage::class.java)
+            intent.putExtra("displayFrom", intentDisplayFrom)
+            intent.putExtra("displayTo", intentDisplayTo)
+            intent.putExtra("value", valueLFrom.text.toString())
+            startActivity(intent)
+            finish()
+            overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
         }
+
 
 //        Click speaking button to speak
         btnSpeakingLFrom.setOnClickListener {
 
-            var changeLanguage = nameLFrom.selectedItem.toString()
-            speaker = TextToSpeech(applicationContext, {
-
-                if (it== TextToSpeech.SUCCESS){
-
-                    speaker.language = detectVoiceWithLanguage(changeLanguage)
-                    speaker.setSpeechRate(1.0f)
-                    speaker.speak(valueLFrom.text.toString(), TextToSpeech.QUEUE_ADD, null)
-                }
-            })
+            TextSpeech(intentLanguageFrom, valueLFrom.text.toString())
         }
 
         btnSpeakingLTo.setOnClickListener {
 
-            var changeLanguage = nameLTo.selectedItem.toString()
-            speaker = TextToSpeech(applicationContext, {
-
-                if (it== TextToSpeech.SUCCESS){
-
-                    speaker.language = detectVoiceWithLanguage(changeLanguage)
-                    speaker.setSpeechRate(1.0f)
-                    speaker.speak(valueLTo.text.toString(), TextToSpeech.QUEUE_ADD, null)
-                }
-            })
+            TextSpeech(intentLanguageTo, valueLTo.text.toString())
         }
 
         btnSpeakingBottom.setOnClickListener {
@@ -240,12 +242,12 @@ class Home : AppCompatActivity() {
             btnSpeakingBottomTo.setBackgroundResource(R.drawable.btn_speaking_right)
             btnSpeakingBottomTo.setTextColor(Color.parseColor(colorWhite))
 
-            var changeLanguage = nameLFrom.selectedItem.toString()
-            SpeechText(detectVoiceWithLanguage(changeLanguage))
+            SpeechText(intentDisplayFrom)
         }
     }
 
-//    Function -- Click back button to close app
+
+    //    Function -- Click back button to close app
     override fun onBackPressed() {
 
         if (backPressedTime + 3000 > System.currentTimeMillis()) {
@@ -257,93 +259,30 @@ class Home : AppCompatActivity() {
         backPressedTime = System.currentTimeMillis()
     }
 
-//    Function -- Toast
+    //    Function -- Toast
     private fun show(message: String) {
-        Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-//    Function -- Check permission to use camera
+    //    Function -- Check permission to use camera
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == RECORD_SPEECH_TEXT && resultCode == Activity.RESULT_OK){
+        if (requestCode == RECORD_SPEECH_TEXT && resultCode == Activity.RESULT_OK) {
 
             val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             valueFrom.setText(result?.get(0).toString())
         }
     }
 
-//    Display the flag follow a language is chosen
-    private fun displayFlagFrom(language: String){
+    //    Translate
+    private fun translateValue(value: String, typeFrom: String, typeTo: String) {
 
-        val flagLFrom: ImageView = findViewById(R.id.flagLanguageFrom)
-        when (language){
-
-            "English" -> {flagLFrom.setImageResource(R.drawable.ic_flag_american)}
-            "Spanish" -> {flagLFrom.setImageResource(R.drawable.ic_flag_spanish)}
-            "Chinese" -> {flagLFrom.setImageResource(R.drawable.ic_flag_china)}
-            "French" -> {flagLFrom.setImageResource(R.drawable.ic_flag_france)}
-            "Japanese" -> {flagLFrom.setImageResource(R.drawable.ic_flag_japanese)}
-            "German" -> {flagLFrom.setImageResource(R.drawable.ic_flag_germany)}
-            "Hindi" -> {flagLFrom.setImageResource(R.drawable.ic_flag_hindi)}
-            "Italian" -> {flagLFrom.setImageResource(R.drawable.ic_flag_italy)}
-            "Korean" -> {flagLFrom.setImageResource(R.drawable.ic_flag_southkorea)}
-            "Russian" -> {flagLFrom.setImageResource(R.drawable.ic_flag_russia)}
-            "Vietnamese" -> {flagLFrom.setImageResource(R.drawable.ic_flag_vietnam)}
-        }
-    }
-
-    private fun displayFlagTo(language: String){
-
-        val flagLTo: ImageView = findViewById(R.id.flagLanguageTo)
-        when (language){
-
-            "English" -> {flagLTo.setImageResource(R.drawable.ic_flag_american)}
-            "Spanish" -> {flagLTo.setImageResource(R.drawable.ic_flag_spanish)}
-            "Chinese" -> {flagLTo.setImageResource(R.drawable.ic_flag_china)}
-            "French" -> {flagLTo.setImageResource(R.drawable.ic_flag_france)}
-            "Japanese" -> {flagLTo.setImageResource(R.drawable.ic_flag_japanese)}
-            "German" -> {flagLTo.setImageResource(R.drawable.ic_flag_germany)}
-            "Hindi" -> {flagLTo.setImageResource(R.drawable.ic_flag_hindi)}
-            "Italian" -> {flagLTo.setImageResource(R.drawable.ic_flag_italy)}
-            "Korean" -> {flagLTo.setImageResource(R.drawable.ic_flag_southkorea)}
-            "Russian" -> {flagLTo.setImageResource(R.drawable.ic_flag_russia)}
-            "Vietnamese" -> {flagLTo.setImageResource(R.drawable.ic_flag_vietnam)}
-        }
-    }
-
-//    Detect a language
-    private fun detectLanguage(language: String): String{
-
-        var languageType = ""
-        when (language){
-
-            "English" -> {languageType = TranslateLanguage.ENGLISH}
-            "Chinese" -> {languageType = TranslateLanguage.CHINESE}
-            "Spanish" -> {languageType = TranslateLanguage.SPANISH}
-            "French" -> {languageType = TranslateLanguage.FRENCH}
-            "Japanese" -> {languageType = TranslateLanguage.JAPANESE}
-            "German" -> {languageType = TranslateLanguage.GERMAN}
-            "Hindi" -> {languageType = TranslateLanguage.HINDI}
-            "Italian" -> {languageType = TranslateLanguage.ITALIAN}
-            "Korean" -> {languageType = TranslateLanguage.KOREAN}
-            "Russian" -> {languageType = TranslateLanguage.RUSSIAN}
-            "Vietnamese" -> {languageType = TranslateLanguage.VIETNAMESE}
-        }
-        return languageType
-    }
-
-
-//    Translate
-    private fun translateValue(value: String, typeFrom: String, typeTo: String){
-
-        val valueFTo: TextView = findViewById(R.id.valueFrom)
         val valueLTo: TextView = findViewById(R.id.valueTo)
         val options = TranslatorOptions.Builder()
             .setSourceLanguage(typeFrom)
             .setTargetLanguage(typeTo)
             .build()
-
         val translator = Translation.getClient(options)
         translator.downloadModelIfNeeded().addOnSuccessListener {
 
@@ -357,52 +296,55 @@ class Home : AppCompatActivity() {
         }
     }
 
-//    Swap between languages
-    private fun swapLanguage(positionFrom: Int, positionTo: Int){
+    //    Swap between languages
+    private fun swapLanguage(displayFrom: String?, flagFrom: Int, displayTo: String?, flagTo: Int) {
 
-        val nameLFrom: Spinner = findViewById(R.id.nameLanguageFrom)
-        val nameLTo: Spinner = findViewById(R.id.nameLanguageTo)
+        val flagLFrom: ImageView = findViewById(R.id.flagLanguageFrom)
+        val displayNameLFrom: TextView = findViewById(R.id.displayLanguageFrom)
+        val displayNameLFromBottom: TextView = findViewById(R.id.btn_speakFromBottom)
+        val flagLTo: ImageView = findViewById(R.id.flagLanguageTo)
+        val displayNameLTo: TextView = findViewById(R.id.displayLanguageTo)
+        val displayNameLToBottom: TextView = findViewById(R.id.btn_speakToBottom)
 
-        nameLFrom.setSelection(positionTo)
-        nameLTo.setSelection(positionFrom)
+        displayNameLFrom.setText(displayTo)
+        displayNameLFromBottom.setText(displayTo)
+        flagLFrom.setImageResource(flagTo)
+
+        displayNameLTo.setText(displayFrom)
+        displayNameLToBottom.setText(displayFrom)
+        flagLTo.setImageResource(flagFrom)
     }
 
-//    Get voice to speak
-    private fun detectVoiceWithLanguage(language: String): Locale{
-
-        var languageType = Locale.getDefault()
-        when (language){
-
-            "English" -> {languageType = Locale.ENGLISH}
-            "Chinese" -> {languageType = Locale.forLanguageTag(CHINESE)}
-            "Spanish" -> {languageType = Locale.forLanguageTag(SPANISH)}
-            "French" -> {languageType = Locale.forLanguageTag(FRENCH)}
-            "Japanese" -> {languageType = Locale.forLanguageTag(JAPANESE)}
-            "German" -> {languageType = Locale.forLanguageTag(GERMAN)}
-            "Hindi" -> {languageType = Locale.forLanguageTag(HINDI)}
-            "Italian" -> {languageType = Locale.forLanguageTag(ITALIAN)}
-            "Korean" -> {languageType = Locale.forLanguageTag(KOREAN)}
-            "Russian" -> {languageType = Locale.forLanguageTag(RUSSIAN)}
-            "Vietnamese" -> {languageType = Locale.forLanguageTag(VIETNAMESE)}
-        }
-        return languageType
-    }
-
-//    Speech to text
-    private fun SpeechText(voice: Locale){
+    //    Speech to text
+    private fun SpeechText(voice: String?) {
 
         if (!SpeechRecognizer.isRecognitionAvailable(this))
 
             show("Error")
-        else{
+        else {
 
             val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, voice)
-            i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say something by " + voice.toString() + " !")
+            i.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            )
+            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, Locale.forLanguageTag(voice))
+            i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say something in " + voice + " !")
             startActivityForResult(i, RECORD_SPEECH_TEXT)
         }
+    }
 
+    //    Text Speech
+    private fun TextSpeech(voice: String, value: String) {
+
+        speaker = TextToSpeech(applicationContext, {
+
+            if (it == TextToSpeech.SUCCESS) {
+
+                speaker.language = Locale.forLanguageTag(voice)
+                speaker.setSpeechRate(1.0f)
+                speaker.speak(value, TextToSpeech.QUEUE_ADD, null)
+            }
+        })
     }
 }
-

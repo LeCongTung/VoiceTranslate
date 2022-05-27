@@ -1,15 +1,13 @@
 package com.example.voicetranslate.screens
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.voicetranslate.R
 
 class Setting : AppCompatActivity() {
-
-    var backPressedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,11 +16,32 @@ class Setting : AppCompatActivity() {
 //        Init
         val btnClose: ImageButton = findViewById(R.id.btn_close)
 
+//        Get data
+        val value = intent.getStringExtra("value").toString()
+
+        var intentDisplayFrom = intent.getStringExtra("displayFrom")
+
+        var intentLanguageFrom = intent.getStringExtra("languageFrom").toString()
+        var intentFlagFrom = intent.getIntExtra("flagFrom", R.drawable.ic_flag_english)
+
+        var intentDisplayTo = intent.getStringExtra("displayTo")
+        var intentLanguageTo = intent.getStringExtra("languageTo").toString()
+        var intentFlagTo = intent.getIntExtra("flagTo", R.drawable.ic_flag_vietnamese)
+
 //        Excute event -- when click button
         btnClose.setOnClickListener {
 
             val intent = Intent(this, Home::class.java)
+            intent.putExtra("value", value)
+            intent.putExtra("displayFrom", intentDisplayFrom)
+            intent.putExtra("languageFrom", intentLanguageFrom)
+            intent.putExtra("flagFrom", intentFlagFrom)
+
+            intent.putExtra("displayTo", intentDisplayTo)
+            intent.putExtra("languageTo", intentLanguageTo)
+            intent.putExtra("flagTo", intentFlagTo)
             startActivity(intent)
+            finish()
             overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
         }
     }
@@ -30,15 +49,29 @@ class Setting : AppCompatActivity() {
 //    Function -- Click back button to close app
     override fun onBackPressed() {
 
-        if (backPressedTime + 3000 > System.currentTimeMillis()) {
-            super.onBackPressed()
-            finishAffinity();
-        } else {
-            show("Press back again to leave the app")
-        }
-        backPressedTime = System.currentTimeMillis()
-    }
+        val value = intent.getStringExtra("value").toString()
 
+        var intentDisplayFrom = intent.getStringExtra("displayFrom")
+        var intentLanguageFrom = intent.getStringExtra("languageFrom").toString()
+        var intentFlagFrom = intent.getIntExtra("flagFrom", R.drawable.ic_flag_english)
+
+        var intentDisplayTo = intent.getStringExtra("displayTo")
+        var intentLanguageTo = intent.getStringExtra("languageTo").toString()
+        var intentFlagTo = intent.getIntExtra("flagTo", R.drawable.ic_flag_vietnamese)
+
+        val intent = Intent(this, Home::class.java)
+        intent.putExtra("value", value)
+        intent.putExtra("displayFrom", intentDisplayFrom)
+        intent.putExtra("languageFrom", intentLanguageFrom)
+        intent.putExtra("flagFrom", intentFlagFrom)
+
+        intent.putExtra("displayTo", intentDisplayTo)
+        intent.putExtra("languageTo", intentLanguageTo)
+        intent.putExtra("flagTo", intentFlagTo)
+        startActivity(intent)
+        finish()
+        overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
+    }
 
     //    Function -- Toast
     private fun show(message: String) {

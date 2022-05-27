@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".shows.ShowLanguage"
+
+    android:paddingTop="30dp"
+
+    android:background="@color/backgroundColor">
+
+    <!--    Navigation-->
+    <LinearLayout
+        android:id="@+id/navigationbar"
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:background="@color/backgroundColor"
+        android:orientation="horizontal"
+
+        android:layout_marginHorizontal="30dp"
+
+        android:weightSum="4">
+
+        <ImageButton
+            android:id="@+id/nav_offlinePhrasebook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="1"
+
+            android:background="@drawable/bg_item_nav_effect"
+            android:padding="5dp"
+            android:src="@drawable/ic_nav_airport"/>
+
+        <ImageButton
+            android:id="@+id/nav_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:background="@drawable/bg_item_nav_effect"
+
+            android:padding="5dp"
+            android:src="@drawable/ic_nav_camera" />
+
+        <ImageButton
+            android:id="@+id/nav_another"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:background="@drawable/bg_item_nav_effect"
+
+            android:padding="5dp"
+            android:src="@drawable/ic_nav_cube" />
+
+        <ImageButton
+            android:id="@+id/nav_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:background="@drawable/bg_item_nav_effect"
+
+            android:padding="5dp"
+            android:src="@drawable/ic_nav_setting" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/navigationbar"
+
+        android:layout_marginTop="35dp"
+        android:paddingHorizontal="30dp"
+        android:paddingTop="30dp"
+
+        android:background="@drawable/bg_choice_language">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="5dp"
+
+            android:fontFamily="@font/poppins_medium"
+            android:text="Select language"
+            android:textColor="@color/word"
+            android:textSize="20sp" />
+
+        <ImageButton
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignParentEnd="true"
+
+            android:background="@drawable/bg_item_btn_effect"
+            android:padding="5dp"
+
+            android:paddingHorizontal="5dp"
+
+            android:src="@drawable/ic_lose" />
+
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/btn_close"
+
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_search_language_radius"
+
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="15dp"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center_vertical"
+            android:hint="Search"
+
+            android:maxLines="1"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:queryBackground="@android:color/transparent"
+
+            android:textColor="@color/word"
+            android:textSize="16sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/et_search"
+
+            android:layout_marginTop="20dp"
+
+            android:background="@color/white"
+            android:scrollbars="none"
+            tools:listitem="@layout/item_language" />
+    </RelativeLayout>
+</RelativeLayout>

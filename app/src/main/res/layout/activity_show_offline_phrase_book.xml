@@ -61,12 +61,12 @@
             android:hint="Search"
 
             android:maxLines="1"
-            android:paddingVertical="10dp"
             android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
             android:queryBackground="@android:color/transparent"
 
             android:textColor="@color/word"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/allTopics"

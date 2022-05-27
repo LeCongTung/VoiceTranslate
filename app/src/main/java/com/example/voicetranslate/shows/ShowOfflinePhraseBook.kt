@@ -1,23 +1,17 @@
 package com.example.voicetranslate.shows
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.ArrayAdapter
 import android.widget.EditText
-import android.widget.SearchView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.voicetranslate.R
-import com.example.voicetranslate.adapters.AdapterExample
 import com.example.voicetranslate.adapters.AdapterTopic
 import com.example.voicetranslate.models.Topic
 import com.example.voicetranslate.screens.Home
-import java.util.*
-import kotlin.collections.ArrayList
 
 class ShowOfflinePhraseBook : AppCompatActivity() {
 
@@ -48,11 +42,11 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
             R.drawable.ic_topic_callpolice,
             R.drawable.ic_topic_communication,
             R.drawable.ic_topic_food,
-            R.drawable.ic_topic_health,
+            R.drawable.ic_topic_healthcare,
             R.drawable.ic_topic_hotel,
             R.drawable.ic_topic_restaurant,
             R.drawable.ic_topic_transport,
-            R.drawable.ic_topic_repairs,
+            R.drawable.ic_topic_laundry,
             R.drawable.ic_topic_shopping,
             R.drawable.ic_topic_sightseeing,
             R.drawable.ic_topic_sport,
@@ -109,6 +103,7 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
 
         val intent = Intent(this@ShowOfflinePhraseBook, Home::class.java)
         startActivity(intent)
+        finish()
         overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
     }
 
@@ -134,10 +129,10 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
                 else
                     titleToContent = filteredNames[position].title.toString()
 
-
                 val intent = Intent(this@ShowOfflinePhraseBook, ShowContent::class.java)
                 intent.putExtra("title", titleToContent)
                 startActivity(intent)
+                finish()
                 overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
             }
         })
