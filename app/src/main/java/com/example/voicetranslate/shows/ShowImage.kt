@@ -1,5 +1,6 @@
 package com.example.voicetranslate.shows
 
+import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
@@ -37,6 +38,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.activity_show_image.*
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 class ShowImage : AppCompatActivity() {
@@ -46,13 +48,14 @@ class ShowImage : AppCompatActivity() {
     private val REQUEST_CODE = 42
     private val FILE_NAME = "photo.jpg"
 
-    var backPressedTime: Long = 0
-
     lateinit var takePictureIntent: Intent
     lateinit var inputImage: InputImage
     lateinit var textRecognizer: TextRecognizer
     lateinit var photoFile: File
     private lateinit var dialog: Dialog
+
+    lateinit var valuePhoto: ByteArray
+    lateinit var bmp: Bitmap
 
     val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
@@ -75,7 +78,6 @@ class ShowImage : AppCompatActivity() {
         val picgallery: ImageView = findViewById(R.id.picgallery)
 
 //        Get data
-
         var intentDisplayFrom = intent.getStringExtra("displayFrom").toString()
         var intentLanguageFrom = intent.getStringExtra("languageFrom").toString()
         var intentFlagFrom = intent.getIntExtra("flagFrom", 0)
@@ -84,26 +86,36 @@ class ShowImage : AppCompatActivity() {
         var intentLanguageTo = intent.getStringExtra("languageTo").toString()
         var intentFlagTo = intent.getIntExtra("flagTo", 0)
 
+        val byteArray = intent.getByteArrayExtra("image")
         swapLanguage(intentDisplayTo, intentDisplayFrom)
 
 //        Get text from image
         textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
-        showDialog()
+        if (byteArray!= null){
 
+            bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray!!.size)
+            piccam.setImageBitmap(bmp)
+        }else
+            if (checkPermission()) {
 
-        val handler = Handler()
-        handler.postDelayed({
+                showDialog()
+                val handler = Handler()
+                handler.postDelayed({
 
-            useCamera()
-            hideDialog()
-        }, 2500)
+                    useCamera()
+                    hideDialog()
+                }, 2500)
+            } else
+                requestPermission()
+
 
 //        Excute event
         btnClose.setOnClickListener {
 
             val intent = Intent(this, Home::class.java)
             intent.putExtra("value", textAfterDetect.text.toString())
+
             intent.putExtra("displayFrom", intentDisplayFrom)
             intent.putExtra("languageFrom", intentLanguageFrom)
             intent.putExtra("flagFrom", intentFlagFrom)
@@ -157,6 +169,7 @@ class ShowImage : AppCompatActivity() {
             val intent = Intent(this, ShowLanguage::class.java)
             intent.putExtra("typeChoice", "above")
             intent.putExtra("from", "camera")
+            intent.putExtra("image", valuePhoto)
             intent.putExtra("displayFrom", intentDisplayFrom)
             intent.putExtra("displayTo", intentDisplayTo)
             startActivity(intent)
@@ -168,6 +181,7 @@ class ShowImage : AppCompatActivity() {
 
             val intent = Intent(this, ShowLanguage::class.java)
             intent.putExtra("from", "camera")
+            intent.putExtra("image", valuePhoto)
             intent.putExtra("displayFrom", intentDisplayFrom)
             intent.putExtra("displayTo", intentDisplayTo)
             startActivity(intent)
@@ -179,13 +193,25 @@ class ShowImage : AppCompatActivity() {
     //    Function -- Click back button to close app
     override fun onBackPressed() {
 
-        if (backPressedTime + 3000 > System.currentTimeMillis()) {
-            super.onBackPressed()
-            finishAffinity();
-        } else {
-            show("Press back again to leave the app")
-        }
-        backPressedTime = System.currentTimeMillis()
+        var intentDisplayFrom = intent.getStringExtra("displayFrom")
+        var intentLanguageFrom = intent.getStringExtra("languageFrom").toString()
+        var intentFlagFrom = intent.getIntExtra("flagFrom", R.drawable.ic_flag_english)
+
+        var intentDisplayTo = intent.getStringExtra("displayTo")
+        var intentLanguageTo = intent.getStringExtra("languageTo").toString()
+        var intentFlagTo = intent.getIntExtra("flagTo", R.drawable.ic_flag_vietnamese)
+
+        val intent = Intent(this, Home::class.java)
+        intent.putExtra("displayFrom", intentDisplayFrom)
+        intent.putExtra("languageFrom", intentLanguageFrom)
+        intent.putExtra("flagFrom", intentFlagFrom)
+
+        intent.putExtra("displayTo", intentDisplayTo)
+        intent.putExtra("languageTo", intentLanguageTo)
+        intent.putExtra("flagTo", intentFlagTo)
+        startActivity(intent)
+        finish()
+        overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
     }
 
     //    Function -- Toast
@@ -223,6 +249,19 @@ class ShowImage : AppCompatActivity() {
     }
 
     //    Camera
+    private fun checkPermission(): Boolean {
+        return if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            false
+        } else true
+    }
+
+    private fun requestPermission() {
+        ActivityCompat.requestPermissions(
+            this, arrayOf(Manifest.permission.CAMERA),
+            1888
+        )
+    }
+
     private fun getPhotoFile(fileName: String): File {
 
         val storageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
@@ -266,6 +305,7 @@ class ShowImage : AppCompatActivity() {
             imageView.setImageBitmap(takeImage)
             convertImageToTextFromBitmap(takeImage)
             show("Pause Translation")
+            valuePhoto = decodeBitmap(takeImage)
         }
     }
 
@@ -347,15 +387,11 @@ class ShowImage : AppCompatActivity() {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == STORAGE_PERMISSION_CODE) {
-
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-
-                show("Storage Permission Granted")
-            else
-
-                show("Storage Permission Denied")
-        }
+//        if (requestCode == STORAGE_PERMISSION_CODE) {
+//
+//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+//                Hello
+//        }
     }
 
     //    Function -- Swap language
@@ -367,6 +403,16 @@ class ShowImage : AppCompatActivity() {
 
         nameLFrom.setText(displayTo)
         nameLTo.setText(displayFrom)
+    }
+
+//    Function -- Bitmap decode ByteArray
+    private fun decodeBitmap(photo: Bitmap): ByteArray{
+
+        val stream = ByteArrayOutputStream()
+        photo.compress(Bitmap.CompressFormat.PNG, 100, stream)
+        val byteArray = stream.toByteArray()
+
+        return byteArray
     }
 
     //    Showing a dialog

@@ -95,7 +95,6 @@ class Home : AppCompatActivity() {
             btnMore.visibility = View.VISIBLE
         }
 
-
 //        _________________________________________________________________Excute event -- when click button
 //        ===========Navigation
         btnOfflinePhraseBook.setOnClickListener {
@@ -192,10 +191,10 @@ class Home : AppCompatActivity() {
                     btnMore.visibility = View.INVISIBLE
                 }
 
-                btnSpeakingBottomFrom.setBackgroundResource(R.drawable.btn_speaking_default_left)
-                btnSpeakingBottomFrom.setTextColor(Color.parseColor(colorWord))
-                btnSpeakingBottomTo.setBackgroundResource(R.drawable.btn_speaking_default_right)
-                btnSpeakingBottomTo.setTextColor(Color.parseColor(colorWord))
+//                btnSpeakingBottomFrom.setBackgroundResource(R.drawable.btn_speaking_default_left)
+//                btnSpeakingBottomFrom.setTextColor(Color.parseColor(colorWord))
+//                btnSpeakingBottomTo.setBackgroundResource(R.drawable.btn_speaking_default_right)
+//                btnSpeakingBottomTo.setTextColor(Color.parseColor(colorWord))
             }
         })
 
@@ -321,15 +320,15 @@ class Home : AppCompatActivity() {
         if (!SpeechRecognizer.isRecognitionAvailable(this))
 
             show("Error")
-        else {
+        else{
 
             val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
             i.putExtra(
                 RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
             )
-            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_PREFERENCE, Locale.forLanguageTag(voice))
-            i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say something in " + voice + " !")
+            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.forLanguageTag(voice))
+            i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say something in " + Locale.forLanguageTag(voice) + " !")
             startActivityForResult(i, RECORD_SPEECH_TEXT)
         }
     }
@@ -348,3 +347,4 @@ class Home : AppCompatActivity() {
         })
     }
 }
+
