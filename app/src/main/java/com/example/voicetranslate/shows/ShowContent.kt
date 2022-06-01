@@ -4,17 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.voicetranslate.R
 import com.example.voicetranslate.adapters.AdapterExample
 import com.example.voicetranslate.models.DataItem
 import com.example.voicetranslate.networks.ApiDataItem
 import com.example.voicetranslate.screens.Home
+import kotlinx.android.synthetic.main.activity_show_content.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,13 +32,7 @@ class ShowContent : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_content)
 
-//        Init
-        val btnBack: TextView = findViewById(R.id.btn_back)
-        val tvTitle: TextView = findViewById(R.id.title_content)
-        val listItem: RecyclerView = findViewById(R.id.list_item)
-
-        val etSearch: EditText = findViewById(R.id.et_search)
-        etSearch.addTextChangedListener(object : TextWatcher{
+        et_search.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }
@@ -57,10 +49,10 @@ class ShowContent : AppCompatActivity() {
 
 //        Get data from previous screen
         val title = intent.getStringExtra("title")
-        tvTitle.setText(title)
+        title_content.setText(title)
 
 //        Excute button -- when click button
-        btnBack.setOnClickListener {
+        btn_back.setOnClickListener {
 
             val intent = Intent(this, ShowOfflinePhraseBook::class.java)
             startActivity(intent)
@@ -69,9 +61,9 @@ class ShowContent : AppCompatActivity() {
         }
 
 //        Api
-        listItem.adapter = myAdapter
-        listItem.layoutManager = LinearLayoutManager(this)
-        listItem.setHasFixedSize(true)
+        list_item.adapter = myAdapter
+        list_item.layoutManager = LinearLayoutManager(this)
+        list_item.setHasFixedSize(true)
         getDataExample()
     }
 
@@ -92,7 +84,6 @@ class ShowContent : AppCompatActivity() {
 //    Get data
     private fun getDataExample() {
 
-        val listItem: RecyclerView = findViewById(R.id.list_item)
         val retrofitBuilder = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(BASE_URL)
@@ -105,7 +96,7 @@ class ShowContent : AppCompatActivity() {
             override fun onResponse(call: Call<List<DataItem>?>, response: Response<List<DataItem>?>) {
 
                 dataList.addAll(response.body()!!)
-                listItem.adapter!!.notifyDataSetChanged()
+                list_item.adapter!!.notifyDataSetChanged()
             }
 
             override fun onFailure(call: Call<List<DataItem>?>, t: Throwable) {

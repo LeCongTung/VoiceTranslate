@@ -4,14 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.voicetranslate.R
 import com.example.voicetranslate.adapters.AdapterTopic
 import com.example.voicetranslate.models.Topic
 import com.example.voicetranslate.screens.Home
+import kotlinx.android.synthetic.main.activity_show_offline_phrase_book.*
 
 class ShowOfflinePhraseBook : AppCompatActivity() {
 
@@ -28,10 +27,6 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_offline_phrase_book)
-
-//        Init
-        val etSearch: EditText = findViewById(R.id.et_search)
-        val listItem: RecyclerView = findViewById(R.id.list_item)
 
 //        Excute event -- when click button
 //        Array of a logo per topic
@@ -73,8 +68,8 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
             "Traveling"
         )
 
-        val valueSearch = etSearch.text.toString()
-        etSearch.addTextChangedListener(object : TextWatcher {
+        val valueSearch = et_search.text.toString()
+        et_search.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }
@@ -93,8 +88,8 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
         })
 
 //        Format recycleview topic
-        listItem.layoutManager = GridLayoutManager(this, 2)
-        listItem.setHasFixedSize(true)
+        list_item.layoutManager = GridLayoutManager(this, 2)
+        list_item.setHasFixedSize(true)
         getData()
     }
 
@@ -111,14 +106,13 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
     private fun getData() {
 
         newArrayList.clear()
-        val listItem: RecyclerView = findViewById(R.id.list_item)
         for (i in titleShow.indices) {
             val topics = Topic(titleShow[i], imageShow[i])
             newArrayList.add(topics)
         }
 
         searchArrayList = newArrayList
-        listItem.adapter = myAdapter
+        list_item.adapter = myAdapter
 
         var titleToContent = ""
         myAdapter.setOnItemClickListener(object : AdapterTopic.onItemClickListener {

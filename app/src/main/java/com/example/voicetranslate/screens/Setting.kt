@@ -2,19 +2,15 @@ package com.example.voicetranslate.screens
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageButton
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.voicetranslate.R
+import kotlinx.android.synthetic.main.activity_setting.*
 
 class Setting : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
-
-//        Init
-        val btnClose: ImageButton = findViewById(R.id.btn_close)
 
 //        Get data
         val value = intent.getStringExtra("value").toString()
@@ -29,7 +25,7 @@ class Setting : AppCompatActivity() {
         var intentFlagTo = intent.getIntExtra("flagTo", R.drawable.ic_flag_vietnamese)
 
 //        Excute event -- when click button
-        btnClose.setOnClickListener {
+        btn_close.setOnClickListener {
 
             val intent = Intent(this, Home::class.java)
             intent.putExtra("value", value)
@@ -72,10 +68,4 @@ class Setting : AppCompatActivity() {
         finish()
         overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
     }
-
-    //    Function -- Toast
-    private fun show(message: String) {
-        Toast.makeText(this,message, Toast.LENGTH_SHORT).show()
-    }
-
 }
