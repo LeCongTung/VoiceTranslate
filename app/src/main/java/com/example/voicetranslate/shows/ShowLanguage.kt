@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.voicetranslate.R
 import com.example.voicetranslate.adapters.AdapterLanguage
 import com.example.voicetranslate.models.Language
-import com.example.voicetranslate.screens.Home
 import com.example.voicetranslate.screens.Setting
 import com.google.mlkit.nl.translate.TranslateLanguage
 import kotlinx.android.synthetic.main.activity_show_language.*
@@ -126,15 +125,21 @@ class ShowLanguage : AppCompatActivity() {
 
     val myAdapter: AdapterLanguage by lazy { AdapterLanguage(newArrayList) } //Chi khoi tao khi duoc goi
 
+    lateinit var intentDisplayFrom: String
+    lateinit var intentLanguageFrom: String
+    var intentFlagFrom: Int = 0
+    lateinit var intentDisplayTo: String
+    lateinit var intentLanguageTo: String
+    var intentFlagTo: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_language)
 
 //        Get data
         val fromLayout = intent.getStringExtra("from").toString()
-        val value = intent.getStringExtra("value")
-        val intentDisplayFrom = intent.getStringExtra("displayFrom").toString()
-        val intentDisplayTo = intent.getStringExtra("displayTo").toString()
+        intentDisplayFrom = intent.getStringExtra("displayFrom").toString()
+        intentDisplayTo = intent.getStringExtra("displayTo").toString()
 
 //        Format recycleview language
         list_item.layoutManager = LinearLayoutManager(this)
@@ -147,60 +152,36 @@ class ShowLanguage : AppCompatActivity() {
 
             val intent = Intent(this, ShowOfflinePhraseBook::class.java)
             startActivity(intent)
-            finish()
             overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
         }
 
         nav_camera.setOnClickListener {
-
-            val intent = Intent(this, ShowImage::class.java)
-            startActivity(intent)
-            finish()
-            overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
+            if (fromLayout.equals("camera"))
+                onBackPressed()
+            else{
+                val intent = Intent(this, ShowImage::class.java)
+                intent.putExtra("displayFrom", intentDisplayFrom)
+                intent.putExtra("languageFrom", detectLanguage(intentDisplayFrom))
+                intent.putExtra("flagFrom", detectFlag(intentDisplayFrom))
+                intent.putExtra("displayTo", intentDisplayTo)
+                intent.putExtra("languageTo", detectLanguage(intentDisplayTo))
+                intent.putExtra("flagTo", detectFlag(intentDisplayTo))
+                startActivity(intent)
+                finish()
+                overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
+            }
         }
 
         nav_setting.setOnClickListener {
 
             val intent = Intent(this, Setting::class.java)
             startActivity(intent)
-            finish()
             overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
         }
 
         btn_close.setOnClickListener {
 
-            if (fromLayout.equals("camera")) {
-
-                val intent = Intent()
-
-                intent.putExtra("displayFrom", intentDisplayFrom)
-                intent.putExtra("languageFrom", detectLanguage(intentDisplayFrom))
-                intent.putExtra("flagFrom", detectFlag(intentDisplayFrom))
-
-                intent.putExtra("displayTo", intentDisplayTo)
-                intent.putExtra("languageTo", detectLanguage(intentDisplayTo))
-                intent.putExtra("flagTo", detectFlag(intentDisplayTo))
-
-                setResult(Activity.RESULT_OK, intent)
-                finish()
-                overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
-            } else {
-
-                val intent = Intent(this@ShowLanguage, Home::class.java)
-                intent.putExtra("value", value)
-
-                intent.putExtra("displayFrom", intentDisplayFrom)
-                intent.putExtra("languageFrom", detectLanguage(intentDisplayFrom))
-                intent.putExtra("flagFrom", detectFlag(intentDisplayFrom))
-
-                intent.putExtra("displayTo", intentDisplayTo)
-                intent.putExtra("languageTo", detectLanguage(intentDisplayTo))
-                intent.putExtra("flagTo", detectFlag(intentDisplayTo))
-
-                startActivity(intent)
-                finish()
-                overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
-            }
+            onBackPressed()
         }
 
 
@@ -275,18 +256,15 @@ class ShowLanguage : AppCompatActivity() {
                     overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
                 } else {
 
-                    val intent = Intent(this@ShowLanguage, Home::class.java)
+                    val intent = Intent()
                     intent.putExtra("value", value)
-
                     intent.putExtra("displayFrom", intentDisplayFrom)
                     intent.putExtra("languageFrom", detectLanguage(intentDisplayFrom))
                     intent.putExtra("flagFrom", detectFlag(intentDisplayFrom))
-
                     intent.putExtra("displayTo", intentDisplayTo)
                     intent.putExtra("languageTo", detectLanguage(intentDisplayTo))
                     intent.putExtra("flagTo", detectFlag(intentDisplayTo))
-
-                    startActivity(intent)
+                    setResult(Activity.RESULT_OK, intent)
                     finish()
                     overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
                 }
@@ -331,40 +309,7 @@ class ShowLanguage : AppCompatActivity() {
 
     //    Function -- Click back button to close app
     override fun onBackPressed() {
-
-        val fromLayout = intent.getStringExtra("from").toString()
-        val value = intent.getStringExtra("value")
-
-        val intentDisplayFrom = intent.getStringExtra("displayFrom").toString()
-        val intentDisplayTo = intent.getStringExtra("displayTo").toString()
-
-        if (fromLayout.equals("camera")) {
-
-            val intent = Intent()
-            intent.putExtra("displayFrom", intentDisplayFrom)
-            intent.putExtra("languageFrom", detectLanguage(intentDisplayFrom))
-            intent.putExtra("flagFrom", detectFlag(intentDisplayFrom))
-            intent.putExtra("displayTo", intentDisplayTo)
-            intent.putExtra("languageTo", detectLanguage(intentDisplayTo))
-            intent.putExtra("flagTo", detectFlag(intentDisplayTo))
-
-            setResult(Activity.RESULT_OK, intent)
-            finish()
-            overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
-        } else {
-
-            val intent = Intent(this@ShowLanguage, Home::class.java)
-            intent.putExtra("value", value)
-            intent.putExtra("displayFrom", intentDisplayFrom)
-            intent.putExtra("languageFrom", detectLanguage(intentDisplayFrom))
-            intent.putExtra("flagFrom", detectFlag(intentDisplayFrom))
-            intent.putExtra("displayTo", intentDisplayTo)
-            intent.putExtra("languageTo", detectLanguage(intentDisplayTo))
-            intent.putExtra("flagTo", detectFlag(intentDisplayTo))
-
-            startActivity(intent)
-            finish()
-            overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
-        }
+        finish()
+        overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
     }
 }

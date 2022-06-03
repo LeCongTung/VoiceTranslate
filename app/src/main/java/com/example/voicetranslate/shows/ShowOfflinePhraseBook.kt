@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.voicetranslate.R
 import com.example.voicetranslate.adapters.AdapterTopic
 import com.example.voicetranslate.models.Topic
-import com.example.voicetranslate.screens.Home
 import kotlinx.android.synthetic.main.activity_show_offline_phrase_book.*
 
 class ShowOfflinePhraseBook : AppCompatActivity() {
@@ -24,9 +23,27 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
 
     val myAdapter: AdapterTopic by lazy { AdapterTopic(newArrayList) } //Chi khoi tao khi duoc goi
 
+    lateinit var value: String
+    lateinit var intentDisplayFrom: String
+    lateinit var intentLanguageFrom: String
+    var intentFlagFrom: Int = 0
+    lateinit var intentDisplayTo: String
+    lateinit var intentLanguageTo: String
+    var intentFlagTo: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_offline_phrase_book)
+
+//        Get data
+        value = intent.getStringExtra("value").toString()
+        intentDisplayFrom = intent.getStringExtra("displayFrom").toString()
+        intentLanguageFrom = intent.getStringExtra("languageFrom").toString()
+        intentFlagFrom = intent.getIntExtra("flagFrom", R.drawable.ic_flag_english)
+
+        intentDisplayTo = intent.getStringExtra("displayTo").toString()
+        intentLanguageTo = intent.getStringExtra("languageTo").toString()
+        intentFlagTo = intent.getIntExtra("flagTo", R.drawable.ic_flag_vietnamese)
 
 //        Excute event -- when click button
 //        Array of a logo per topic
@@ -96,8 +113,6 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
     //    Function -- Click back button to close app
     override fun onBackPressed() {
 
-        val intent = Intent(this@ShowOfflinePhraseBook, Home::class.java)
-        startActivity(intent)
         finish()
         overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
     }
@@ -125,8 +140,15 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
 
                 val intent = Intent(this@ShowOfflinePhraseBook, ShowContent::class.java)
                 intent.putExtra("title", titleToContent)
+                intent.putExtra("value", value)
+                intent.putExtra("displayFrom", intentDisplayFrom)
+                intent.putExtra("languageFrom", intentLanguageFrom)
+                intent.putExtra("flagFrom", intentFlagFrom)
+
+                intent.putExtra("displayTo", intentDisplayTo)
+                intent.putExtra("languageTo", intentLanguageTo)
+                intent.putExtra("flagTo", intentFlagTo)
                 startActivity(intent)
-                finish()
                 overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
             }
         })

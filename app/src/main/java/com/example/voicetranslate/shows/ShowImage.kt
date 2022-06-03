@@ -90,8 +90,7 @@ class ShowImage : AppCompatActivity() {
                 useCamera()
                 hideDialog()
             }, 2500)
-        } else
-            requestPermission()
+        } else requestPermission()
 
 
 //        Excute event
@@ -111,7 +110,7 @@ class ShowImage : AppCompatActivity() {
             overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
         }
 
-        btnCamera.setOnClickListener {
+        contentCamera.setOnClickListener {
 
             btnCamera.setTextColor(Color.parseColor("#5491FF"))
             piccam.setColorFilter(Color.parseColor("#5491FF"))
@@ -121,7 +120,7 @@ class ShowImage : AppCompatActivity() {
             useCamera()
         }
 
-        btnGallery.setOnClickListener {
+        contentGallery.setOnClickListener {
 
             btnGallery.setTextColor(Color.parseColor("#5491FF"))
             picgallery.setColorFilter(Color.parseColor("#5491FF"))
@@ -240,10 +239,24 @@ class ShowImage : AppCompatActivity() {
     }
 
     private fun requestPermission() {
-        ActivityCompat.requestPermissions(
-            this, arrayOf(Manifest.permission.CAMERA),
-            1888
-        )
+        Dexter.withContext(this).withPermission(
+            android.Manifest.permission.CAMERA
+        ).withListener(object : PermissionListener {
+            override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
+                useCamera()
+            }
+
+            override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
+                show("You have denied the storage permission to select image")
+                showRotationalDialogForPermission()
+            }
+
+            override fun onPermissionRationaleShouldBeShown(
+                p0: PermissionRequest?, p1: PermissionToken?
+            ) {
+                showRotationalDialogForPermission()
+            }
+        }).onSameThread().check()
     }
 
     private fun getPhotoFile(fileName: String): File {
@@ -393,6 +406,7 @@ class ShowImage : AppCompatActivity() {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.dialog_loadingcamera)
         dialog.setCanceledOnTouchOutside(false)
+        dialog.setCancelable(false)
         dialog.show()
     }
 

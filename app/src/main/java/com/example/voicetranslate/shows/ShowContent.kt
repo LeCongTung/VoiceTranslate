@@ -28,9 +28,26 @@ class ShowContent : AppCompatActivity() {
 
     val myAdapter: AdapterExample by lazy { AdapterExample(this, dataList) } //Chi khoi tao khi duoc goi
 
+    lateinit var value: String
+    lateinit var intentDisplayFrom: String
+    lateinit var intentLanguageFrom: String
+    var intentFlagFrom: Int = 0
+    lateinit var intentDisplayTo: String
+    lateinit var intentLanguageTo: String
+    var intentFlagTo: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_content)
+
+//        Get text from image
+        value = intent.getStringExtra("value").toString()
+        intentDisplayFrom = intent.getStringExtra("displayFrom").toString()
+        intentLanguageFrom = intent.getStringExtra("languageFrom").toString()
+        intentFlagFrom = intent.getIntExtra("flagFrom", R.drawable.ic_flag_english)
+        intentDisplayTo = intent.getStringExtra("displayTo").toString()
+        intentLanguageTo = intent.getStringExtra("languageTo").toString()
+        intentFlagTo = intent.getIntExtra("flagTo", R.drawable.ic_flag_vietnamese)
 
         et_search.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -54,10 +71,7 @@ class ShowContent : AppCompatActivity() {
 //        Excute button -- when click button
         btn_back.setOnClickListener {
 
-            val intent = Intent(this, ShowOfflinePhraseBook::class.java)
-            startActivity(intent)
-            finish()
-            overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
+            onBackPressed()
         }
 
 //        Api
@@ -70,8 +84,6 @@ class ShowContent : AppCompatActivity() {
     //    Function -- Click back button to close app
     override fun onBackPressed() {
 
-        val intent = Intent(this, ShowOfflinePhraseBook::class.java)
-        startActivity(intent)
         finish()
         overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
     }
@@ -104,17 +116,22 @@ class ShowContent : AppCompatActivity() {
             }
         })
 
-        var languageChange = ""
         myAdapter.setOnItemClickListener(object : AdapterExample.onItemClickListener {
             override fun onItemClick(position: Int) {
 
                 if (filteredNames.size == 0)
-                    languageChange = dataList[position].title
+                    value = dataList[position].title
                 else
-                    languageChange = filteredNames[position].title
+                    value = filteredNames[position].title
 
                 val intent = Intent(this@ShowContent, Home::class.java)
-                intent.putExtra("value", languageChange)
+                intent.putExtra("value", value)
+                intent.putExtra("displayFrom", intentDisplayFrom)
+                intent.putExtra("languageFrom", intentLanguageFrom)
+                intent.putExtra("flagFrom", intentFlagFrom)
+                intent.putExtra("displayTo", intentDisplayTo)
+                intent.putExtra("languageTo", intentLanguageTo)
+                intent.putExtra("flagTo", intentFlagTo)
                 startActivity(intent)
                 finish()
                 overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
