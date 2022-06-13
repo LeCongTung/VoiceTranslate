@@ -126,11 +126,7 @@ class ShowLanguage : AppCompatActivity() {
     val myAdapter: AdapterLanguage by lazy { AdapterLanguage(newArrayList) } //Chi khoi tao khi duoc goi
 
     lateinit var intentDisplayFrom: String
-    lateinit var intentLanguageFrom: String
-    var intentFlagFrom: Int = 0
     lateinit var intentDisplayTo: String
-    lateinit var intentLanguageTo: String
-    var intentFlagTo: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -146,7 +142,7 @@ class ShowLanguage : AppCompatActivity() {
         list_item.setHasFixedSize(true)
         getData()
 
-        //        _________________________________________________________________Excute event -- when click button
+//        _________________________________________________________________Excute event -- when click button
 //        ===========Navigation
         nav_offlinePhrasebook.setOnClickListener {
 
@@ -241,8 +237,6 @@ class ShowLanguage : AppCompatActivity() {
 
                 if (fromLayout.equals("camera")) {
 
-//                    val intent = Intent(this@ShowLanguage, ShowImage::class.java)
-
                     val intent = Intent()
                     intent.putExtra("displayFrom", intentDisplayFrom)
                     intent.putExtra("languageFrom", detectLanguage(intentDisplayFrom))
@@ -250,7 +244,6 @@ class ShowLanguage : AppCompatActivity() {
                     intent.putExtra("displayTo", intentDisplayTo)
                     intent.putExtra("languageTo", detectLanguage(intentDisplayTo))
                     intent.putExtra("flagTo", detectFlag(intentDisplayTo))
-
                     setResult(Activity.RESULT_OK, intent)
                     finish()
                     overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)

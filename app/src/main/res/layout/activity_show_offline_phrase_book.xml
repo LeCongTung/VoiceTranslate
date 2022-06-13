@@ -93,7 +93,7 @@
 
         android:background="@color/backgroundColor"
 
-        android:paddingHorizontal="20dp"
+        android:paddingHorizontal="17dp"
         android:scrollbars="none"
         tools:listitem="@layout/item_content" />
 </RelativeLayout>

@@ -3,25 +3,24 @@ package com.example.voicetranslate.shows
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.hardware.camera2.CameraManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
-import android.provider.MediaStore
 import android.provider.Settings
-import android.view.Window
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.Preview
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import coil.load
 import com.example.voicetranslate.R
 import com.example.voicetranslate.screens.Home
@@ -38,21 +37,17 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.activity_show_image.*
-import java.io.File
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class ShowImage : AppCompatActivity() {
 
     private val GALLERY_REQUEST_CODE = 2
     private val STORAGE_PERMISSION_CODE = 113
-    private val CAMERA_REQUEST_CODE = 42
+    private val PERMISSIONS_REQUEST_CODE_FLASH = 23
 
-    lateinit var takePictureIntent: Intent
     lateinit var inputImage: InputImage
     lateinit var textRecognizer: TextRecognizer
-    lateinit var photoFile: File
-    private lateinit var dialog: Dialog
 
     lateinit var intentDisplayFrom: String
     lateinit var intentLanguageFrom: String
@@ -61,7 +56,17 @@ class ShowImage : AppCompatActivity() {
     lateinit var intentLanguageTo: String
     var intentFlagTo: Int = 0
 
-    val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+    private lateinit var cameraM :CameraManager
+    var isFlash = false
+    var cameraStatus: Boolean = true
+
+    private lateinit var cameraExecutor: ExecutorService
+
+    private val imageAnalyzer: ImageAnalysis.Analyzer = TextAnalysis()
+    private var imageAnalysis = ImageAnalysis.Builder()
+        .setImageQueueDepth(ImageAnalysis.STRATEGY_BLOCK_PRODUCER)
+        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+        .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,17 +86,9 @@ class ShowImage : AppCompatActivity() {
 //        Get text from image
         textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
-        if (checkPermission()) {
-
-            showDialog()
-            val handler = Handler()
-            handler.postDelayed({
-
-                useCamera()
-                hideDialog()
-            }, 2500)
-        } else requestPermission()
-
+        askCameraPermission()
+        startCamera()
+        cameraExecutor = Executors.newSingleThreadExecutor()
 
 //        Excute event
         btn_close.setOnClickListener {
@@ -110,24 +107,41 @@ class ShowImage : AppCompatActivity() {
             overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
         }
 
+        btnCamera.setTextColor(Color.parseColor("#5491FF"))
+        piccam.setColorFilter(Color.parseColor("#5491FF"))
+
         contentCamera.setOnClickListener {
+            if (!cameraStatus){
 
-            btnCamera.setTextColor(Color.parseColor("#5491FF"))
-            piccam.setColorFilter(Color.parseColor("#5491FF"))
-            btnGallery.setTextColor(Color.parseColor("#989898"))
-            picgallery.setColorFilter(Color.parseColor("#989898"))
-
-            useCamera()
+                btnGallery.setTextColor(Color.parseColor("#989898"))
+                picgallery.setColorFilter(Color.parseColor("#989898"))
+                btnCamera.setTextColor(Color.parseColor("#5491FF"))
+                piccam.setColorFilter(Color.parseColor("#5491FF"))
+                valueAfterDetect.setText("")
+                cameraStatus = true
+                imageView.visibility = View.INVISIBLE
+                viewFinder.visibility = View.VISIBLE
+                btn_capture.visibility = View.VISIBLE
+                startCamera()
+            }
         }
 
         contentGallery.setOnClickListener {
 
-            btnGallery.setTextColor(Color.parseColor("#5491FF"))
-            picgallery.setColorFilter(Color.parseColor("#5491FF"))
-            btnCamera.setTextColor(Color.parseColor("#989898"))
-            piccam.setColorFilter(Color.parseColor("#989898"))
-
+            cameraStatus = false
             galleryCheckPermission()
+            valueAfterDetect.setText("")
+            valueAfterDetect.visibility = View.VISIBLE
+        }
+
+        btn_flash.setOnClickListener {
+
+            openFlashLight()
+        }
+
+        btn_capture.setOnClickListener {
+
+            startRecognising()
         }
 
         btn_swap.setOnClickListener {
@@ -172,14 +186,6 @@ class ShowImage : AppCompatActivity() {
     //    Function -- Click back button to close app
     override fun onBackPressed() {
 
-        intentDisplayFrom = intent.getStringExtra("displayFrom").toString()
-        intentLanguageFrom = intent.getStringExtra("languageFrom").toString()
-        intentFlagFrom = intent.getIntExtra("flagFrom", 0)
-
-        intentDisplayTo = intent.getStringExtra("displayTo").toString()
-        intentLanguageTo = intent.getStringExtra("languageTo").toString()
-        intentFlagTo = intent.getIntExtra("flagTo", 0)
-
         val intent = Intent(this, Home::class.java)
         intent.putExtra("displayFrom", intentDisplayFrom)
         intent.putExtra("languageFrom", intentLanguageFrom)
@@ -222,69 +228,82 @@ class ShowImage : AppCompatActivity() {
     }
 
     private fun gallery() {
+        btnGallery.setTextColor(Color.parseColor("#5491FF"))
+        picgallery.setColorFilter(Color.parseColor("#5491FF"))
+        btnCamera.setTextColor(Color.parseColor("#989898"))
+        piccam.setColorFilter(Color.parseColor("#989898"))
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         startActivityForResult(intent, GALLERY_REQUEST_CODE)
     }
 
-    //    Camera
-    private fun checkPermission(): Boolean {
-        return if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            false
-        } else true
+    companion object {
+        private const val TAG = "CameraXBasic"
+
+        const val CAMERA_PERM_CODE = 422
     }
 
-    private fun requestPermission() {
-        Dexter.withContext(this).withPermission(
-            android.Manifest.permission.CAMERA
-        ).withListener(object : PermissionListener {
-            override fun onPermissionGranted(p0: PermissionGrantedResponse?) {
-                useCamera()
+    private fun askCameraPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE),
+            CAMERA_PERM_CODE
+        )
+    }
+
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+
+        cameraProviderFuture.addListener({
+            // Used to bind the lifecycle of cameras to the lifecycle owner
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+
+            // Preview
+            val preview = Preview.Builder()
+                .build()
+                .also {
+                    it.setSurfaceProvider(viewFinder.surfaceProvider)
+                }
+
+
+
+            // Select back camera as a default
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+            try {
+                // Unbind use cases before rebinding
+                cameraProvider.unbindAll()
+
+                // Bind use cases to camera
+                cameraProvider.bindToLifecycle(
+                    this, cameraSelector, preview, imageAnalysis)
+
+            } catch (exc: Exception) {
+                Log.e(TAG, "Use case binding failed", exc)
             }
 
-            override fun onPermissionDenied(p0: PermissionDeniedResponse?) {
-                show("You have denied the storage permission to select image")
-                showRotationalDialogForPermission()
-            }
-
-            override fun onPermissionRationaleShouldBeShown(
-                p0: PermissionRequest?, p1: PermissionToken?
-            ) {
-                showRotationalDialogForPermission()
-            }
-        }).onSameThread().check()
+        }, ContextCompat.getMainExecutor(this))
     }
 
-    private fun getPhotoFile(fileName: String): File {
 
-        val storageDirectory = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(fileName, ".jpg", storageDirectory)
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraExecutor.shutdown()
     }
 
-    private fun useCamera() {
 
-        val current = LocalDateTime.now()
 
-        val formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss")
-        val formatted = current.format(formatter)
+    private fun startRecognising(){
+        imageAnalysis.setAnalyzer(
+            ContextCompat.getMainExecutor(this),
+            imageAnalyzer
+        )
+        valueAfterDetect.text= textDone.toString()
 
-        takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        photoFile = getPhotoFile(formatted + "_")
-
-        val fileProvider = FileProvider.getUriForFile(this, "com.example.voicetranslate", photoFile)
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
-        if (takePictureIntent.resolveActivity(this.packageManager) != null) {
-            startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE)
-        } else {
-            show("Unable to open camera")
-        }
     }
 
-    //    Override Activity Result
+//    Override Activity Result
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -306,17 +325,28 @@ class ShowImage : AppCompatActivity() {
 
             requestCode == GALLERY_REQUEST_CODE  && resultCode == Activity.RESULT_OK -> {
                 val imageUri = data?.data
+                valueAfterDetect.visibility = View.INVISIBLE
                 imageView.load(imageUri)
+                imageView.visibility = View.VISIBLE
+                viewFinder.visibility = View.INVISIBLE
+                btn_capture.visibility = View.INVISIBLE
+
                 convertImageToTextFromURI(imageUri)
             }
 
-            requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK -> {
-                val takeImage = BitmapFactory.decodeFile(photoFile.absolutePath)
-                imageView.setImageBitmap(takeImage)
-                convertImageToTextFromBitmap(takeImage)
+            requestCode != GALLERY_REQUEST_CODE || resultCode != Activity.RESULT_OK ->{
+
+                btnGallery.setTextColor(Color.parseColor("#989898"))
+                picgallery.setColorFilter(Color.parseColor("#989898"))
+                btnCamera.setTextColor(Color.parseColor("#5491FF"))
+                piccam.setColorFilter(Color.parseColor("#5491FF"))
+                cameraStatus = true
+                imageView.visibility = View.INVISIBLE
+                viewFinder.visibility = View.VISIBLE
             }
         }
     }
+
 
     private fun showRotationalDialogForPermission() {
         AlertDialog.Builder(this)
@@ -358,18 +388,6 @@ class ShowImage : AppCompatActivity() {
             }
     }
 
-    private fun convertImageToTextFromBitmap(bitmap: Bitmap) {
-        val image = InputImage.fromBitmap(bitmap, 0)
-        val result = recognizer.process(image)
-            .addOnSuccessListener { visionText ->
-
-                valueAfterDetect.text = visionText.text
-            }
-            .addOnFailureListener { e ->
-
-            }
-    }
-
     override fun onResume() {
         super.onResume()
         detectCheckPermission(
@@ -391,6 +409,19 @@ class ShowImage : AppCompatActivity() {
     ) {
 
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        startCamera()
+        when (requestCode) {
+            PERMISSIONS_REQUEST_CODE_FLASH -> {
+                if (grantResults.isNotEmpty() &&
+                    ((grantResults[0] == PackageManager.PERMISSION_GRANTED))
+                ) {
+
+                } else {
+                    Toast.makeText(this, "Permissions denied.", Toast.LENGTH_SHORT).show()
+                }
+                return
+            }
+        }
     }
 
     //    Function -- Swap language
@@ -400,18 +431,20 @@ class ShowImage : AppCompatActivity() {
         nameLanguageTo.setText(displayFrom)
     }
 
-    //    Showing a dialog
-    private fun showDialog() {
-        dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(R.layout.dialog_loadingcamera)
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.setCancelable(false)
-        dialog.show()
-    }
+    private fun openFlashLight() {
+        val cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
+        val cameraId = cameraManager.cameraIdList[0]
+        if (!isFlash) {
 
-    private fun hideDialog() {
+            cameraManager.setTorchMode(cameraId, true)
+            btn_flash.setImageResource(R.drawable.ic_flash_on)
+            isFlash = true
 
-        dialog.dismiss()
+
+        } else {
+            cameraManager.setTorchMode(cameraId, false)
+            btn_flash.setImageResource(R.drawable.ic_flash_off)
+            isFlash = false
+        }
     }
 }

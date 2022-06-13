@@ -1,15 +1,14 @@
 package com.example.voicetranslate.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.voicetranslate.R
-import com.example.voicetranslate.models.DataItem
+import com.example.voicetranslate.models.Example
 
-class AdapterExample(val context: Context, var list: List<DataItem>): RecyclerView.Adapter<AdapterExample.MyViewHolder>() {
+class AdapterExample(private var list: ArrayList<Example>): RecyclerView.Adapter<AdapterExample.MyViewHolder>() {
 
     //    Choice a product in type
     private lateinit var mListener: onItemClickListener
@@ -24,25 +23,25 @@ class AdapterExample(val context: Context, var list: List<DataItem>): RecyclerVi
         mListener = listener
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterExample.MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
 
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_content, parent, false)
-        return AdapterExample.MyViewHolder(itemView, mListener)
+        return MyViewHolder(itemView, mListener)
     }
 
-    override fun onBindViewHolder(holder: AdapterExample.MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
         val currentitem = list[position]
-        holder.itemexample.text = currentitem.title
+        holder.itemtitle.text = currentitem.example
     }
 
     override fun getItemCount(): Int {
         return list.size
     }
 
-    class MyViewHolder (itemView: View, listener: AdapterExample.onItemClickListener): RecyclerView.ViewHolder(itemView) {
+    class MyViewHolder (itemView: View, listener: onItemClickListener): RecyclerView.ViewHolder(itemView) {
 
-        val itemexample: TextView = itemView.findViewById(R.id.value)
+        val itemtitle: TextView = itemView.findViewById(R.id.value)
 
         init {
 
@@ -53,7 +52,8 @@ class AdapterExample(val context: Context, var list: List<DataItem>): RecyclerVi
         }
     }
 
-    fun filterList(filteredNames: ArrayList<DataItem> ) {
+    fun filterList(filteredNames: ArrayList<Example>) {
+
         this.list = filteredNames
         notifyDataSetChanged()
     }

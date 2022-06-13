@@ -151,7 +151,7 @@
 
                 android:fontFamily="@font/poppins_medium"
                 android:lineHeight="30dp"
-                android:text="@string/share"
+                android:text="@string/aboutSubscription"
                 android:textColor="@color/word"
                 android:textSize="20sp" />
         </LinearLayout>

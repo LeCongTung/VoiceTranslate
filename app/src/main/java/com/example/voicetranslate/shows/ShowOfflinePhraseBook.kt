@@ -1,5 +1,6 @@
 package com.example.voicetranslate.shows
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -9,19 +10,39 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.voicetranslate.R
 import com.example.voicetranslate.adapters.AdapterTopic
 import com.example.voicetranslate.models.Topic
+import com.example.voicetranslate.screens.Home
 import kotlinx.android.synthetic.main.activity_show_offline_phrase_book.*
 
 class ShowOfflinePhraseBook : AppCompatActivity() {
 
-    lateinit var imageShow: Array<Int>
-    lateinit var titleShow: Array<String>
-
     val newArrayList: ArrayList<Topic> = arrayListOf()
     var searchArrayList: ArrayList<Topic> = arrayListOf()
-
     var filteredNames = ArrayList<Topic>()
 
     val myAdapter: AdapterTopic by lazy { AdapterTopic(newArrayList) } //Chi khoi tao khi duoc goi
+
+    val imageShow: Array<Int> by lazy { arrayOf(
+        R.drawable.ic_topic_bank,
+        R.drawable.ic_topic_basic,
+        R.drawable.ic_topic_beautycare,
+        R.drawable.ic_topic_callpolice,
+        R.drawable.ic_topic_communication,
+        R.drawable.ic_topic_food,
+        R.drawable.ic_topic_healthcare,
+        R.drawable.ic_topic_hotel,
+        R.drawable.ic_topic_restaurant,
+        R.drawable.ic_topic_transport,
+        R.drawable.ic_topic_laundry,
+        R.drawable.ic_topic_shopping,
+        R.drawable.ic_topic_sightseeing,
+        R.drawable.ic_topic_sport,
+        R.drawable.ic_topic_studying,
+        R.drawable.ic_topic_traveling)}
+
+    val titleShow: Array<String> by lazy { arrayOf(
+            "Bank", "Basic", "Beauty Care", "Calling for Police", "Communication Means", "Food and Drinks", "Health and Drugstore", "Hotel", "In the Restaurant", "Local Transport", "Repairs and Laundry", "Shopping", "Sightseeing", "Sport and Leisute", "Studying and Work", "Traveling"
+        )
+    }
 
     lateinit var value: String
     lateinit var intentDisplayFrom: String
@@ -43,47 +64,7 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
 
         intentDisplayTo = intent.getStringExtra("displayTo").toString()
         intentLanguageTo = intent.getStringExtra("languageTo").toString()
-        intentFlagTo = intent.getIntExtra("flagTo", R.drawable.ic_flag_vietnamese)
-
-//        Excute event -- when click button
-//        Array of a logo per topic
-        imageShow = arrayOf(
-            R.drawable.ic_topic_bank,
-            R.drawable.ic_topic_basic,
-            R.drawable.ic_topic_beautycare,
-            R.drawable.ic_topic_callpolice,
-            R.drawable.ic_topic_communication,
-            R.drawable.ic_topic_food,
-            R.drawable.ic_topic_healthcare,
-            R.drawable.ic_topic_hotel,
-            R.drawable.ic_topic_restaurant,
-            R.drawable.ic_topic_transport,
-            R.drawable.ic_topic_laundry,
-            R.drawable.ic_topic_shopping,
-            R.drawable.ic_topic_sightseeing,
-            R.drawable.ic_topic_sport,
-            R.drawable.ic_topic_studying,
-            R.drawable.ic_topic_traveling,
-        )
-
-        titleShow = arrayOf(
-            "Bank",
-            "Basic",
-            "Beauty Care",
-            "Calling for Police",
-            "Communication Means",
-            "Food and Drinks",
-            "Health and Drugstore",
-            "Hotel",
-            "In the restaurant",
-            "Local transport",
-            "Repair and Laundry",
-            "Shopping",
-            "SightSeeing",
-            "Sport and Leisute",
-            "Studying and Work",
-            "Traveling"
-        )
+        intentFlagTo = intent.getIntExtra( "flagTo", R.drawable.ic_flag_vietnamese)
 
         val valueSearch = et_search.text.toString()
         et_search.addTextChangedListener(object : TextWatcher {
@@ -113,6 +94,15 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
     //    Function -- Click back button to close app
     override fun onBackPressed() {
 
+        val intent = Intent(this@ShowOfflinePhraseBook, Home::class.java)
+        intent.putExtra("value", value)
+        intent.putExtra("displayFrom", intentDisplayFrom)
+        intent.putExtra("languageFrom", intentLanguageFrom)
+        intent.putExtra("flagFrom", intentFlagFrom)
+        intent.putExtra("displayTo", intentDisplayTo)
+        intent.putExtra("languageTo", intentLanguageTo)
+        intent.putExtra("flagTo", intentFlagTo)
+        startActivity(intent)
         finish()
         overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
     }
@@ -144,11 +134,11 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
                 intent.putExtra("displayFrom", intentDisplayFrom)
                 intent.putExtra("languageFrom", intentLanguageFrom)
                 intent.putExtra("flagFrom", intentFlagFrom)
-
                 intent.putExtra("displayTo", intentDisplayTo)
                 intent.putExtra("languageTo", intentLanguageTo)
                 intent.putExtra("flagTo", intentFlagTo)
-                startActivity(intent)
+                startActivityForResult(intent, 998)
+                finish()
                 overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
             }
         })
@@ -162,5 +152,22 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
             it.title.toString().lowercase().contains(text.lowercase())
         }
         myAdapter.filterList(filteredNames)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when {
+            requestCode == 998 && resultCode == Activity.RESULT_OK -> {
+                data?.let {
+                    intentDisplayFrom = data.getStringExtra("displayFrom").toString()
+                    intentLanguageFrom = data.getStringExtra("languageFrom").toString()
+                    intentFlagFrom = data.getIntExtra("flagFrom", 0)
+
+                    intentDisplayTo = data.getStringExtra("displayTo").toString()
+                    intentLanguageTo = data.getStringExtra("languageTo").toString()
+                    intentFlagTo = data.getIntExtra("flagTo", 0)
+                }
+            }
+        }
     }
 }

@@ -88,7 +88,9 @@ class Home : AppCompatActivity() {
             intent.putExtra("languageTo", intentLanguageTo)
             intent.putExtra("flagTo", intentFlagTo)
             startActivity(intent)
+            finish()
             overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
+
         }
 
         nav_camera.setOnClickListener {
@@ -101,8 +103,8 @@ class Home : AppCompatActivity() {
             intent.putExtra("languageTo", intentLanguageTo)
             intent.putExtra("flagTo", intentFlagTo)
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
             finish()
+            overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
         }
 
         nav_setting.setOnClickListener {
@@ -347,10 +349,12 @@ class Home : AppCompatActivity() {
             if (it == TextToSpeech.SUCCESS) {
 
                 speaker.language = Locale.forLanguageTag(voice)
-                speaker.setSpeechRate(1.2f)
+                speaker.setSpeechRate(1.0f)
                 speaker.speak(value, TextToSpeech.QUEUE_ADD, null)
             }
         })
     }
+
+
 }
 

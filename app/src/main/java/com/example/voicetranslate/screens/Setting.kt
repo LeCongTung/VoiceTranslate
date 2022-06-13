@@ -29,7 +29,7 @@ class Setting : AppCompatActivity() {
         intentLanguageTo = intent.getStringExtra("languageTo").toString()
         intentFlagTo = intent.getIntExtra("flagTo", R.drawable.ic_flag_vietnamese)
 
-//        Excute event -- when click button
+//        Excute event -- when click buttons
         btn_close.setOnClickListener {
 
             onBackPressed()

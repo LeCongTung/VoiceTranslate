@@ -25,5 +25,5 @@
     <color name="btn_speak_left">#9844fd</color>
     <color name="btn_speak_right">#34b8fa</color>
     <color name="btn_color_camera_noclick">#989898</color>
-
+    <color name="btn_color_camera_focus">#5491FF</color>
 </resources>

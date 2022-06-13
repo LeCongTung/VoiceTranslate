@@ -31,10 +31,6 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
-    buildFeatures {
-        viewBinding = true
-    }
 }
 
 dependencies {
@@ -53,28 +49,29 @@ dependencies {
     implementation 'com.karumi:dexter:6.2.2'
     implementation("io.coil-kt:coil:1.1.1")
 
-    /*Retrofit 2*/
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-
     /* Recycler View */
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-
-    /*Retrofit*/
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     /*Firebase*/
     implementation platform('com.google.firebase:firebase-bom:30.0.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.android.gms:play-services-mlkit-text-recognition:18.0.0'
+    implementation 'com.google.firebase:firebase-ml-vision:24.0.3'
+
     implementation 'com.google.mlkit:translate:17.0.0'
 
     /*Circle Images*/
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
-    /*Dialog*/
-    implementation'com.jpardogo.googleprogressbar:library:1.2.0'
+    /*Camera preview*/
+    def camerax_version = "1.1.0-beta01"
+    implementation "androidx.camera:camera-core:${camerax_version}"
+    implementation "androidx.camera:camera-camera2:${camerax_version}"
+    implementation "androidx.camera:camera-lifecycle:${camerax_version}"
+    implementation "androidx.camera:camera-video:${camerax_version}"
+
+    implementation "androidx.camera:camera-view:${camerax_version}"
+    implementation "androidx.camera:camera-extensions:${camerax_version}"
 
     apply plugin: 'com.google.gms.google-services'
 }
