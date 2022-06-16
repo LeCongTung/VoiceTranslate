@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".shows.ShowImage"
+    android:background="@color/backgroundButtonCamera"
 
-    android:background="@color/backgroundButtonCamera">
+    tools:context=".shows.ShowImageActivity">
 
     <RelativeLayout
         android:id="@+id/appBar"
@@ -32,8 +32,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toStartOf="@id/btn_close"
             android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/btn_close"
             android:layout_toEndOf="@id/btn_flash">
 
             <TextView
@@ -48,12 +48,12 @@
                 android:maxLines="1"
 
                 android:minWidth="50dp"
-                android:paddingHorizontal="10dp"
+                android:padding="10dp"
 
                 android:text="English"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
 
             <ImageButton
                 android:id="@+id/btn_swap"
@@ -72,12 +72,12 @@
 
                 android:maxLines="1"
 
-                android:paddingHorizontal="10dp"
+                android:padding="10dp"
 
                 android:text="Spanish"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="16sp" />
         </RelativeLayout>
 
         <ImageButton
@@ -100,9 +100,10 @@
         android:layout_height="match_parent"
         android:layout_above="@id/contentBtn"
         android:layout_below="@id/appBar"
-        android:visibility="invisible"
+        android:layout_centerInParent="true"
 
-        android:layout_centerInParent="true" />
+        android:visibility="invisible"
+        android:scaleType="centerCrop"/>
 
     <androidx.camera.view.PreviewView
         android:id="@+id/viewFinder"
@@ -113,19 +114,32 @@
 
         android:layout_centerInParent="true" />
 
-    <TextView
-        android:id="@+id/valueAfterDetect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/contentBtn"
+        android:layout_below="@id/appBar">
 
-        android:layout_marginHorizontal="20dp"
+        <TextView
+            android:id="@+id/valueAfterDetect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-        android:fontFamily="@font/poppins_medium"
-        android:textAlignment="center"
-        android:textColor="#DA4040"
-        android:textSize="16sp" />
-    
+            android:layout_centerInParent="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="#66FFFFFF"
+            android:fontFamily="@font/poppins_medium"
+            android:lineSpacingExtra="5dp"
+            android:padding="10dp"
+            android:textColor="#DC0F0F"
+            android:textSize="13sp"
+            android:visibility="invisible" />
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/btn_capture"
         android:layout_width="218dp"
@@ -133,16 +147,16 @@
         android:layout_above="@id/contentBtn"
         android:layout_centerHorizontal="true"
 
-        android:layout_marginBottom="30dp"
-
-        android:gravity="center"
+        android:layout_marginBottom="20dp"
 
         android:background="@drawable/bg_capture_image_radius"
 
+        android:fontFamily="@font/poppins_medium"
+
+        android:gravity="center"
         android:text="Pause translation"
-        android:textSize="16sp"
         android:textColor="@color/word"
-        android:fontFamily="@font/poppins_medium"/>
+        android:textSize="16sp" />
 
     <LinearLayout
         android:id="@+id/contentBtn"
@@ -175,7 +189,7 @@
                     android:layout_height="22dp"
                     android:layout_centerHorizontal="true"
                     android:src="@drawable/ic_scancamera_noclick"
-                    app:tint="@color/btn_color_camera_focus"/>
+                    app:tint="@color/btn_color_camera_focus" />
 
                 <TextView
                     android:id="@+id/btnCamera"
@@ -195,7 +209,6 @@
                     android:textSize="12sp" />
             </RelativeLayout>
         </RelativeLayout>
-
 
         <RelativeLayout
             android:id="@+id/contentGallery"
@@ -223,9 +236,9 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/picgallery"
 
-                    android:background="@color/backgroundButtonCamera"
-
                     android:layout_marginTop="5dp"
+
+                    android:background="@color/backgroundButtonCamera"
 
                     android:fontFamily="@font/poppins_regular"
                     android:text="Photo"
@@ -235,6 +248,5 @@
                     android:textSize="12sp" />
             </RelativeLayout>
         </RelativeLayout>
-
     </LinearLayout>
 </RelativeLayout>

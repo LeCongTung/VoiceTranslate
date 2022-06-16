@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.voicetranslate.R
 import kotlinx.android.synthetic.main.activity_setting.*
 
-class Setting : AppCompatActivity() {
+class SettingActivity : AppCompatActivity() {
 
     lateinit var value: String
     lateinit var intentDisplayFrom: String

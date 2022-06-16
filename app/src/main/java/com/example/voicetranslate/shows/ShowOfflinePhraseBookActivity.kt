@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.voicetranslate.R
 import com.example.voicetranslate.adapters.AdapterTopic
 import com.example.voicetranslate.models.Topic
-import com.example.voicetranslate.screens.Home
+import com.example.voicetranslate.screens.HomeActivity
 import kotlinx.android.synthetic.main.activity_show_offline_phrase_book.*
 
-class ShowOfflinePhraseBook : AppCompatActivity() {
+class ShowOfflinePhraseBookActivity : AppCompatActivity() {
 
     val newArrayList: ArrayList<Topic> = arrayListOf()
     var searchArrayList: ArrayList<Topic> = arrayListOf()
@@ -94,7 +94,7 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
     //    Function -- Click back button to close app
     override fun onBackPressed() {
 
-        val intent = Intent(this@ShowOfflinePhraseBook, Home::class.java)
+        val intent = Intent(this@ShowOfflinePhraseBookActivity, HomeActivity::class.java)
         intent.putExtra("value", value)
         intent.putExtra("displayFrom", intentDisplayFrom)
         intent.putExtra("languageFrom", intentLanguageFrom)
@@ -128,7 +128,7 @@ class ShowOfflinePhraseBook : AppCompatActivity() {
                 else
                     titleToContent = filteredNames[position].title.toString()
 
-                val intent = Intent(this@ShowOfflinePhraseBook, ShowContent::class.java)
+                val intent = Intent(this@ShowOfflinePhraseBookActivity, ShowContentActivity::class.java)
                 intent.putExtra("title", titleToContent)
                 intent.putExtra("value", value)
                 intent.putExtra("displayFrom", intentDisplayFrom)

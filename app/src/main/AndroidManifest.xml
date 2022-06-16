@@ -11,10 +11,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-feature android:name="android.hardware.camera.any" />
-    <permission android:name="android.permission.FLASHLIGHT"
-        android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
-        android:protectionLevel="normal" />
-    <uses-feature android:name="android.hardware.camera.flash" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.flash" android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -25,33 +22,33 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VoiceTranslate">
         <activity
-            android:name=".shows.ShowLanguage"
+            android:name=".shows.ShowLanguageActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"
             android:exported="false" />
         <activity
-            android:name=".shows.ShowImage"
+            android:name=".shows.ShowImageActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"
             android:exported="false"
             android:theme="@style/Theme.GetImage" />
         <activity
-            android:name=".shows.ShowOfflinePhraseBook"
+            android:name=".shows.ShowOfflinePhraseBookActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"
             android:exported="false" />
         <activity
-            android:name=".shows.ShowContent"
+            android:name=".shows.ShowContentActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"
             android:exported="false" />
         <activity
-            android:name=".screens.Setting"
+            android:name=".screens.SettingActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"
             android:exported="false" />
         <activity
-            android:name=".screens.Home"
+            android:name=".screens.HomeActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity"
             android:exported="true">

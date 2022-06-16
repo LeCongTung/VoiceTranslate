@@ -8,26 +8,24 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
 import com.example.voicetranslate.R
-import com.example.voicetranslate.shows.ShowImage
-import com.example.voicetranslate.shows.ShowLanguage
-import com.example.voicetranslate.shows.ShowOfflinePhraseBook
+import com.example.voicetranslate.shows.ShowImageActivity
+import com.example.voicetranslate.shows.ShowLanguageActivity
+import com.example.voicetranslate.shows.ShowOfflinePhraseBookActivity
 import com.google.mlkit.nl.translate.TranslateLanguage
 import com.google.mlkit.nl.translate.Translation
 import com.google.mlkit.nl.translate.TranslatorOptions
 import kotlinx.android.synthetic.main.activity_home.*
 import java.util.*
 
-class Home : AppCompatActivity() {
+class HomeActivity : AppCompatActivity() {
 
     //    Camera
     private val RECORD_SPEECH_TEXT = 102
-
     //    Value
     lateinit var speaker: TextToSpeech
     var backPressedTime: Long = 0
@@ -41,6 +39,7 @@ class Home : AppCompatActivity() {
     lateinit var intentDisplayTo: String
     lateinit var intentLanguageTo: String
     var intentFlagTo: Int = 0
+    var isTranslate: Boolean = false
 
     @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,19 +66,17 @@ class Home : AppCompatActivity() {
 
 //        Display value
         swapLanguage(intentDisplayTo, intentFlagTo, intentDisplayFrom, intentFlagFrom)
-        if (!value.equals("null")) {
+        if (!value.equals("null") && !value.equals("")) {
+            isTranslate = true
             valueFrom.setText(value)
-
-            translateValue(value, intentLanguageFrom, intentLanguageTo)
+            translateValue(value, intentLanguageFrom, intentLanguageTo, isTranslate)
             btn_clear.visibility = View.VISIBLE
             btn_moreInfo.visibility = View.VISIBLE
         }
-
 //        _________________________________________________________________Excute event -- when click button
 //        ===========Navigation
         nav_offlinePhrasebook.setOnClickListener {
-
-            val intent = Intent(this, ShowOfflinePhraseBook::class.java)
+            val intent = Intent(this, ShowOfflinePhraseBookActivity::class.java)
             intent.putExtra("value", valueFrom.text.toString())
             intent.putExtra("displayFrom", intentDisplayFrom)
             intent.putExtra("languageFrom", intentLanguageFrom)
@@ -90,12 +87,10 @@ class Home : AppCompatActivity() {
             startActivity(intent)
             finish()
             overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
-
         }
 
         nav_camera.setOnClickListener {
-
-            val intent = Intent(this, ShowImage::class.java)
+            val intent = Intent(this, ShowImageActivity::class.java)
             intent.putExtra("displayFrom", intentDisplayFrom)
             intent.putExtra("languageFrom", intentLanguageFrom)
             intent.putExtra("flagFrom", intentFlagFrom)
@@ -108,7 +103,7 @@ class Home : AppCompatActivity() {
         }
 
         nav_setting.setOnClickListener {
-            val intent = Intent(this, Setting::class.java)
+            val intent = Intent(this, SettingActivity::class.java)
             intent.putExtra("value", valueFrom.text.toString())
             intent.putExtra("displayFrom", intentDisplayFrom)
             intent.putExtra("languageFrom", intentLanguageFrom)
@@ -119,20 +114,21 @@ class Home : AppCompatActivity() {
             startActivity(intent)
             overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
         }
-
 //        Content
 //        ===========Translate
         btn_clear.setOnClickListener {
-            if (::speaker.isInitialized){
+            if (::speaker.isInitialized) {
                 speaker.stop()
             }
             valueFrom.setText("")
-            valueTo.setText("")
+            valueTo.visibility = View.INVISIBLE
+            btn_clear.visibility = View.INVISIBLE
+            btn_moreInfo.visibility = View.INVISIBLE
         }
 
 //        Swap between languages each other
         btn_swap.setOnClickListener {
-            if (::speaker.isInitialized){
+            if (::speaker.isInitialized) {
                 speaker.stop()
             }
             swapLanguage(intentDisplayFrom, intentFlagFrom, intentDisplayTo, intentFlagTo)
@@ -149,39 +145,42 @@ class Home : AppCompatActivity() {
             intentLanguageFrom = intentLanguageTo
             intentLanguageTo = dataSave
 
-            translateValue(valueFrom.text.toString(), intentLanguageFrom, intentLanguageTo)
+            isTranslate = true
+            translateValue(
+                valueFrom.text.toString(),
+                intentLanguageFrom,
+                intentLanguageTo,
+                isTranslate
+            )
         }
-
 //        Enter text you wanna translate
-        valueFrom.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun afterTextChanged(p0: Editable?) {
-                if (::speaker.isInitialized){
-                    speaker.stop()
-                }
-                var value = valueFrom.text.toString()
-                if (value != "") {
-                    btn_clear.visibility = View.VISIBLE
-                    btn_moreInfo.visibility = View.VISIBLE
-                    translateValue(value, intentLanguageFrom, intentLanguageTo)
-
-                } else {
-                    valueTo.setText("")
-                    btn_clear.visibility = View.INVISIBLE
-                    btn_moreInfo.visibility = View.INVISIBLE
-                }
+        valueFrom.doAfterTextChanged {
+            if (::speaker.isInitialized) {
+                speaker.stop()
             }
-        })
+
+            var value = valueFrom.text.toString()
+            valueTo.visibility = View.VISIBLE
+            if (value == "") {
+                valueTo.visibility = View.INVISIBLE
+                btn_clear.visibility = View.INVISIBLE
+                btn_moreInfo.visibility = View.INVISIBLE
+                isTranslate = false
+                translateValue(value, intentLanguageFrom, intentLanguageTo, isTranslate)
+            } else {
+                btn_clear.visibility = View.VISIBLE
+                btn_moreInfo.visibility = View.VISIBLE
+                isTranslate = true
+                translateValue(value, intentLanguageFrom, intentLanguageTo, isTranslate)
+            }
+        }
 
 //        Choose language
         btn_choicelanguagefrom.setOnClickListener {
-            if (::speaker.isInitialized){
+            if (::speaker.isInitialized) {
                 speaker.stop()
             }
-            val intent = Intent(this, ShowLanguage::class.java)
+            val intent = Intent(this, ShowLanguageActivity::class.java)
             intent.putExtra("typeChoice", "above")
             intent.putExtra("displayFrom", intentDisplayFrom)
             intent.putExtra("displayTo", intentDisplayTo)
@@ -191,10 +190,10 @@ class Home : AppCompatActivity() {
         }
 
         btn_choicelanguageTo.setOnClickListener {
-            if (::speaker.isInitialized){
+            if (::speaker.isInitialized) {
                 speaker.stop()
             }
-            val intent = Intent(this, ShowLanguage::class.java)
+            val intent = Intent(this, ShowLanguageActivity::class.java)
             intent.putExtra("displayFrom", intentDisplayFrom)
             intent.putExtra("displayTo", intentDisplayTo)
             intent.putExtra("value", valueFrom.text.toString())
@@ -205,21 +204,21 @@ class Home : AppCompatActivity() {
 
 //        Click speaking button to speak
         btn_speakingFrom.setOnClickListener {
-            if (::speaker.isInitialized){
+            if (::speaker.isInitialized) {
                 speaker.stop()
             }
             TextSpeech(intentLanguageFrom, valueFrom.text.toString())
         }
 
         btn_speakingTo.setOnClickListener {
-            if (::speaker.isInitialized){
+            if (::speaker.isInitialized) {
                 speaker.stop()
             }
             TextSpeech(intentLanguageTo, valueTo.text.toString())
         }
 
         btn_speak.setOnClickListener {
-            if (::speaker.isInitialized){
+            if (::speaker.isInitialized) {
                 speaker.stop()
             }
             btn_speakFromBottom.setBackgroundResource(R.drawable.btn_speaking_left)
@@ -232,14 +231,14 @@ class Home : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (::speaker.isInitialized){
+        if (::speaker.isInitialized) {
             speaker.stop()
         }
     }
 
     override fun onPause() {
         super.onPause()
-        if (::speaker.isInitialized){
+        if (::speaker.isInitialized) {
             speaker.stop()
         }
     }
@@ -275,7 +274,14 @@ class Home : AppCompatActivity() {
 
                     swapLanguage(intentDisplayTo, intentFlagTo, intentDisplayFrom, intentFlagFrom)
                 }
-                translateValue(valueFrom.text.toString(), intentLanguageFrom, intentLanguageTo)
+
+                isTranslate = true
+                translateValue(
+                    valueFrom.text.toString(),
+                    intentLanguageFrom,
+                    intentLanguageTo,
+                    isTranslate
+                )
             }
             requestCode == RECORD_SPEECH_TEXT && resultCode == Activity.RESULT_OK -> {
                 val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
@@ -295,16 +301,25 @@ class Home : AppCompatActivity() {
     }
 
     //    Translate
-    private fun translateValue(value: String, typeFrom: String, typeTo: String) {
+    private fun translateValue(
+        value: String,
+        typeFrom: String,
+        typeTo: String,
+        isTranslate: Boolean
+    ) {
         val options = TranslatorOptions.Builder()
             .setSourceLanguage(typeFrom)
             .setTargetLanguage(typeTo)
             .build()
         val translator = Translation.getClient(options)
         translator.downloadModelIfNeeded().addOnSuccessListener {
-            translator.translate(value).addOnSuccessListener {
-                valueTo.setText(it)
-            }.addOnFailureListener {}
+            if (isTranslate.equals(false))
+                translator.close()
+            else {
+                translator.translate(value).addOnSuccessListener {
+                    valueTo.setText(it)
+                }.addOnFailureListener {}
+            }
         }.addOnFailureListener {
 
             show("Lost conncection")
@@ -328,7 +343,7 @@ class Home : AppCompatActivity() {
         if (!SpeechRecognizer.isRecognitionAvailable(this))
 
             show("Error")
-        else{
+        else {
 
             val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
             i.putExtra(

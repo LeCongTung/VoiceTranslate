@@ -4,7 +4,7 @@
     xmlns:svgimageview="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.Home"
+    tools:context=".screens.HomeActivity"
 
     android:padding="30dp"
 
@@ -166,8 +166,9 @@
                     android:hint="Enter text here"
                     android:lineHeight="30dp"
                     android:paddingEnd="10dp"
+                    android:justificationMode="inter_word"
                     android:textColor="@color/word"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
             </ScrollView>
 
             <ImageButton
@@ -177,7 +178,6 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
 
-                android:layout_marginTop="5dp"
                 android:background="@drawable/bg_item_btn_effect"
 
                 android:paddingHorizontal="5dp"
@@ -300,8 +300,9 @@
 
                     android:lineHeight="30dp"
                     android:paddingEnd="10dp"
+                    android:justificationMode="inter_word"
                     android:textColor="@color/word"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
             </ScrollView>
 
 
@@ -312,7 +313,6 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
 
-                android:layout_marginTop="5dp"
                 android:background="@drawable/bg_item_btn_effect"
 
                 android:paddingHorizontal="5dp"
@@ -354,7 +354,7 @@
                 android:fontFamily="@font/poppins_regular"
                 android:textColor="@color/word"
                 android:textStyle="bold"
-                android:textSize="16sp"/>
+                android:textSize="14sp"/>
 
             <Button
                 android:id="@+id/btn_speakToBottom"
@@ -365,12 +365,12 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:background="@drawable/btn_speaking_default_right"
 
-                android:text="Spanish"
+                android:text="Vietnamese"
                 android:textAllCaps="false"
                 android:fontFamily="@font/poppins_regular"
                 android:textColor="@color/word"
                 android:textStyle="bold"
-                android:textSize="16sp"/>
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <ImageButton

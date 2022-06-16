@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.voicetranslate.R
 import com.example.voicetranslate.adapters.AdapterExample
 import com.example.voicetranslate.models.Example
-import com.example.voicetranslate.screens.Home
+import com.example.voicetranslate.screens.HomeActivity
 import kotlinx.android.synthetic.main.activity_show_content.*
 
-class ShowContent : AppCompatActivity() {
+class ShowContentActivity : AppCompatActivity() {
 
     val newArrayList: ArrayList<Example> = arrayListOf()
     var searchArrayList: ArrayList<Example> = arrayListOf()
@@ -173,7 +173,7 @@ class ShowContent : AppCompatActivity() {
     //    Function -- Click back button to close app
     override fun onBackPressed() {
 
-        val intent = Intent(this@ShowContent, ShowOfflinePhraseBook::class.java)
+        val intent = Intent(this@ShowContentActivity, ShowOfflinePhraseBookActivity::class.java)
         intent.putExtra("value", value)
         intent.putExtra("displayFrom", intentDisplayFrom)
         intent.putExtra("languageFrom", intentLanguageFrom)
@@ -208,7 +208,7 @@ class ShowContent : AppCompatActivity() {
                 else
                     titleToContent = filteredNames[position].example.toString()
 
-                val intent = Intent(this@ShowContent, Home::class.java)
+                val intent = Intent(this@ShowContentActivity, HomeActivity::class.java)
                 intent.putExtra("value", titleToContent)
                 intent.putExtra("displayFrom", intentDisplayFrom)
                 intent.putExtra("languageFrom", intentLanguageFrom)

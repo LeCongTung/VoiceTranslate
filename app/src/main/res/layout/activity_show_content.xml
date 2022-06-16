@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".shows.ShowContent"
+    tools:context=".shows.ShowContentActivity"
 
     android:background="@color/backgroundColor">
 
@@ -44,7 +44,7 @@
                 android:fontFamily="@font/poppins_medium"
                 android:text="@string/offlinePhraseBook"
                 android:textColor="@color/word"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/btn_done"
