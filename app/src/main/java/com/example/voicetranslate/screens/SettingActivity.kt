@@ -7,13 +7,13 @@ import kotlinx.android.synthetic.main.activity_setting.*
 
 class SettingActivity : AppCompatActivity() {
 
-    lateinit var value: String
-    lateinit var intentDisplayFrom: String
-    lateinit var intentLanguageFrom: String
-    var intentFlagFrom: Int = 0
-    lateinit var intentDisplayTo: String
-    lateinit var intentLanguageTo: String
-    var intentFlagTo: Int = 0
+    private lateinit var value: String
+    private lateinit var intentDisplayFrom: String
+    private lateinit var intentLanguageFrom: String
+    private var intentFlagFrom: Int = 0
+    private lateinit var intentDisplayTo: String
+    private lateinit var intentLanguageTo: String
+    private var intentFlagTo: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

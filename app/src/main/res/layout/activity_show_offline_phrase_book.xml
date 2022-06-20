@@ -31,7 +31,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/btn_done"
+                android:id="@+id/btn_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -39,7 +39,7 @@
 
                 android:fontFamily="@font/poppins_medium"
                 android:lineHeight="24dp"
-                android:text="Done"
+                android:text="Close"
                 android:textColor="@color/heading_listitem"
                 android:textSize="16dp" />
         </RelativeLayout>
@@ -57,7 +57,7 @@
             android:drawablePadding="15dp"
             android:fontFamily="@font/poppins_medium"
             android:gravity="center_vertical"
-            android:hint="Search"
+            android:hint="@string/searchHint"
 
             android:maxLines="1"
             android:paddingHorizontal="20dp"

@@ -30,7 +30,6 @@
                 android:drawablePadding="3dp"
 
                 android:fontFamily="@font/poppins_medium"
-                android:lineHeight="24dp"
                 android:text="Back"
                 android:textColor="@color/heading_listitem"
                 android:textSize="16dp" />
@@ -45,21 +44,7 @@
                 android:text="@string/offlinePhraseBook"
                 android:textColor="@color/word"
                 android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/btn_done"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-
-                android:fontFamily="@font/poppins_medium"
-                android:lineHeight="24dp"
-                android:text="Done"
-                android:textColor="@color/heading_listitem"
-                android:textSize="16dp" />
         </RelativeLayout>
-
 
         <EditText
             android:id="@+id/et_search"
@@ -74,8 +59,7 @@
             android:drawablePadding="10dp"
 
             android:fontFamily="@font/poppins_medium"
-            android:hint="Search"
-            android:lineHeight="24dp"
+            android:hint="@string/searchHint"
             android:maxLines="1"
             android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"

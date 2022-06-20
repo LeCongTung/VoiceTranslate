@@ -15,13 +15,13 @@ import kotlinx.android.synthetic.main.activity_show_offline_phrase_book.*
 
 class ShowOfflinePhraseBookActivity : AppCompatActivity() {
 
-    val newArrayList: ArrayList<Topic> = arrayListOf()
-    var searchArrayList: ArrayList<Topic> = arrayListOf()
-    var filteredNames = ArrayList<Topic>()
+    private val newArrayList: ArrayList<Topic> = arrayListOf()
+    private var searchArrayList: ArrayList<Topic> = arrayListOf()
+    private var filteredNames = ArrayList<Topic>()
 
-    val myAdapter: AdapterTopic by lazy { AdapterTopic(newArrayList) } //Chi khoi tao khi duoc goi
+    private val myAdapter: AdapterTopic by lazy { AdapterTopic(newArrayList) } //Chi khoi tao khi duoc goi
 
-    val imageShow: Array<Int> by lazy { arrayOf(
+    private val imageShow: Array<Int> by lazy { arrayOf(
         R.drawable.ic_topic_bank,
         R.drawable.ic_topic_basic,
         R.drawable.ic_topic_beautycare,
@@ -39,7 +39,7 @@ class ShowOfflinePhraseBookActivity : AppCompatActivity() {
         R.drawable.ic_topic_studying,
         R.drawable.ic_topic_traveling)}
 
-    val titleShow: Array<String> by lazy { arrayOf(
+    private val titleShow: Array<String> by lazy { arrayOf(
             "Bank", "Basic", "Beauty Care", "Calling for Police", "Communication Means", "Food and Drinks", "Health and Drugstore", "Hotel", "In the Restaurant", "Local Transport", "Repairs and Laundry", "Shopping", "Sightseeing", "Sport and Leisute", "Studying and Work", "Traveling"
         )
     }
@@ -79,11 +79,16 @@ class ShowOfflinePhraseBookActivity : AppCompatActivity() {
             override fun afterTextChanged(p0: Editable?) {
 
                 filters(p0.toString())
-                if (valueSearch.equals(""))
+                if (valueSearch == "")
                     getData()
 
             }
         })
+
+        btn_close.setOnClickListener {
+
+            onBackPressed()
+        }
 
 //        Format recycleview topic
         list_item.layoutManager = GridLayoutManager(this, 2)
@@ -119,14 +124,13 @@ class ShowOfflinePhraseBookActivity : AppCompatActivity() {
         searchArrayList = newArrayList
         list_item.adapter = myAdapter
 
-        var titleToContent = ""
         myAdapter.setOnItemClickListener(object : AdapterTopic.onItemClickListener {
             override fun onItemClick(position: Int) {
 
-                if (filteredNames.size == 0)
-                     titleToContent = searchArrayList[position].title.toString()
+                val titleToContent = if (filteredNames.size == 0)
+                    searchArrayList[position].title.toString()
                 else
-                    titleToContent = filteredNames[position].title.toString()
+                    filteredNames[position].title.toString()
 
                 val intent = Intent(this@ShowOfflinePhraseBookActivity, ShowContentActivity::class.java)
                 intent.putExtra("title", titleToContent)

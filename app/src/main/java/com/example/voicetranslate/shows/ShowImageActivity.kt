@@ -56,17 +56,17 @@ class ShowImageActivity : AppCompatActivity() {
     private val GALLERY_REQUEST_CODE = 2
     private val PERMISSIONS_REQUEST_CODE_FLASH = 23
 
-    lateinit var textRecognizer: TextRecognizer
+    private lateinit var textRecognizer: TextRecognizer
 
-    lateinit var intentDisplayFrom: String
-    lateinit var intentLanguageFrom: String
-    var intentFlagFrom: Int = 0
-    lateinit var intentDisplayTo: String
-    lateinit var intentLanguageTo: String
-    var intentFlagTo: Int = 0
+    private lateinit var intentDisplayFrom: String
+    private lateinit var intentLanguageFrom: String
+    private var intentFlagFrom: Int = 0
+    private lateinit var intentDisplayTo: String
+    private lateinit var intentLanguageTo: String
+    private var intentFlagTo: Int = 0
 
-    var isFlash = false
-    var imageFromCamera: Int = 0
+    private var isFlash = false
+    private var imageFromCamera: Int = 0
 
     private lateinit var cameraExecutor: ExecutorService
     private var imageCapture: ImageCapture? = null
@@ -123,15 +123,15 @@ class ShowImageActivity : AppCompatActivity() {
 
             swapLanguage(intentDisplayFrom, intentDisplayTo)
 
-            var dataDisplay = intentDisplayFrom
+            val dataDisplay = intentDisplayFrom
             intentDisplayFrom = intentDisplayTo
             intentDisplayTo = dataDisplay
 
-            var dataFlag = intentFlagFrom.toString()
+            val dataFlag = intentFlagFrom.toString()
             intentFlagFrom = intentFlagTo
             intentFlagTo = dataFlag.toInt()
 
-            var dataSave = intentLanguageFrom
+            val dataSave = intentLanguageFrom
             intentLanguageFrom = intentLanguageTo
             intentLanguageTo = dataSave
 
@@ -145,7 +145,7 @@ class ShowImageActivity : AppCompatActivity() {
 
         contentCamera.setOnClickListener {
             displayEnableCamera()
-            valueAfterDetect.setText("")
+            valueAfterDetect.text = ""
             contentCamera.isEnabled = false
             imageFromCamera = 0
             imageView.visibility = View.INVISIBLE
@@ -260,11 +260,11 @@ class ShowImageActivity : AppCompatActivity() {
 
                 override fun
                         onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val filedir: File =
-                        File("/storage/emulated/0/Pictures/CameraX-Image/" + name + ".jpg")
-                    if (filedir.exists()) {
+                    val fileDir =
+                        File("/storage/emulated/0/Pictures/CameraX-Image/$name.jpg")
+                    if (fileDir.exists()) {
 
-                        bitmap = BitmapFactory.decodeFile(filedir.absolutePath)
+                        bitmap = BitmapFactory.decodeFile(fileDir.absolutePath)
                         convertImageToTextFromBitmap(bitmap!!)
                         imageView.setImageBitmap(bitmap)
                         viewFinder.visibility = View.INVISIBLE
@@ -299,14 +299,14 @@ class ShowImageActivity : AppCompatActivity() {
 //                Event of camera
                 btn_flash.setOnClickListener {
 
-                    if (isFlash.equals(false)) {
+                    isFlash = if (!isFlash) {
                         camera.cameraControl.enableTorch(true)
                         btn_flash.setImageResource(R.drawable.ic_flash_on)
-                        isFlash = true
+                        true
                     } else {
                         camera.cameraControl.enableTorch(false)
                         btn_flash.setImageResource(R.drawable.ic_flash_off)
-                        isFlash = false
+                        false
                     }
                 }
                 btn_capture.setOnClickListener {
@@ -423,10 +423,10 @@ class ShowImageActivity : AppCompatActivity() {
         valueAfterDetect.visibility = View.INVISIBLE
         styleLanguage(nameLanguageFrom.text.toString())
         val image = InputImage.fromFilePath(applicationContext, imageUri!!)
-        val result = textRecognizer.process(image)
+        textRecognizer.process(image)
             .addOnSuccessListener {
                 valueAfterDetect.text = it.text
-                if (!valueAfterDetect.text.toString().equals(""))
+                if (valueAfterDetect.text.toString() != "")
                     valueAfterDetect.visibility = View.VISIBLE
                 else
                     show("Can't detect anything in the picture")
@@ -441,16 +441,16 @@ class ShowImageActivity : AppCompatActivity() {
         valueAfterDetect.visibility = View.INVISIBLE
         styleLanguage(nameLanguageFrom.text.toString())
         val image = InputImage.fromBitmap(bitmap, 0)
-        val result = textRecognizer.process(image)
+        textRecognizer.process(image)
             .addOnSuccessListener { visionText ->
 
                 valueAfterDetect.text = visionText.text
-                if (!valueAfterDetect.text.toString().equals(""))
+                if (valueAfterDetect.text.toString() != "")
                     valueAfterDetect.visibility = View.VISIBLE
                 else
                     show("Can't detect anything in the picture")
             }
-            .addOnFailureListener { e ->
+            .addOnFailureListener {
 
                 show("Cant get data from this image")
             }
@@ -494,24 +494,18 @@ class ShowImageActivity : AppCompatActivity() {
     //    Function -- Swap language
 //    Swap between languages
     private fun swapLanguage(displayFrom: String, displayTo: String) {
-        nameLanguageFrom.setText(displayTo)
-        nameLanguageTo.setText(displayFrom)
+        nameLanguageFrom.text = displayTo
+        nameLanguageTo.text = displayFrom
     }
 
     private fun styleLanguage(style: String) {
-        when (style) {
-            "Japanese" -> textRecognizer =
-                TextRecognition.getClient(JapaneseTextRecognizerOptions.Builder().build())
-            "Korean" -> textRecognizer =
-                TextRecognition.getClient(KoreanTextRecognizerOptions.Builder().build())
-            "Chinese" -> textRecognizer =
-                TextRecognition.getClient(ChineseTextRecognizerOptions.Builder().build())
-            "Hindi" -> textRecognizer =
-                TextRecognition.getClient(DevanagariTextRecognizerOptions.Builder().build())
-            "Bengali" -> textRecognizer =
-                TextRecognition.getClient(DevanagariTextRecognizerOptions.Builder().build())
-            else -> textRecognizer =
-                TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+        textRecognizer = when (style) {
+            "Japanese" -> TextRecognition.getClient(JapaneseTextRecognizerOptions.Builder().build())
+            "Korean" -> TextRecognition.getClient(KoreanTextRecognizerOptions.Builder().build())
+            "Chinese" -> TextRecognition.getClient(ChineseTextRecognizerOptions.Builder().build())
+            "Hindi" -> TextRecognition.getClient(DevanagariTextRecognizerOptions.Builder().build())
+            "Bengali" -> TextRecognition.getClient(DevanagariTextRecognizerOptions.Builder().build())
+            else -> TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
         }
     }
 

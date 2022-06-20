@@ -20,7 +20,7 @@ class ShowLanguageActivity : AppCompatActivity() {
     var languageChange = ""
 
     //    Array
-    val arrayLanguage = arrayOf(
+    private val arrayLanguage = arrayOf(
         "Afrikaans",
         "Belarusian",
         "Bulgarian",
@@ -53,7 +53,7 @@ class ShowLanguageActivity : AppCompatActivity() {
         "Vietnamese"
     )
 
-    val imageShow = arrayOf(
+    private val imageShow = arrayOf(
         R.drawable.ic_flag_afrikaans,
         R.drawable.ic_flag_belarusian,
         R.drawable.ic_flag_bulgarian,
@@ -86,7 +86,7 @@ class ShowLanguageActivity : AppCompatActivity() {
         R.drawable.ic_flag_vietnamese,
     )
 
-    val getLanguage = arrayOf(
+    private val getLanguage: Array<String> by lazy {arrayOf(
         TranslateLanguage.AFRIKAANS,
         TranslateLanguage.BELARUSIAN,
         TranslateLanguage.BULGARIAN,
@@ -117,16 +117,16 @@ class ShowLanguageActivity : AppCompatActivity() {
         TranslateLanguage.THAI,
         TranslateLanguage.TURKISH,
         TranslateLanguage.VIETNAMESE
-    )
+    )}
 
-    val newArrayList: ArrayList<Language> = arrayListOf()
-    var searchArrayList: ArrayList<Language> = arrayListOf()
-    var filteredNames = ArrayList<Language>()
+    private val newArrayList: ArrayList<Language> = arrayListOf()
+    private var searchArrayList: ArrayList<Language> = arrayListOf()
+    private var filteredNames = ArrayList<Language>()
 
-    val myAdapter: AdapterLanguage by lazy { AdapterLanguage(newArrayList) } //Chi khoi tao khi duoc goi
+    private val myAdapter: AdapterLanguage by lazy { AdapterLanguage(newArrayList) } //Chi khoi tao khi duoc goi
 
-    lateinit var intentDisplayFrom: String
-    lateinit var intentDisplayTo: String
+    private lateinit var intentDisplayFrom: String
+    private lateinit var intentDisplayTo: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -152,7 +152,7 @@ class ShowLanguageActivity : AppCompatActivity() {
         }
 
         nav_camera.setOnClickListener {
-            if (fromLayout.equals("camera"))
+            if (fromLayout == "camera")
                 onBackPressed()
             else{
                 val intent = Intent(this, ShowImageActivity::class.java)
@@ -194,7 +194,7 @@ class ShowLanguageActivity : AppCompatActivity() {
             override fun afterTextChanged(p0: Editable?) {
 
                 filters(p0.toString())
-                if (valueSearch.equals(""))
+                if (valueSearch == "")
                     getData()
             }
         })
@@ -225,18 +225,18 @@ class ShowLanguageActivity : AppCompatActivity() {
         myAdapter.setOnItemClickListener(object : AdapterLanguage.onItemClickListener {
             override fun onItemClick(position: Int) {
 
-                if (filteredNames.size == 0)
-                    languageChange = searchArrayList[position].language.toString()
+                languageChange = if (filteredNames.size == 0)
+                    searchArrayList[position].language.toString()
                 else
-                    languageChange = filteredNames[position].language.toString()
+                    filteredNames[position].language.toString()
 
-                if (intentTypeChoice.equals("above"))
+                if (intentTypeChoice == "above")
                     intentDisplayFrom = languageChange
                 else
                     intentDisplayTo = languageChange
 
                 val intent = Intent()
-                if (!fromLayout.equals("camera"))
+                if (fromLayout != "camera")
                     intent.putExtra("value", value)
                 intent.putExtra("displayFrom", intentDisplayFrom)
                 intent.putExtra("languageFrom", detectLanguage(intentDisplayFrom))
@@ -266,8 +266,8 @@ class ShowLanguageActivity : AppCompatActivity() {
     private fun detectLanguage(language: String): String {
 
         var languageType = ""
-        for (i in 0..arrayLanguage.size - 1)
-            if (arrayLanguage[i].equals(language)) {
+        for (i in arrayLanguage.indices)
+            if (arrayLanguage[i] == language) {
 
                 languageType = getLanguage[i]
             }
@@ -278,8 +278,8 @@ class ShowLanguageActivity : AppCompatActivity() {
     private fun detectFlag(language: String): Int {
 
         var flag = 0
-        for (i in 0..arrayLanguage.size - 1)
-            if (arrayLanguage[i].equals(language)) {
+        for (i in arrayLanguage.indices)
+            if (arrayLanguage[i] == language) {
 
                 flag = imageShow[i]
             }
@@ -293,7 +293,7 @@ class ShowLanguageActivity : AppCompatActivity() {
         val value = intent.getStringExtra("value").toString()
 
         val intent = Intent()
-        if (!fromLayout.equals("camera"))
+        if (fromLayout != "camera")
             intent.putExtra("value", value)
         intent.putExtra("displayFrom", intentDisplayFrom)
         intent.putExtra("languageFrom", detectLanguage(intentDisplayFrom))

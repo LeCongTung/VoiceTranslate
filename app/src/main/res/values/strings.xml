@@ -2,12 +2,13 @@
     <string name="app_name">VoiceTranslate</string>
 
     <!-- Setting - data recycleview -->
-    <string name="restorePurchase">Restore Purchase</string>
     <string name="share">Share</string>
     <string name="contactUs">Contact us</string>
     <string name="privacyPolicy">Privacy Policy</string>
     <string name="termOfService">Term of service</string>
-    <string name="aboutSubscription">About Subscription</string>
+    <string name="hintText">Enter text here</string>
+    <string name="searchHint">Search</string>
+
 
     <!-- Offline PhraseBook-->
     <string name="offlinePhraseBook">Offline PhraseBook</string>

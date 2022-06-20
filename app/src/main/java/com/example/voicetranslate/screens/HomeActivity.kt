@@ -2,17 +2,22 @@ package com.example.voicetranslate.screens
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.doAfterTextChanged
 import com.example.voicetranslate.R
+import com.example.voicetranslate.extensions.showKeyboard
 import com.example.voicetranslate.shows.ShowImageActivity
 import com.example.voicetranslate.shows.ShowLanguageActivity
 import com.example.voicetranslate.shows.ShowOfflinePhraseBookActivity
@@ -26,20 +31,20 @@ class HomeActivity : AppCompatActivity() {
 
     //    Camera
     private val RECORD_SPEECH_TEXT = 102
-    //    Value
-    lateinit var speaker: TextToSpeech
-    var backPressedTime: Long = 0
-    val colorWhite = "#FFFFFF"
-    val colorWord = "#262C30"
 
-    lateinit var value: String
-    lateinit var intentDisplayFrom: String
-    lateinit var intentLanguageFrom: String
-    var intentFlagFrom: Int = 0
-    lateinit var intentDisplayTo: String
-    lateinit var intentLanguageTo: String
-    var intentFlagTo: Int = 0
-    var isTranslate: Boolean = false
+    //    Value
+    private lateinit var speaker: TextToSpeech
+    private var backPressedTime: Long = 0
+    private val colorWhite = "#FFFFFF"
+    private val colorWord = "#262C30"
+
+    private lateinit var value: String
+    private lateinit var intentDisplayFrom: String
+    private lateinit var intentLanguageFrom: String
+    private var intentFlagFrom: Int = 0
+    private lateinit var intentDisplayTo: String
+    private lateinit var intentLanguageTo: String
+    private var intentFlagTo: Int = 0
 
     @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +61,7 @@ class HomeActivity : AppCompatActivity() {
         intentFlagTo = intent.getIntExtra("flagTo", R.drawable.ic_flag_vietnamese)
 
 //        Set up data for app
-        if (intentDisplayFrom.equals("null")) {
+        if (intentDisplayFrom == "null") {
 
             intentDisplayFrom = "English"
             intentDisplayTo = "Vietnamese"
@@ -66,12 +71,11 @@ class HomeActivity : AppCompatActivity() {
 
 //        Display value
         swapLanguage(intentDisplayTo, intentFlagTo, intentDisplayFrom, intentFlagFrom)
-        if (!value.equals("null") && !value.equals("")) {
-            isTranslate = true
+        if (value != "null" && value != "") {
             valueFrom.setText(value)
-            translateValue(value, intentLanguageFrom, intentLanguageTo, isTranslate)
+            translateValue(value, intentLanguageFrom, intentLanguageTo)
             btn_clear.visibility = View.VISIBLE
-            btn_moreInfo.visibility = View.VISIBLE
+            btn_copy.visibility = View.VISIBLE
         }
 //        _________________________________________________________________Excute event -- when click button
 //        ===========Navigation
@@ -115,17 +119,6 @@ class HomeActivity : AppCompatActivity() {
             overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
         }
 //        Content
-//        ===========Translate
-        btn_clear.setOnClickListener {
-            if (::speaker.isInitialized) {
-                speaker.stop()
-            }
-            valueFrom.setText("")
-            valueTo.visibility = View.INVISIBLE
-            btn_clear.visibility = View.INVISIBLE
-            btn_moreInfo.visibility = View.INVISIBLE
-        }
-
 //        Swap between languages each other
         btn_swap.setOnClickListener {
             if (::speaker.isInitialized) {
@@ -133,46 +126,28 @@ class HomeActivity : AppCompatActivity() {
             }
             swapLanguage(intentDisplayFrom, intentFlagFrom, intentDisplayTo, intentFlagTo)
 
-            var dataDisplay = intentDisplayFrom
+            val dataDisplay = intentDisplayFrom
             intentDisplayFrom = intentDisplayTo
             intentDisplayTo = dataDisplay
 
-            var dataFlag = intentFlagFrom.toString()
+            val dataFlag = intentFlagFrom.toString()
             intentFlagFrom = intentFlagTo
             intentFlagTo = dataFlag.toInt()
 
-            var dataSave = intentLanguageFrom
+            val dataSave = intentLanguageFrom
             intentLanguageFrom = intentLanguageTo
             intentLanguageTo = dataSave
 
-            isTranslate = true
             translateValue(
                 valueFrom.text.toString(),
                 intentLanguageFrom,
-                intentLanguageTo,
-                isTranslate
+                intentLanguageTo
             )
         }
-//        Enter text you wanna translate
-        valueFrom.doAfterTextChanged {
-            if (::speaker.isInitialized) {
-                speaker.stop()
-            }
 
-            var value = valueFrom.text.toString()
-            valueTo.visibility = View.VISIBLE
-            if (value == "") {
-                valueTo.visibility = View.INVISIBLE
-                btn_clear.visibility = View.INVISIBLE
-                btn_moreInfo.visibility = View.INVISIBLE
-                isTranslate = false
-                translateValue(value, intentLanguageFrom, intentLanguageTo, isTranslate)
-            } else {
-                btn_clear.visibility = View.VISIBLE
-                btn_moreInfo.visibility = View.VISIBLE
-                isTranslate = true
-                translateValue(value, intentLanguageFrom, intentLanguageTo, isTranslate)
-            }
+        formFrom.setOnClickListener {
+
+            showKeyboard(valueFrom, this)
         }
 
 //        Choose language
@@ -207,14 +182,14 @@ class HomeActivity : AppCompatActivity() {
             if (::speaker.isInitialized) {
                 speaker.stop()
             }
-            TextSpeech(intentLanguageFrom, valueFrom.text.toString())
+            textSpeech(intentLanguageFrom, valueFrom.text.toString())
         }
 
         btn_speakingTo.setOnClickListener {
             if (::speaker.isInitialized) {
                 speaker.stop()
             }
-            TextSpeech(intentLanguageTo, valueTo.text.toString())
+            textSpeech(intentLanguageTo, valueTo.text.toString())
         }
 
         btn_speak.setOnClickListener {
@@ -225,8 +200,48 @@ class HomeActivity : AppCompatActivity() {
             btn_speakFromBottom.setTextColor(Color.parseColor(colorWhite))
             btn_speakToBottom.setBackgroundResource(R.drawable.btn_speaking_right)
             btn_speakToBottom.setTextColor(Color.parseColor(colorWhite))
-            SpeechText(intentLanguageFrom, intentDisplayFrom)
+            speechText(intentLanguageFrom, intentDisplayFrom)
         }
+
+        btn_clear.setOnClickListener {
+            if (::speaker.isInitialized) {
+                speaker.stop()
+            }
+            valueFrom.setText("")
+            valueTo.visibility = View.INVISIBLE
+            btn_clear.visibility = View.INVISIBLE
+            btn_copy.visibility = View.INVISIBLE
+        }
+
+        btn_copy.setOnClickListener{
+
+            copyText()
+        }
+
+        valueFrom.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+                if (::speaker.isInitialized) {
+                    speaker.stop()
+                }
+
+                valueTo.visibility = View.VISIBLE
+                val valueget = valueFrom.text.toString()
+                if (valueget == "") {
+                    valueTo.visibility = View.INVISIBLE
+                    btn_clear.visibility = View.INVISIBLE
+                    btn_copy.visibility = View.INVISIBLE
+                } else {
+                    btn_clear.visibility = View.VISIBLE
+                    btn_copy.visibility = View.VISIBLE
+                    translateValue(valueget, intentLanguageFrom, intentLanguageTo)
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {}
+        })
     }
 
     override fun onDestroy() {
@@ -275,12 +290,10 @@ class HomeActivity : AppCompatActivity() {
                     swapLanguage(intentDisplayTo, intentFlagTo, intentDisplayFrom, intentFlagFrom)
                 }
 
-                isTranslate = true
                 translateValue(
                     valueFrom.text.toString(),
                     intentLanguageFrom,
-                    intentLanguageTo,
-                    isTranslate
+                    intentLanguageTo
                 )
             }
             requestCode == RECORD_SPEECH_TEXT && resultCode == Activity.RESULT_OK -> {
@@ -305,7 +318,6 @@ class HomeActivity : AppCompatActivity() {
         value: String,
         typeFrom: String,
         typeTo: String,
-        isTranslate: Boolean
     ) {
         val options = TranslatorOptions.Builder()
             .setSourceLanguage(typeFrom)
@@ -313,13 +325,9 @@ class HomeActivity : AppCompatActivity() {
             .build()
         val translator = Translation.getClient(options)
         translator.downloadModelIfNeeded().addOnSuccessListener {
-            if (isTranslate.equals(false))
-                translator.close()
-            else {
-                translator.translate(value).addOnSuccessListener {
-                    valueTo.setText(it)
-                }.addOnFailureListener {}
-            }
+            translator.translate(value).addOnSuccessListener {
+                valueTo.text = it
+            }.addOnFailureListener {}
         }.addOnFailureListener {
 
             show("Lost conncection")
@@ -328,17 +336,17 @@ class HomeActivity : AppCompatActivity() {
 
     //    Swap between languages
     private fun swapLanguage(displayFrom: String?, flagFrom: Int, displayTo: String?, flagTo: Int) {
-        displayLanguageFrom.setText(displayTo)
-        btn_speakFromBottom.setText(displayTo)
+        displayLanguageFrom.text = displayTo
+        btn_speakFromBottom.text = displayTo
         flagLanguageFrom.setImageResource(flagTo)
 
-        displayLanguageTo.setText(displayFrom)
-        btn_speakToBottom.setText(displayFrom)
+        displayLanguageTo.text = displayFrom
+        btn_speakToBottom.text = displayFrom
         flagLanguageTo.setImageResource(flagFrom)
     }
 
     //    Speech to text
-    private fun SpeechText(voice: String?, display: String) {
+    private fun speechText(voice: String?, display: String) {
 
         if (!SpeechRecognizer.isRecognitionAvailable(this))
 
@@ -350,16 +358,16 @@ class HomeActivity : AppCompatActivity() {
                 RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
             )
-            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.forLanguageTag(voice))
-            i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say something in " + display + " !")
+            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.forLanguageTag(voice.toString()))
+            i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say something in $display !")
             startActivityForResult(i, RECORD_SPEECH_TEXT)
         }
     }
 
     //    Text Speech
-    private fun TextSpeech(voice: String, value: String) {
+    private fun textSpeech(voice: String, value: String) {
 
-        speaker = TextToSpeech(applicationContext, {
+        speaker = TextToSpeech(applicationContext) {
 
             if (it == TextToSpeech.SUCCESS) {
 
@@ -367,9 +375,17 @@ class HomeActivity : AppCompatActivity() {
                 speaker.setSpeechRate(1.0f)
                 speaker.speak(value, TextToSpeech.QUEUE_ADD, null)
             }
-        })
+        }
     }
 
+    private fun copyText() {
+        val text = valueTo.text.toString()
+        var clipboardManager: ClipboardManager =
+            getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipData = ClipData.newPlainText("key", text)
+        clipboardManager.setPrimaryClip(clipData)
+        Toast.makeText(applicationContext, "Copied", Toast.LENGTH_SHORT).show()
 
+    }
 }
 
