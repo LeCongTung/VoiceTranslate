@@ -222,7 +222,6 @@ class HomeActivity : AppCompatActivity() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
                 if (::speaker.isInitialized) {
                     speaker.stop()
                 }
@@ -233,9 +232,11 @@ class HomeActivity : AppCompatActivity() {
                     valueTo.visibility = View.INVISIBLE
                     btn_clear.visibility = View.INVISIBLE
                     btn_copy.visibility = View.INVISIBLE
+                    btn_speakingTo.isEnabled = false
                 } else {
                     btn_clear.visibility = View.VISIBLE
                     btn_copy.visibility = View.VISIBLE
+                    btn_speakingTo.isEnabled = true
                     translateValue(valueget, intentLanguageFrom, intentLanguageTo)
                 }
             }
@@ -359,7 +360,7 @@ class HomeActivity : AppCompatActivity() {
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
             )
             i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.forLanguageTag(voice.toString()))
-            i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say something in $display !")
+            i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say something in $display!")
             startActivityForResult(i, RECORD_SPEECH_TEXT)
         }
     }
@@ -385,7 +386,6 @@ class HomeActivity : AppCompatActivity() {
         val clipData = ClipData.newPlainText("key", text)
         clipboardManager.setPrimaryClip(clipData)
         Toast.makeText(applicationContext, "Copied", Toast.LENGTH_SHORT).show()
-
     }
 }
 

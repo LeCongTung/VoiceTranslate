@@ -7,7 +7,8 @@
     android:background="@color/backgroundColor"
 
     android:paddingHorizontal="10dp"
-    android:paddingVertical="30dp"
+    android:paddingTop="20dp"
+    android:paddingBottom="10dp"
 
     tools:context=".screens.HomeActivity">
 
@@ -63,7 +64,7 @@
         android:layout_above="@id/btn_speakingMain"
         android:layout_below="@id/navigationbar"
 
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         android:background="@drawable/bg_white_radius"
 
         android:padding="30dp">
@@ -317,7 +318,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
 
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="10dp">
 
         <LinearLayout
             android:id="@+id/contentBtn"

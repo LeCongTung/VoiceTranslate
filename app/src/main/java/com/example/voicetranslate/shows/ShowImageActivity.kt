@@ -429,7 +429,7 @@ class ShowImageActivity : AppCompatActivity() {
                 if (valueAfterDetect.text.toString() != "")
                     valueAfterDetect.visibility = View.VISIBLE
                 else
-                    show("Can't detect anything in the picture")
+                    show("Can't detect anything in the photo")
 
             }.addOnFailureListener {
 
@@ -448,7 +448,7 @@ class ShowImageActivity : AppCompatActivity() {
                 if (valueAfterDetect.text.toString() != "")
                     valueAfterDetect.visibility = View.VISIBLE
                 else
-                    show("Can't detect anything in the picture")
+                    show("Can't detect anything in the photo")
             }
             .addOnFailureListener {
 
