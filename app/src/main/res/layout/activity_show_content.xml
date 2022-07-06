@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".shows.ShowContentActivity"
+    tools:context=".ui.activities.ShowContentActivity"
 
     android:background="@color/backgroundColor">
 
@@ -26,13 +26,12 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
 
-                android:drawableStart="@drawable/ic_back"
                 android:drawablePadding="3dp"
 
-                android:fontFamily="@font/poppins_medium"
-                android:text="Back"
-                android:textColor="@color/heading_listitem"
-                android:textSize="16dp" />
+                android:fontFamily="@font/nunito_bold"
+                android:text="@string/back"
+                android:textColor="@color/enable"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/title_content"
@@ -40,8 +39,8 @@
                 android:layout_height="wrap_content"
 
                 android:layout_centerInParent="true"
-                android:fontFamily="@font/poppins_medium"
-                android:text="@string/offlinePhraseBook"
+                android:fontFamily="@font/nunito_bold"
+                android:text="@string/title_offlinePhraseBook"
                 android:textColor="@color/word"
                 android:textSize="18sp" />
         </RelativeLayout>
@@ -52,13 +51,13 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/controller"
 
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
 
             android:background="@drawable/bg_search_radius"
             android:drawableStart="@drawable/ic_search"
             android:drawablePadding="10dp"
 
-            android:fontFamily="@font/poppins_medium"
+            android:fontFamily="@font/nunito_medium"
             android:hint="@string/searchHint"
             android:maxLines="1"
             android:paddingHorizontal="20dp"

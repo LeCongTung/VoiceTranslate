@@ -3,63 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".shows.ShowLanguageActivity"
+    tools:context=".ui.activities.ShowLanguageActivity"
 
     android:paddingTop="20dp"
 
     android:background="@color/backgroundColor">
 
-    <!--    Navigation-->
-    <LinearLayout
-        android:id="@+id/navigationbar"
-        android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:background="@color/backgroundColor"
-        android:orientation="horizontal"
-
-        android:layout_marginHorizontal="10dp"
-
-        android:weightSum="3">
-
-        <ImageButton
-            android:id="@+id/nav_offlinePhrasebook"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_weight="1"
-
-            android:background="@drawable/bg_item_nav_effect"
-            android:padding="5dp"
-            android:src="@drawable/ic_nav_airport"/>
-
-        <ImageButton
-            android:id="@+id/nav_camera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-
-            android:background="@drawable/bg_item_nav_effect"
-
-            android:padding="5dp"
-            android:src="@drawable/ic_nav_camera" />
-
-        <ImageButton
-            android:id="@+id/nav_setting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-
-            android:background="@drawable/bg_item_nav_effect"
-
-            android:padding="5dp"
-            android:src="@drawable/ic_nav_setting" />
-    </LinearLayout>
-
     <RelativeLayout
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/navigationbar"
 
         android:layout_marginTop="15dp"
         android:background="@drawable/bg_choice_language"
@@ -73,7 +26,7 @@
 
             android:layout_marginTop="5dp"
 
-            android:fontFamily="@font/poppins_medium"
+            android:fontFamily="@font/nunito_regular"
             android:text="Select language"
             android:textColor="@color/word"
             android:textSize="20sp" />
@@ -99,11 +52,11 @@
             android:layout_below="@id/btn_close"
 
             android:layout_marginTop="20dp"
-            android:background="@drawable/bg_search_language_radius"
+            android:background="@drawable/bg_search_radius"
 
             android:drawableStart="@drawable/ic_search"
             android:drawablePadding="15dp"
-            android:fontFamily="@font/poppins_medium"
+            android:fontFamily="@font/nunito_regular"
             android:gravity="center_vertical"
             android:hint="@string/searchHint"
 

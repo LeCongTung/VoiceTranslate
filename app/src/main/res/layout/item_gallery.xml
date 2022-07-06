@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="2dp"
+    app:cardElevation="1dp"
+    app:cardCornerRadius="0dp">
+
+    <RelativeLayout
+        android:id="@+id/item"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingVertical="15dp"
+        android:background="@color/white"
+        android:paddingHorizontal="10dp"
+        android:layout_marginVertical="10dp">
+        
+        <androidx.cardview.widget.CardView
+            android:id="@+id/contentImage"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+
+            app:cardCornerRadius="5dp">
+
+            <ImageView
+                android:id="@+id/item_photo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:src="@color/enable"
+                android:scaleType="centerCrop"/>
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/contentInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="90dp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/contentImage"
+            android:orientation="vertical"
+            android:gravity="center_vertical"
+
+            android:paddingHorizontal="20dp">
+
+            <TextView
+                android:id="@+id/toLang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="@font/nunito_semibold"
+                android:text="@string/title_crop"
+                android:textColor="@color/enable"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tv_timeSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:fontFamily="@font/nunito_regular"
+
+                android:paddingTop="10dp"
+                android:text="@string/title_crop"
+                android:textColor="@color/word"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btn_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+
+            android:paddingVertical="20dp"
+            android:paddingStart="10dp"
+
+            android:src="@drawable/ic_showimage" />
+
+        <ImageView
+            android:id="@+id/btn_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone"
+
+            android:paddingVertical="20dp"
+
+            android:src="@drawable/ic_checked" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

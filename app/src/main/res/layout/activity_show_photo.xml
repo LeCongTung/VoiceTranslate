@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activities.ShowPhotoActivity">
+
+    <RelativeLayout
+        android:id="@+id/captureImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:layout_centerInParent="true" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:background="#90403F3F" />
+
+        <TextView
+            android:id="@+id/valueAfterDetect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_centerInParent="true"
+            android:layout_marginTop="50dp"
+            android:fontFamily="@font/nunito_medium"
+            android:lineSpacingExtra="5dp"
+            android:padding="20dp"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#BF000000"
+        android:orientation="horizontal"
+        android:paddingVertical="20dp"
+
+        android:weightSum="4">
+
+        <ImageButton
+            android:id="@+id/btn_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:background="@color/noColor"
+            android:src="@drawable/ic_more" />
+
+        <ImageButton
+            android:id="@+id/btn_translate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:background="@color/noColor"
+            android:src="@drawable/ic_translate" />
+
+        <ImageButton
+            android:id="@+id/btn_pin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:background="@color/noColor"
+            android:src="@drawable/ic_unpin" />
+
+        <ImageButton
+            android:id="@+id/btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:background="@color/noColor"
+            android:src="@drawable/ic_close32" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/dismissDialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:layout_above="@id/contentFeature"
+        android:background="@color/noColor"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:id="@+id/contentFeature"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="invisible"
+
+        android:layout_margin="10dp"
+
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            android:layout_marginBottom="10dp"
+
+            android:background="@drawable/bg_gray_radius">
+
+            <Button
+                android:id="@+id/btn_crop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="?android:attr/borderlessButtonStyle"
+
+                android:paddingVertical="15dp"
+                android:background="@drawable/bg_gray_radius"
+
+                android:text="@string/title_crop"
+                android:textAllCaps="false"
+                android:fontFamily="@font/nunito_regular"
+                android:textColor="@color/backgroundOutput"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/btn_translateTo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="?android:attr/borderlessButtonStyle"
+
+                android:paddingVertical="15dp"
+                android:background="@drawable/bg_gray_radius"
+
+                android:text="@string/title_translateTo"
+                android:textAllCaps="false"
+                android:fontFamily="@font/nunito_regular"
+                android:textColor="@color/backgroundOutput"
+                android:textSize="16sp"/>
+
+            <Button
+                android:id="@+id/btn_shareImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="?android:attr/borderlessButtonStyle"
+
+                android:paddingVertical="15dp"
+                android:background="@drawable/bg_gray_radius"
+
+                android:text="@string/title_shareImage"
+                android:textAllCaps="false"
+                android:fontFamily="@font/nunito_regular"
+                android:textColor="@color/backgroundOutput"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/bg_white_radius"
+            android:fontFamily="@font/nunito_bold"
+
+            android:paddingVertical="20dp"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/backgroundOutput"
+            android:textSize="16sp" />
+    </LinearLayout>
+</RelativeLayout>

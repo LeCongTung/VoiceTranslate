@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#FF0606</color>
+    <color name="green">#32970D</color>
 
-<!--    basic color-->
+    <!--    basic color-->
     <color name="backgroundColor">#f2f2f2</color>
     <color name="backgroundSearch">#DFDFE0</color>
-    <color name="effectClick">#6E6D71</color>
-    <color name="backgroundButtonCamera">#2D2C2C</color>
+    <color name="time">#6c6c6c</color>
+    <color name="noColor">#00FFFFFF</color>
+    <color name="disable">#d9d9d9</color>
+    <color name="enable">#3478F6</color>
+    <color name="longPress">#e1ebfe</color>
 
-    <color name="icon">#2E373E</color>
-    <color name="word">#262C30</color>
-    <color name="heading_listitem">#1565F8</color>
+    <color name="icon">#173042</color>
+    <color name="word">#404040</color>
+    <color name="backgroundOutput">#1565F8</color>
+    <color name="backgroundMoreFeature">#dedede</color>
     <color name="styleSearch">#7D7D81</color>
-
-<!--    special color-->
-    <color name="btn_speak_left">#9844fd</color>
-    <color name="btn_speak_right">#34b8fa</color>
-    <color name="btn_color_camera_noclick">#989898</color>
-    <color name="btn_color_camera_focus">#5491FF</color>
+    <color name="blurBlack">#BF000000</color>
 </resources>

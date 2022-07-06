@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".shows.ShowOfflinePhraseBookActivity"
+    tools:context=".ui.activities.ShowOfflinePhraseBookActivity"
 
     android:background="@color/backgroundColor">
 
@@ -25,23 +25,21 @@
                 android:layout_height="wrap_content"
 
                 android:layout_centerInParent="true"
-                android:fontFamily="@font/poppins_medium"
-                android:text="@string/offlinePhraseBook"
+                android:fontFamily="@font/nunito_bold"
+                android:text="@string/title_offlinePhraseBook"
                 android:textColor="@color/word"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/btn_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
 
-                android:fontFamily="@font/poppins_medium"
-                android:lineHeight="24dp"
-                android:text="Close"
-                android:textColor="@color/heading_listitem"
-                android:textSize="16dp" />
+                android:fontFamily="@font/nunito_bold"
+                android:text="@string/close"
+                android:textColor="@color/enable"
+                android:textSize="16sp" />
         </RelativeLayout>
 
         <EditText
@@ -55,7 +53,7 @@
 
             android:drawableStart="@drawable/ic_search"
             android:drawablePadding="15dp"
-            android:fontFamily="@font/poppins_medium"
+            android:fontFamily="@font/nunito_medium"
             android:gravity="center_vertical"
             android:hint="@string/searchHint"
 
@@ -74,14 +72,13 @@
             android:layout_below="@id/et_search"
 
             android:layout_marginTop="25dp"
-            android:paddingStart="5dp"
+            android:fontFamily="@font/nunito_medium"
 
-            android:fontFamily="@font/poppins_medium"
-            android:lineHeight="24dp"
-            android:text="all topics"
+            android:paddingHorizontal="5dp"
+            android:text="@string/title_allTopics"
             android:textAllCaps="true"
-            android:textColor="@color/effectClick"
-            android:textSize="16dp" />
+            android:textColor="@color/word"
+            android:textSize="16sp" />
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -94,5 +91,5 @@
 
         android:paddingHorizontal="17dp"
         android:scrollbars="none"
-        tools:listitem="@layout/item_content" />
+        tools:listitem="@layout/item_topic" />
 </RelativeLayout>

@@ -1,15 +1,39 @@
 <resources>
     <string name="app_name">VoiceTranslate</string>
 
-    <!-- Setting - data recycleview -->
-    <string name="share">Share</string>
-    <string name="contactUs">Contact us</string>
-    <string name="privacyPolicy">Privacy Policy</string>
-    <string name="termOfService">Term of service</string>
-    <string name="hintText">Enter text here</string>
+    <!--    Basic-->
     <string name="searchHint">Search</string>
+    <string name="hintText">Enter text here</string>
+    <string name="cancel">Cancel</string>
+    <string name="recognize">Loading...</string>
 
+    <!-- Setting-->
+    <string name="share">Share</string>
+    <string name="back">Back</string>
+    <string name="close">Close</string>
 
     <!-- Offline PhraseBook-->
-    <string name="offlinePhraseBook">Offline PhraseBook</string>
+    <string name="title_offlinePhraseBook">Offline PhraseBook</string>
+    <string name="title_allTopics">All Topics</string>
+
+    <!--    Translate-->
+    <string name="title_translate_text">Text to text translate</string>
+    <string name="title_translate_voice">Speech to text translate</string>
+    <string name="title_translate_viewall">View all text</string>
+
+    <!--    Show Photo-->
+    <string name="title_crop">Crop Image</string>
+    <string name="title_translateTo">Translate to</string>
+    <string name="title_shareImage">Share Photo with Translation</string>
+
+    <!--    Gallery-->
+    <string name="navLeft_upgrade">Upgrade</string>
+    <string name="navLeft_offlineMode">Offline Mode</string>
+    <string name="navLeft_voice">Voice Translator</string>
+    <string name="navLeft_Review">Write a Review</string>
+    <string name="navLeft_shareFriend">Share with Friends</string>
+    <string name="navLeft_contact">Contact Us</string>
+    <string name="title_recent">Recent</string>
+    <string name="title_pinned">Pinned</string>
+    <string name="title_trash">This action can’t be undone. Are you sure to delete selected items?</string>
 </resources>

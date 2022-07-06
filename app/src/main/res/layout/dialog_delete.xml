@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+
+    android:layout_margin="30dp"
+    android:padding="30dp"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/titleDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nunito_medium"
+        android:paddingTop="10dp"
+        android:text="@string/title_trash"
+        android:textAlignment="center"
+        android:textColor="@color/word"
+
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/titleDelete"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="20dp">
+
+        <Button
+            android:id="@+id/btn_cancelDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:background="@drawable/bg_blue_radius"
+            android:fontFamily="@font/nunito_semibold"
+            android:paddingHorizontal="10dp"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_deleteDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/bg_blue_radius"
+            android:fontFamily="@font/nunito_semibold"
+            android:paddingHorizontal="10dp"
+            android:text="Delete"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+
+            android:textSize="16sp" />
+    </LinearLayout>
+</RelativeLayout>

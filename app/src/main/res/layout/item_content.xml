@@ -20,7 +20,7 @@
 
             android:maxLines="1"
 
-            android:fontFamily="@font/poppins_regular"
+            android:fontFamily="@font/nunito_regular"
             android:textColor="@color/word"
             android:textSize="16sp" />
     </RelativeLayout>

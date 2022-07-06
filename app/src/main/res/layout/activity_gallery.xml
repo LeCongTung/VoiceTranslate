@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activities.GalleryActivity"
+
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@color/white">
+
+        <ImageButton
+            android:id="@+id/btn_navleft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:background="@color/noColor"
+
+            android:padding="20dp"
+            android:src="@drawable/ic_navleft" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+
+            android:orientation="horizontal"
+            android:padding="3dp"
+            android:background="@drawable/bg_gray_radius">
+
+            <TextView
+                android:id="@+id/btn_showRecent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:padding="10dp"
+                android:enabled="false"
+
+                android:fontFamily="@font/nunito_medium"
+                android:textSize="13sp"
+                android:text="@string/title_recent"
+                android:textColor="@color/word"
+                android:background="@drawable/bg_white_radius"/>
+
+            <TextView
+                android:id="@+id/btn_showPin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:padding="10dp"
+                android:layout_marginStart="6dp"
+
+                android:fontFamily="@font/nunito_medium"
+                android:textSize="13sp"
+                android:text="@string/title_pinned"
+                android:textColor="@color/word"/>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/btn_premium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+
+            android:background="@color/noColor"
+
+            android:padding="20dp"
+            android:src="@drawable/ic_premium" />
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/ContentNav"
+        android:layout_below="@id/appBar"
+        android:layout_marginHorizontal="10dp"
+
+        android:background="@color/white"
+        tools:listitem="@layout/item_gallery"/>
+
+    <LinearLayout
+        android:id="@+id/ContentNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_weight="1"
+
+        android:elevation="10dp"
+        android:background="@color/white"
+
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+
+            android:background="@color/noColor"
+
+            android:paddingVertical="20dp"
+            android:src="@drawable/ic_edit" />
+
+        <ImageButton
+            android:id="@+id/btn_delete"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/noColor"
+
+            android:paddingVertical="20dp"
+
+            android:src="@drawable/ic_delete"
+            android:visibility="gone"
+            app:tint="@color/disable" />
+
+        <ImageButton
+            android:id="@+id/btn_gallery"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+
+            android:background="@color/noColor"
+
+            android:paddingVertical="20dp"
+            android:src="@drawable/ic_gallery"
+            app:tint="@color/backgroundOutput" />
+
+        <ImageButton
+            android:id="@+id/btn_multipleChoice"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:visibility="gone"
+
+            android:background="@color/noColor"
+
+            android:paddingVertical="20dp"
+            android:src="@drawable/ic_multiplechoice"
+            app:tint="@color/backgroundOutput" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menuleft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/appBar"
+
+        android:layout_marginStart="10dp"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="10dp"
+
+        android:background="@drawable/bg_white_radius"
+        android:elevation="10dp"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/btn_upgrade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="10dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+
+                android:src="@drawable/ic_king"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:paddingStart="10dp"
+
+                android:text="@string/navLeft_upgrade"
+                android:fontFamily="@font/nunito_medium"
+                android:textColor="@color/word"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_offlineMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:src="@drawable/ic_offlonemode"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:paddingStart="10dp"
+
+                android:text="@string/navLeft_offlineMode"
+                android:fontFamily="@font/nunito_medium"
+                android:textColor="@color/word"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_voice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:src="@drawable/ic_voice"
+                app:tint="@color/icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:paddingStart="10dp"
+
+                android:text="@string/navLeft_voice"
+                android:fontFamily="@font/nunito_medium"
+                android:textColor="@color/word"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_review"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="10dp">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+
+                android:src="@drawable/ic_review"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:paddingStart="10dp"
+
+                android:text="@string/navLeft_Review"
+                android:fontFamily="@font/nunito_medium"
+                android:textColor="@color/word"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_shareFriend"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:src="@drawable/ic_sharecloud"
+                app:tint="@color/icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:paddingStart="10dp"
+
+                android:text="@string/navLeft_shareFriend"
+                android:fontFamily="@font/nunito_medium"
+                android:textColor="@color/word"
+                android:textSize="16sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_contactUs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:src="@drawable/ic_messages" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:paddingStart="10dp"
+
+                android:text="@string/navLeft_contact"
+                android:fontFamily="@font/nunito_medium"
+                android:textColor="@color/word"
+                android:textSize="16sp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/dismissDialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/ContentNav"
+
+        android:background="@color/noColor"
+        android:visibility="gone"/>
+
+    <ImageButton
+        android:id="@+id/btn_tocamera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:translationZ="999dp"
+
+        android:background="@color/noColor"
+
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/ic_intent_camera" />
+</RelativeLayout>
