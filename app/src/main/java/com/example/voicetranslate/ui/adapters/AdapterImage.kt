@@ -15,13 +15,14 @@ class AdapterImage(var listener: OnItemClickListener) :
     RecyclerView.Adapter<AdapterImage.MyViewHolder>() {
 
     var imageList = emptyList<Image>()
+    var selectAllList = ArrayList<Image>()
     private var quantity: Int = 0
 
     interface OnItemClickListener {
 
         fun onItemClick(image: Image)
-        fun onLongClick(id: Int)
-        fun onUnDeleteClick(id: Int)
+        fun onLongClick(time: String)
+        fun onUnDeleteClick(time: String)
     }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {}
@@ -48,7 +49,7 @@ class AdapterImage(var listener: OnItemClickListener) :
                 holder.itemView.btn_show.visibility = View.GONE
 
                 quantity++
-                listener.onLongClick(currentItem.id)
+                listener.onLongClick(currentItem.time)
             }
             true
         }
@@ -69,7 +70,7 @@ class AdapterImage(var listener: OnItemClickListener) :
 
                     quantity--
                 }
-                listener.onUnDeleteClick(currentItem.id)
+                listener.onUnDeleteClick(currentItem.time)
             }
         }
     }
@@ -80,6 +81,17 @@ class AdapterImage(var listener: OnItemClickListener) :
 
     fun setData(image: List<Image>) {
         this.imageList = image
+        notifyDataSetChanged()
+    }
+
+    fun selectedAll(){
+        selectAllList.clear()
+        selectAllList.addAll(imageList)
+        notifyDataSetChanged()
+    }
+
+    fun clearSelectedAll(){
+        selectAllList.clear()
         notifyDataSetChanged()
     }
 }

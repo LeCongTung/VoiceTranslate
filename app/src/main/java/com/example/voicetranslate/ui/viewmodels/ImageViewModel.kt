@@ -27,15 +27,9 @@ class ImageViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-//    fun selectAll(){
-//        viewModelScope.launch(Dispatchers.IO){
-//            repository.selectAll()
-//        }
-//    }
-
-    fun deleteRow(id: Int){
+    fun deleteByTime(time: String){
         viewModelScope.launch(Dispatchers.IO){
-            repository.deleteRow(id)
+            repository.deleteByTime(time)
         }
     }
 }

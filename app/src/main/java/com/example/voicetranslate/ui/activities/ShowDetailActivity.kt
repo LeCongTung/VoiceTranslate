@@ -6,7 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.os.Handler
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -27,8 +27,6 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import kotlinx.android.synthetic.main.activity_show_detail.*
 import java.io.File
 import java.io.FileOutputStream
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 class ShowDetailActivity : AppCompatActivity() {
 
@@ -42,10 +40,9 @@ class ShowDetailActivity : AppCompatActivity() {
     private lateinit var intentLanguageTo: String
     private var intentFlagTo: Int = 0
     private var intentList: Boolean = true
-    private var intentID: Int = 0
+    private lateinit var intentTime: String
 
     private lateinit var pinViewModel: PinViewModel
-
     private var uri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,10 +78,14 @@ class ShowDetailActivity : AppCompatActivity() {
         }
 
         btn_shareImageAct.setOnClickListener {
+            appBar.visibility = View.INVISIBLE
             displayMoreDismiss(false)
-            val bitmap = ShowPhotoActivity.takeScreenshotOfRootView(captureImageAct)
+            val bitmap = takeScreenshotOfRootView(captureImageAct)
             val uriShare = getImageToShare(bitmap)
             shareImageURI(uriShare!!)
+            Handler().postDelayed({
+                appBar.visibility = View.VISIBLE
+            }, 100)
         }
 
         btn_pinAct.setOnClickListener {
@@ -102,6 +103,7 @@ class ShowDetailActivity : AppCompatActivity() {
         intent.putExtra("flagTo", intentFlagTo)
         setResult(Activity.RESULT_OK, intent)
         finish()
+        overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -131,9 +133,7 @@ class ShowDetailActivity : AppCompatActivity() {
         intentLanguageTo = intent.getStringExtra("languageTo").toString()
         intentFlagTo = intent.getIntExtra("flagTo", R.drawable.ic_flag_vietnamese)
         intentList = intent.getBooleanExtra("pin", intentList)
-        intentID = intent.getIntExtra("id", 0)
-
-        Log.d("Main12345","IntentPathImage: $intentPathImage")
+        intentTime = intent.getStringExtra("time").toString()
     }
 
     private fun detectFrom(){
@@ -258,20 +258,16 @@ class ShowDetailActivity : AppCompatActivity() {
     }
 
     private fun deleteData(){
-        val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        val time = current.format(formatter)
+        pinViewModel = ViewModelProvider(this).get(PinViewModel::class.java)
         intentList = if (intentList){
-            pinViewModel = ViewModelProvider(this).get(PinViewModel::class.java)
-
-            val pin = Pin(intentID, intentPathImage, intentDisplayFrom, intentLanguageFrom, intentFlagFrom, intentDisplayTo, intentLanguageTo, intentFlagTo, time, intentFrom)
+            val pin = Pin(intentTime, intentPathImage, intentDisplayFrom, intentLanguageFrom, intentFlagFrom, intentDisplayTo, intentLanguageTo, intentFlagTo, intentFrom)
             pinViewModel.insert(pin)
             btn_pinAct.setImageResource(R.drawable.ic_pin)
             false
         }
         else{
             btn_pinAct.setImageResource(R.drawable.ic_unpin)
-            pinViewModel.deleteRow(intentID)
+            pinViewModel.deleteByTime(intentTime)
             true
         }
     }

@@ -6,23 +6,24 @@
     android:layout_height="match_parent"
     tools:context=".ui.activities.ShowPhotoActivity">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:layout_centerInParent="true" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:background="#90403F3F" />
+
     <RelativeLayout
         android:id="@+id/captureImage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            android:layout_centerInParent="true" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            android:background="#90403F3F" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/appBar">
 
         <TextView
             android:id="@+id/valueAfterDetect"
@@ -30,7 +31,6 @@
             android:layout_height="wrap_content"
 
             android:layout_centerInParent="true"
-            android:layout_marginTop="50dp"
             android:fontFamily="@font/nunito_medium"
             android:lineSpacingExtra="5dp"
             android:padding="20dp"

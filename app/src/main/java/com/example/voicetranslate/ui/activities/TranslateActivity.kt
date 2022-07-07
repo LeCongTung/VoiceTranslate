@@ -41,7 +41,6 @@ class TranslateActivity : AppCompatActivity() {
         valueFrom.setText(value)
         translateValue(value, intentLanguageFrom, intentLanguageTo)
 
-//        Excute events
         btn_swap.setOnClickListener {
             showLanguageForm(intentDisplayFrom, intentFlagFrom, intentDisplayTo, intentFlagTo)
             swapLanguage()

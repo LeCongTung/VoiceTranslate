@@ -12,11 +12,7 @@ class ImageRepository(private val imageDAO: ImageDAO) {
         imageDAO.insert(image)
     }
 
-//    fun selectAll(){
-//        imageDAO.selectAll()
-//    }
-
-    fun deleteRow(id: Int){
-        imageDAO.deleteDataById(id)
+    fun deleteByTime(time: String){
+        imageDAO.deleteDataByTime(time)
     }
 }

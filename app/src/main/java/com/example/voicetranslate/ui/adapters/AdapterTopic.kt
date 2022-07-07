@@ -14,6 +14,7 @@ class AdapterTopic(private var list: ArrayList<Topic>): RecyclerView.Adapter<Ada
     //    Choice a product in type
     private lateinit var mListener: onItemClickListener
 
+
     interface onItemClickListener {
 
         fun onItemClick(position: Int)
@@ -32,9 +33,9 @@ class AdapterTopic(private var list: ArrayList<Topic>): RecyclerView.Adapter<Ada
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-        val currentitem = list[position]
-        holder.itemtitle.text = currentitem.title
-        holder.itemimage.setImageResource(currentitem.image!!)
+        val currentItem = list[position]
+        holder.itemtitle.text = currentItem.title
+        holder.itemimage.setImageResource(currentItem.image!!)
     }
 
     override fun getItemCount(): Int {

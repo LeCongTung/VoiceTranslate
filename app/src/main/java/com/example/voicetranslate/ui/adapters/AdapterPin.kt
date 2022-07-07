@@ -19,8 +19,8 @@ class AdapterPin(var listener: OnItemClickListener) :
     interface OnItemClickListener {
 
         fun onItemClickPin(pin: Pin)
-        fun onLongClickPin(id: Int)
-        fun onUnDeleteClickPin(id: Int)
+        fun onLongClickPin(time: String)
+        fun onUnDeleteClickPin(time: String)
     }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -48,7 +48,7 @@ class AdapterPin(var listener: OnItemClickListener) :
                 holder.itemView.btn_show.visibility = View.GONE
 
                 quantity++
-                listener.onLongClickPin(currentItem.id)
+                listener.onLongClickPin(currentItem.time)
             }
             true
         }
@@ -67,7 +67,7 @@ class AdapterPin(var listener: OnItemClickListener) :
                     holder.itemView.btn_show.visibility = View.VISIBLE
                     quantity--
                 }
-                listener.onUnDeleteClickPin(currentItem.id)
+                listener.onUnDeleteClickPin(currentItem.time)
             }
         }
     }

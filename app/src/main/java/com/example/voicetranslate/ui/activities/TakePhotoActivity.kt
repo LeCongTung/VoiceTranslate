@@ -254,7 +254,9 @@ class TakePhotoActivity : AppCompatActivity() {
                     startActivityForResult(intent, 1001)
                     overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
                     btn_flash.setImageResource(R.drawable.ic_flash_off)
-                    hideDialog()
+                    Handler().postDelayed({
+                        hideDialog()
+                    }, 500)
                 }
             }
         )

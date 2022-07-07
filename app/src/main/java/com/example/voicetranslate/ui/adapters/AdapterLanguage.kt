@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.voicetranslate.R
 import com.example.voicetranslate.models.Language
 
@@ -32,9 +33,9 @@ class AdapterLanguage(private var list: ArrayList<Language>): RecyclerView.Adapt
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
 
-        val currentitem = list[position]
-        holder.itemtitle.text = currentitem.language
-        holder.itemimage.setImageResource(currentitem.image!!)
+        val currentItem = list[position]
+        holder.itemtitle.text = currentItem.language
+        Glide.with(holder.itemView.context).load(currentItem.image).into(holder.itemimage)
     }
 
     override fun getItemCount(): Int {

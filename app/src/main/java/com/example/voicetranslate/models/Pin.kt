@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "Pin")
 data class Pin(
-    @PrimaryKey val id: Int,
+    @PrimaryKey val time: String,
     val pathImage: String,
     val fromLang: String,
     val fromLangeUse: String,
@@ -13,6 +13,5 @@ data class Pin(
     val toLang: String,
     val toLangeUse: String,
     val toFlagLang: Int,
-    val time: String,
     val type: String
 )

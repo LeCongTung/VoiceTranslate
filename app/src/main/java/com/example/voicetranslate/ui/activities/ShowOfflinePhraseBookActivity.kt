@@ -111,7 +111,6 @@ class ShowOfflinePhraseBookActivity : AppCompatActivity() {
     }
 
     private fun getTopic() {
-
         newArrayList.clear()
         for (i in titleShow.indices) {
             val topics = Topic(titleShow[i], imageShow[i])
@@ -142,7 +141,6 @@ class ShowOfflinePhraseBookActivity : AppCompatActivity() {
     }
 
     private fun filters(text: String) {
-
         filteredNames.clear()
         searchArrayList.filterTo(filteredNames) {
 

@@ -60,9 +60,10 @@ class ShowPhotoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_show_photo)
 
         getData()
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        time = current.format(formatter)
         detectFrom(intentFrom)
-        if (!valueAfterDetect.equals(""))
-            insert(intentPathImage)
 
         btn_more.setOnClickListener {
             displayMoreDismiss(true)
@@ -92,11 +93,10 @@ class ShowPhotoActivity : AppCompatActivity() {
         btn_pin.setOnClickListener {
             isPin = if (!isPin){
                 insertPin(uri.toString())
-                show("Pinned successfully!")
                 btn_pin.setImageResource(R.drawable.ic_pin)
                 true
             }else{
-//                deletePin()
+                deletePin(time)
                 btn_pin.setImageResource(R.drawable.ic_unpin)
                 false
             }
@@ -121,7 +121,6 @@ class ShowPhotoActivity : AppCompatActivity() {
             Handler().postDelayed({
                 displayMoreDismiss(false)
             }, 400)
-
         }
 
         btn_crop.setOnClickListener {
@@ -132,12 +131,12 @@ class ShowPhotoActivity : AppCompatActivity() {
         btn_shareImage.setOnClickListener {
             appBar.visibility = View.INVISIBLE
             displayMoreDismiss(false)
-            val bitmap = takeScreenshotOfRootView(captureImage)
+            val bitmap = takeScreenshotOfRootView(imageView)
             val uriShare = getImageToShare(bitmap)
             shareImageURI(uriShare!!)
             Handler().postDelayed({
                 appBar.visibility = View.VISIBLE
-            }, 200)
+            }, 100)
         }
     }
 
@@ -175,8 +174,7 @@ class ShowPhotoActivity : AppCompatActivity() {
                     Glide.with(this)
                         .load(result.uri)
                         .into(imageView)
-                    convertImageToTextFromURI(result.uri)
-                    insert(result.uri.toString())
+                    convertImageToTextFromURIAfterCrop(result.uri)
                 }
                 else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                     Log.e("error", "Crop error: ${result.error}" )
@@ -230,8 +228,28 @@ class ShowPhotoActivity : AppCompatActivity() {
         textRecognizer.process(image)
             .addOnSuccessListener {
                 valueAfterDetect.text = it.text
-                if (valueAfterDetect.text.toString() != "")
+                if (valueAfterDetect.text.toString() != ""){
                     valueAfterDetect.visibility = View.VISIBLE
+                    insert(intentPathImage)
+                }
+                else
+                    show("No text found")
+            }.addOnFailureListener {
+                show("Cant get data from this image")
+            }
+    }
+
+    private fun convertImageToTextFromURIAfterCrop(imageUri: Uri?) {
+        valueAfterDetect.visibility = View.INVISIBLE
+        styleLanguage(intentDisplayFrom)
+        val image = InputImage.fromFilePath(applicationContext, imageUri!!)
+        textRecognizer.process(image)
+            .addOnSuccessListener {
+                valueAfterDetect.text = it.text
+                if (valueAfterDetect.text.toString() != ""){
+                    valueAfterDetect.visibility = View.VISIBLE
+                    insert(imageUri.toString())
+                }
                 else
                     show("No text found")
             }.addOnFailureListener {
@@ -247,8 +265,10 @@ class ShowPhotoActivity : AppCompatActivity() {
         textRecognizer.process(image)
             .addOnSuccessListener { visionText ->
                 valueAfterDetect.text = visionText.text
-                if (valueAfterDetect.text.toString() != "")
+                if (valueAfterDetect.text.toString() != ""){
                     valueAfterDetect.visibility = View.VISIBLE
+                    insert(intentPathImage)
+                }
                 else
                     show("No text found")
             }
@@ -269,7 +289,7 @@ class ShowPhotoActivity : AppCompatActivity() {
         var uri: Uri? = null
         try {
             imageFolder.mkdirs()
-            val file = File(imageFolder, "$time.png")
+            val file = File(imageFolder, "image.png")
             val outputStream = FileOutputStream(file)
             bitmap.compress(Bitmap.CompressFormat.PNG, 90, outputStream)
             outputStream.flush()
@@ -286,19 +306,20 @@ class ShowPhotoActivity : AppCompatActivity() {
     }
 
     private fun insert(path: String){
-        val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        time = current.format(formatter)
         imageViewModel = ViewModelProvider(this).get(ImageViewModel::class.java)
-
-        val image = Image(0, path, intentDisplayFrom, intentLanguageFrom, intentFlagFrom, intentDisplayTo, intentLanguageTo, intentFlagTo, time, intentFrom)
+        val image = Image(time, path, intentDisplayFrom, intentLanguageFrom, intentFlagFrom, intentDisplayTo, intentLanguageTo, intentFlagTo, intentFrom)
         imageViewModel.insert(image)
     }
 
     private fun insertPin(path: String){
         pinViewModel = ViewModelProvider(this).get(PinViewModel::class.java)
-        val pin = Pin(0, path, intentDisplayFrom, intentLanguageFrom, intentFlagFrom, intentDisplayTo, intentLanguageTo, intentFlagTo, time, intentFrom)
+        val pin = Pin(time, path, intentDisplayFrom, intentLanguageFrom, intentFlagFrom, intentDisplayTo, intentLanguageTo, intentFlagTo, intentFrom)
         pinViewModel.insert(pin)
+    }
+
+    private fun deletePin(time: String){
+        pinViewModel = ViewModelProvider(this).get(PinViewModel::class.java)
+        pinViewModel.deleteByTime(time)
     }
 
     private fun styleLanguage(style: String) {

@@ -13,6 +13,7 @@ abstract class SwipeAction(
 ) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
     private val deleteColor = ContextCompat.getColor(context, R.color.red)
+    private val iconColor = ContextCompat.getColor(context, R.color.white)
     private val deleteIcon = R.drawable.ic_delete
 
     override fun onMove(
@@ -43,9 +44,9 @@ abstract class SwipeAction(
         )
             .addSwipeLeftBackgroundColor(deleteColor)
             .addSwipeLeftActionIcon(deleteIcon)
+            .setSwipeLeftActionIconTint(iconColor)
             .create()
             .decorate()
-
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
     }
 }

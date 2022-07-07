@@ -46,7 +46,8 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener, A
     private lateinit var pinViewModel: PinViewModel
 
     private lateinit var dialog: Dialog
-    private var deleteArrayList: ArrayList<Int> = arrayListOf()
+    private var deleteArrayList: ArrayList<String> = arrayListOf()
+    private var selectedAllImageList = ArrayList<Image>()
     private var isListRecent: Boolean = true
 
     private lateinit var adapterImage: AdapterImage
@@ -132,6 +133,11 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener, A
 
         btn_delete.setOnClickListener {
             showDialog()
+        }
+
+        btn_multipleChoice.setOnClickListener {
+            selectedAll()
+            Log.e("abc", "$selectedAllImageList")
         }
 
         btn_gallery.setOnClickListener {
@@ -246,6 +252,7 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener, A
 
     private fun displayNav(isEdit: Boolean) {
         if (isEdit) {
+//            True: Show edit layout
             btn_edit.setImageResource(R.drawable.ic_checked)
             btn_tocamera.visibility = View.GONE
             btn_delete.visibility = View.VISIBLE
@@ -267,6 +274,7 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener, A
                 btn_delete.setColorFilter(ContextCompat.getColor(this, R.color.disable), PorterDuff.Mode.SRC_IN)
             }
         } else {
+//            False: Hide edit layout, comeback default layout
             btn_edit.setImageResource(R.drawable.ic_edit)
             btn_tocamera.visibility = View.VISIBLE
             btn_delete.visibility = View.GONE
@@ -278,7 +286,6 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener, A
                 PorterDuff.Mode.SRC_IN
             )
         }
-        Log.e("abc", btn_multipleChoice.isEnabled.toString())
     }
 
     //    Gallery
@@ -293,7 +300,6 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener, A
         adapterImage = AdapterImage(this)
         list_item.adapter = adapterImage
         list_item.layoutManager = LinearLayoutManager(this)
-        list_item.setHasFixedSize(true)
         imageViewModel = ViewModelProvider(this).get(ImageViewModel::class.java)
         imageViewModel.readAllData.observe(this) {
             adapterImage.setData(it)
@@ -305,7 +311,7 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener, A
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
-                        imageViewModel.deleteRow(adapterImage.imageList[viewHolder.adapterPosition].id)
+                        imageViewModel.deleteByTime(adapterImage.imageList[viewHolder.adapterPosition].time)
                     }
                 }
             }
@@ -313,15 +319,14 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener, A
     }
 
     private fun getPinned() {
+        ItemTouchHelper(swipeActionPin).attachToRecyclerView(list_item)
         adapterPin = AdapterPin(this)
         list_item.adapter = adapterPin
         list_item.layoutManager = LinearLayoutManager(this)
-        list_item.setHasFixedSize(true)
         pinViewModel = ViewModelProvider(this).get(PinViewModel::class.java)
         pinViewModel.readAllData.observe(this) {
             adapterPin.setData(it)
         }
-        ItemTouchHelper(swipeActionPin).attachToRecyclerView(list_item)
     }
 
     private val swipeActionPin by lazy {
@@ -329,7 +334,7 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener, A
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
-                        pinViewModel.deleteRow(adapterPin.pinList[viewHolder.adapterPosition].id)
+                        pinViewModel.deleteByTime(adapterPin.pinList[viewHolder.adapterPosition].time)
                     }
                 }
             }
@@ -347,24 +352,24 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener, A
         intent.putExtra("flagTo", image.toFlagLang)
         intent.putExtra("from", image.type)
         intent.putExtra("pin", isListRecent)
-        intent.putExtra("id", image.id)
+        intent.putExtra("time", image.time)
         startActivityForResult(intent, 1004)
     }
 
-    override fun onLongClick(id: Int) {
+    override fun onLongClick(time: String) {
         if (deleteArrayList.size == 0) {
-            deleteArrayList.add(id)
+            deleteArrayList.add(time)
             displayNav(true)
         }
     }
 
-    override fun onUnDeleteClick(id: Int) {
+    override fun onUnDeleteClick(time: String) {
         if (deleteArrayList.size > 0){
-            if (deleteArrayList.contains(id)){
-                deleteArrayList.remove(id)
+            if (deleteArrayList.contains(time)){
+                deleteArrayList.remove(time)
                 displayNav(true)
             } else{
-                deleteArrayList.add(id)
+                deleteArrayList.add(time)
             }
         }
     }
@@ -380,24 +385,24 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener, A
         intent.putExtra("flagTo", pin.toFlagLang)
         intent.putExtra("from", pin.type)
         intent.putExtra("pin", isListRecent)
-        intent.putExtra("id", pin.id)
+        intent.putExtra("time", pin.time)
         startActivityForResult(intent, 1004)
     }
 
-    override fun onLongClickPin(id: Int) {
+    override fun onLongClickPin(time: String) {
         if (deleteArrayList.size == 0) {
-            deleteArrayList.add(id)
+            deleteArrayList.add(time)
             displayNav(true)
         }
     }
 
-    override fun onUnDeleteClickPin(id: Int) {
+    override fun onUnDeleteClickPin(time: String) {
         if (deleteArrayList.size > 0){
-            if (deleteArrayList.contains(id)){
-                deleteArrayList.remove(id)
+            if (deleteArrayList.contains(time)){
+                deleteArrayList.remove(time)
                 displayNav(true)
             } else{
-                deleteArrayList.add(id)
+                deleteArrayList.add(time)
             }
         }
     }
@@ -405,11 +410,11 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener, A
     private fun deleteItems() {
         if (isListRecent){
             for (i in deleteArrayList)
-                imageViewModel.deleteRow(i)
+                imageViewModel.deleteByTime(i)
             getImage()
         } else{
             for (i in deleteArrayList)
-                pinViewModel.deleteRow(i)
+                pinViewModel.deleteByTime(i)
             getPinned()
         }
         deleteArrayList.clear()
@@ -420,7 +425,6 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener, A
         val viewDialog = View.inflate(this, R.layout.dialog_delete, null)
         val builder = AlertDialog.Builder(this)
         builder.setView(viewDialog)
-
         dialog = builder.create()
         dialog.show()
         dialog.window?.setBackgroundDrawableResource(R.color.blurBlack)
@@ -433,5 +437,13 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener, A
         viewDialog.btn_cancelDialog.setOnClickListener {
             dialog.dismiss()
         }
+    }
+
+    private fun selectedAll() {
+        selectedAllImageList = adapterImage.selectAllList
+    }
+
+    private fun clearSelected() {
+        adapterImage.clearSelectedAll()
     }
 }

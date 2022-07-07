@@ -12,11 +12,7 @@ class PinRepository(private val pinDAO: PinDAO) {
         pinDAO.insert(pin)
     }
 
-    fun delete(pin: Pin){
-        pinDAO.delete(pin)
-    }
-
-    fun deleteRow(id: Int){
-        pinDAO.deleteDataById(id)
+    fun deleteByTime(time: String){
+        pinDAO.deleteDataByTime(time)
     }
 }

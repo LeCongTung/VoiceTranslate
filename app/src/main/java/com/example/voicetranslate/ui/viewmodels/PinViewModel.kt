@@ -27,15 +27,9 @@ class PinViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
-    fun delete(pin: Pin){
+    fun deleteByTime(time: String){
         viewModelScope.launch(Dispatchers.IO){
-            repository.delete(pin)
-        }
-    }
-
-    fun deleteRow(id: Int){
-        viewModelScope.launch(Dispatchers.IO){
-            repository.deleteRow(id)
+            repository.deleteByTime(time)
         }
     }
 }
