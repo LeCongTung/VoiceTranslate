@@ -6,16 +6,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.voicetranslate.R
-import com.example.voicetranslate.models.Language
+import com.example.voicetranslate.models.Saved
 import kotlinx.android.synthetic.main.item_language.view.*
 
-class AdapterLanguage(var listener: onItemClickListener, private var languageList: ArrayList<Language>): RecyclerView.Adapter<AdapterLanguage.MyViewHolder>() {
+class AdapterLanguageRecently(var listener: onItemClickListener): RecyclerView.Adapter<AdapterLanguageRecently.MyViewHolder>() {
 
+//    Choice a product in type
+    var recentlyList = emptyList<Saved>()
     var selected: String = ""
 
     interface onItemClickListener {
 
-        fun onItemClick(language: Language)
+        fun onItemClick(language: Saved)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -25,25 +27,29 @@ class AdapterLanguage(var listener: onItemClickListener, private var languageLis
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val currentItem = languageList[position]
+        val currentItem = recentlyList[position]
         holder.itemView.value.text = currentItem.language
         Glide.with(holder.itemView.context).load(currentItem.image).into(holder.itemView.flagimage)
-
-        holder.itemView.isNestedScrollingEnabled = false
-
-        if (selected == currentItem.language)
-            holder.itemView.display_used.visibility = View.VISIBLE
-        else
-            holder.itemView.display_used.visibility = View.INVISIBLE
 
         holder.itemView.item.setOnClickListener {
             listener.onItemClick(currentItem)
         }
+
+        if (selected == currentItem.id)
+            holder.itemView.display_used.visibility = View.VISIBLE
+        else
+            holder.itemView.display_used.visibility = View.INVISIBLE
     }
 
     override fun getItemCount(): Int {
-        return languageList.size
+        return recentlyList.size
     }
 
-    class MyViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {}
+    class MyViewHolder (itemView: View): RecyclerView.ViewHolder(itemView) {
+    }
+
+    fun setData(data: List<Saved>) {
+        this.recentlyList = data
+        notifyDataSetChanged()
+    }
 }

@@ -83,7 +83,19 @@
         android:layout_marginHorizontal="10dp"
 
         android:background="@color/white"
-        tools:listitem="@layout/item_gallery"/>
+        tools:listitem="@layout/item_gallery" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_item_pinned"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/ContentNav"
+        android:layout_below="@id/appBar"
+        android:layout_marginHorizontal="10dp"
+        android:visibility="gone"
+
+        android:background="@color/white"
+        tools:listitem="@layout/item_gallery" />
 
     <LinearLayout
         android:id="@+id/ContentNav"

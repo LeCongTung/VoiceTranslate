@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">VoiceTranslate</string>
+    <string name="app_name">PhotoTranslate</string>
 
     <!--    Basic-->
     <string name="searchHint">Search</string>
@@ -36,4 +36,9 @@
     <string name="title_recent">Recent</string>
     <string name="title_pinned">Pinned</string>
     <string name="title_trash">This action can’t be undone. Are you sure to delete selected items?</string>
+
+    <!--    Gallery-->
+    <string name="title_recently">Recently Used</string>
+    <string name="title_alllanguages">All Languages</string>
+
 </resources>

@@ -16,9 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.voicetranslate.R
 import com.example.voicetranslate.models.Image
-import com.example.voicetranslate.models.Pin
 import com.example.voicetranslate.ui.viewmodels.ImageViewModel
-import com.example.voicetranslate.ui.viewmodels.PinViewModel
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
@@ -49,7 +47,6 @@ class ShowPhotoActivity : AppCompatActivity() {
     private var intentFlagTo: Int = 0
 
     private lateinit var imageViewModel: ImageViewModel
-    private lateinit var pinViewModel: PinViewModel
 
     private lateinit var time: String
     private var uri: Uri? = null
@@ -59,6 +56,7 @@ class ShowPhotoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_photo)
 
+        imageViewModel = ViewModelProvider(this).get(ImageViewModel::class.java)
         getData()
         val current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -92,11 +90,11 @@ class ShowPhotoActivity : AppCompatActivity() {
 
         btn_pin.setOnClickListener {
             isPin = if (!isPin){
-                insertPin(uri.toString())
+                insertPin(time, uri.toString(), 1)
                 btn_pin.setImageResource(R.drawable.ic_pin)
                 true
             }else{
-                deletePin(time)
+                insertPin(time, uri.toString(), 0)
                 btn_pin.setImageResource(R.drawable.ic_unpin)
                 false
             }
@@ -175,6 +173,9 @@ class ShowPhotoActivity : AppCompatActivity() {
                         .load(result.uri)
                         .into(imageView)
                     convertImageToTextFromURIAfterCrop(result.uri)
+                    uri = result.uri
+                    btn_pin.setImageResource(R.drawable.ic_unpin)
+                    isPin = false
                 }
                 else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                     Log.e("error", "Crop error: ${result.error}" )
@@ -230,7 +231,7 @@ class ShowPhotoActivity : AppCompatActivity() {
                 valueAfterDetect.text = it.text
                 if (valueAfterDetect.text.toString() != ""){
                     valueAfterDetect.visibility = View.VISIBLE
-                    insert(intentPathImage)
+                    insert(time, intentPathImage)
                 }
                 else
                     show("No text found")
@@ -248,7 +249,10 @@ class ShowPhotoActivity : AppCompatActivity() {
                 valueAfterDetect.text = it.text
                 if (valueAfterDetect.text.toString() != ""){
                     valueAfterDetect.visibility = View.VISIBLE
-                    insert(imageUri.toString())
+                    val current = LocalDateTime.now()
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                    time = current.format(formatter)
+                    insert(time, imageUri.toString())
                 }
                 else
                     show("No text found")
@@ -267,7 +271,7 @@ class ShowPhotoActivity : AppCompatActivity() {
                 valueAfterDetect.text = visionText.text
                 if (valueAfterDetect.text.toString() != ""){
                     valueAfterDetect.visibility = View.VISIBLE
-                    insert(intentPathImage)
+                    insert(time, intentPathImage)
                 }
                 else
                     show("No text found")
@@ -305,21 +309,14 @@ class ShowPhotoActivity : AppCompatActivity() {
         return uri
     }
 
-    private fun insert(path: String){
-        imageViewModel = ViewModelProvider(this).get(ImageViewModel::class.java)
-        val image = Image(time, path, intentDisplayFrom, intentLanguageFrom, intentFlagFrom, intentDisplayTo, intentLanguageTo, intentFlagTo, intentFrom)
+    private fun insert(time: String, path: String){
+        val image = Image(time, path, intentDisplayFrom, intentLanguageFrom, intentFlagFrom, intentDisplayTo, intentLanguageTo, intentFlagTo, intentFrom, 0)
         imageViewModel.insert(image)
     }
 
-    private fun insertPin(path: String){
-        pinViewModel = ViewModelProvider(this).get(PinViewModel::class.java)
-        val pin = Pin(time, path, intentDisplayFrom, intentLanguageFrom, intentFlagFrom, intentDisplayTo, intentLanguageTo, intentFlagTo, intentFrom)
-        pinViewModel.insert(pin)
-    }
-
-    private fun deletePin(time: String){
-        pinViewModel = ViewModelProvider(this).get(PinViewModel::class.java)
-        pinViewModel.deleteByTime(time)
+    private fun insertPin(time: String, path: String, pinned: Int){
+        val image = Image(time, path, intentDisplayFrom, intentLanguageFrom, intentFlagFrom, intentDisplayTo, intentLanguageTo, intentFlagTo, intentFrom, pinned)
+        imageViewModel.update(image)
     }
 
     private fun styleLanguage(style: String) {

@@ -8,15 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.voicetranslate.R
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
-abstract class SwipeAction(
+abstract class SwipeActionPin(
     context: Context
-) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
     private val deleteColor = ContextCompat.getColor(context, R.color.orange)
     private val iconColor = ContextCompat.getColor(context, R.color.white)
     private val deleteIcon = R.drawable.ic_delete
-    private val addColor = ContextCompat.getColor(context, R.color.green)
-    private val addIcon = R.drawable.ic_unpin
 
     override fun onMove(
         recyclerView: RecyclerView,
@@ -47,9 +45,6 @@ abstract class SwipeAction(
             .addSwipeLeftBackgroundColor(deleteColor)
             .addSwipeLeftActionIcon(deleteIcon)
             .setSwipeLeftActionIconTint(iconColor)
-            .addSwipeRightActionIcon(addIcon)
-            .addSwipeRightBackgroundColor(addColor)
-            .setSwipeRightActionIconTint(iconColor)
             .create()
             .decorate()
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)

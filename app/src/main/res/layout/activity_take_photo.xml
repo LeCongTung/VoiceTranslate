@@ -39,30 +39,36 @@
             android:layout_above="@id/contentBtn"
             android:layout_centerInParent="true">
 
-            <ImageView
-                android:id="@+id/flagLanguageFrom"
-                android:layout_width="19dp"
-                android:layout_height="13dp"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/nameLanguageFrom"
-
-                android:src="@drawable/ic_flag_english" />
-
-            <TextView
-                android:id="@+id/nameLanguageFrom"
+            <LinearLayout
+                android:id="@+id/contentFrom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_toStartOf="@id/btn_swap"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                android:fontFamily="@font/nunito_medium"
+                <ImageView
+                    android:id="@+id/flagLanguageFrom"
+                    android:layout_width="19dp"
+                    android:layout_height="13dp"
 
-                android:maxLines="1"
-                android:paddingHorizontal="5dp"
+                    android:src="@drawable/ic_flag_english" />
 
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
+                <TextView
+                    android:id="@+id/nameLanguageFrom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:fontFamily="@font/nunito_medium"
+
+                    android:maxLines="1"
+                    android:paddingHorizontal="5dp"
+
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
             <ImageButton
                 android:id="@+id/btn_swap"
@@ -75,29 +81,39 @@
                 android:paddingVertical="5dp"
                 android:src="@drawable/ic_transfer" />
 
-            <ImageView
-                android:id="@+id/flagLanguageTo"
-                android:layout_width="19dp"
-                android:layout_height="13dp"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@id/btn_swap"
-
-                android:src="@drawable/ic_flag_vietnamese" />
-
-            <TextView
-                android:id="@+id/nameLanguageTo"
+            <LinearLayout
+                android:id="@+id/contentTo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@id/flagLanguageTo"
-                android:fontFamily="@font/nunito_medium"
+                android:layout_toEndOf="@id/btn_swap"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                android:maxLines="1"
-                android:paddingHorizontal="5dp"
+                <ImageView
+                    android:id="@+id/flagLanguageTo"
+                    android:layout_width="19dp"
+                    android:layout_height="13dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/btn_swap"
 
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
+                    android:src="@drawable/ic_flag_vietnamese" />
+
+                <TextView
+                    android:id="@+id/nameLanguageTo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@id/flagLanguageTo"
+                    android:fontFamily="@font/nunito_medium"
+
+                    android:maxLines="1"
+                    android:paddingHorizontal="5dp"
+
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+            </LinearLayout>
         </RelativeLayout>
 
         <RelativeLayout
@@ -135,62 +151,5 @@
                 android:padding="20dp"
                 android:src="@drawable/ic_flash_off" />
         </RelativeLayout>
-
-
-        <!--                <TextView-->
-        <!--                    android:id="@+id/btnCamera"-->
-        <!--                    android:layout_width="match_parent"-->
-        <!--                    android:layout_height="wrap_content"-->
-        <!--                    android:layout_below="@id/piccam"-->
-
-        <!--                    android:layout_marginTop="5dp"-->
-
-        <!--                    android:background="@color/backgroundButtonCamera"-->
-
-        <!--                    android:fontFamily="@font/poppins_regular"-->
-        <!--                    android:text="Instant"-->
-        <!--                    android:textAlignment="center"-->
-        <!--                    android:textAllCaps="false"-->
-        <!--                    android:textColor="@color/btn_color_camera_focus"-->
-        <!--                    android:textSize="12sp" />-->
-
-        <!--        <RelativeLayout-->
-        <!--            android:id="@+id/contentGallery"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent"-->
-
-        <!--            android:layout_weight="1"-->
-        <!--            android:background="@color/backgroundButtonCamera">-->
-
-        <!--            <RelativeLayout-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_centerInParent="true">-->
-
-        <!--                <ImageView-->
-        <!--                    android:id="@+id/picgallery"-->
-        <!--                    android:layout_width="22dp"-->
-        <!--                    android:layout_height="wrap_content"-->
-        <!--                    android:layout_centerHorizontal="true"-->
-        <!--                    android:src="@drawable/ic_scangallery_noclick" />-->
-
-        <!--                <TextView-->
-        <!--                    android:id="@+id/btnGallery"-->
-        <!--                    android:layout_width="match_parent"-->
-        <!--                    android:layout_height="wrap_content"-->
-        <!--                    android:layout_below="@id/picgallery"-->
-
-        <!--                    android:layout_marginTop="5dp"-->
-
-        <!--                    android:background="@color/backgroundButtonCamera"-->
-
-        <!--                    android:fontFamily="@font/poppins_regular"-->
-        <!--                    android:text="Photo"-->
-        <!--                    android:textAlignment="center"-->
-        <!--                    android:textAllCaps="false"-->
-        <!--                    android:textColor="@color/btn_color_camera_noclick"-->
-        <!--                    android:textSize="12sp" />-->
-        <!--            </RelativeLayout>-->
-        <!--        </RelativeLayout>-->
     </RelativeLayout>
 </RelativeLayout>

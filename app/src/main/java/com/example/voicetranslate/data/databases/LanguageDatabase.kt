@@ -4,20 +4,20 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.voicetranslate.data.daos.PinDAO
-import com.example.voicetranslate.models.Pin
+import com.example.voicetranslate.data.daos.LanguageDAO
+import com.example.voicetranslate.models.Saved
 
-@Database(entities = [Pin::class], version = 1)
-abstract class PinDatabase: RoomDatabase() {
+@Database(entities = [Saved::class], version = 1)
+abstract class LanguageDatabase: RoomDatabase() {
 
-    abstract fun pinDAO(): PinDAO
+    abstract fun languageDAO(): LanguageDAO
 
     companion object{
         @Volatile
-        private var INSTANCE: PinDatabase?= null
-        private const val DB_NAME = "pin_database"
+        private var INSTANCE: LanguageDatabase?= null
+        private const val DB_NAME = "language_database"
 
-        fun getDatabase(context: Context): PinDatabase {
+        fun getDatabase(context: Context): LanguageDatabase {
             val tempInstance = INSTANCE
             if (tempInstance != null) {
                 return tempInstance
@@ -25,7 +25,7 @@ abstract class PinDatabase: RoomDatabase() {
             synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    PinDatabase::class.java,
+                    LanguageDatabase::class.java,
                     DB_NAME
                 ).build()
                 INSTANCE = instance

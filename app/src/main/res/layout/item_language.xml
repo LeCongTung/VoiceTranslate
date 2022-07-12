@@ -1,21 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
 
     android:layout_marginBottom="1dp">
 
     <RelativeLayout
+        android:id="@+id/item"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
-        android:gravity="center_vertical">
+        android:paddingHorizontal="30dp">
 
         <ImageView
+            android:id="@+id/display_used"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+
+            android:src="@drawable/ic_checked"
+            android:visibility="invisible"
+            app:tint="@color/green" />
+
+        <ImageView
             android:id="@+id/flagimage"
             android:layout_width="24dp"
             android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/display_used"
             android:src="@drawable/ic_flag_vietnamese" />
 
         <TextView
@@ -25,11 +39,13 @@
             android:layout_centerVertical="true"
 
             android:layout_marginVertical="16dp"
+
+            android:layout_toEndOf="@id/flagimage"
             android:fontFamily="@font/nunito_regular"
 
             android:maxLines="1"
 
-            android:paddingStart="40dp"
+            android:paddingStart="20dp"
             android:text="language"
             android:textColor="@color/word"
             android:textSize="16sp" />

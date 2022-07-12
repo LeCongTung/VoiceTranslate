@@ -6,6 +6,7 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -63,14 +64,8 @@ class TakePhotoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_take_photo)
 
-        getData()
-        if (intentDisplayFrom == "null") {
+        getDataSharePreferences()
 
-            intentDisplayFrom = "English"
-            intentDisplayTo = "Vietnamese"
-            intentLanguageFrom = TranslateLanguage.ENGLISH
-            intentLanguageTo = TranslateLanguage.VIETNAMESE
-        }
         showLanguageForm(intentDisplayTo, intentFlagTo, intentDisplayFrom, intentFlagFrom)
         if (allPermissionsGranted()) {
             startCamera()
@@ -99,7 +94,7 @@ class TakePhotoActivity : AppCompatActivity() {
             swapLanguage()
         }
 
-        nameLanguageFrom.setOnClickListener {
+        contentFrom.setOnClickListener {
 
             val intent = Intent(this, ShowLanguageActivity::class.java)
             intent.putExtra("typeChoice", "above")
@@ -109,7 +104,7 @@ class TakePhotoActivity : AppCompatActivity() {
             overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
         }
 
-        nameLanguageTo.setOnClickListener {
+        contentTo.setOnClickListener {
 
             val intent = Intent(this, ShowLanguageActivity::class.java)
             intent.putExtra("from", "camera")
@@ -176,13 +171,14 @@ class TakePhotoActivity : AppCompatActivity() {
         backPressedTime = System.currentTimeMillis()
     }
 
-    private fun getData() {
-        intentDisplayFrom = intent.getStringExtra("displayFrom").toString()
-        intentLanguageFrom = intent.getStringExtra("languageFrom").toString()
-        intentFlagFrom = intent.getIntExtra("flagFrom", R.drawable.ic_flag_english)
-        intentDisplayTo = intent.getStringExtra("displayTo").toString()
-        intentLanguageTo = intent.getStringExtra("languageTo").toString()
-        intentFlagTo = intent.getIntExtra("flagTo", R.drawable.ic_flag_vietnamese)
+    private fun getDataSharePreferences(){
+        val sharedPreferences = getSharedPreferences("language", Context.MODE_PRIVATE)
+        intentDisplayFrom = sharedPreferences.getString("displayFrom", "English").toString()
+        intentLanguageFrom = sharedPreferences.getString("languageFrom", TranslateLanguage.ENGLISH).toString()
+        intentFlagFrom = sharedPreferences.getInt("flagFrom", R.drawable.ic_flag_english)
+        intentDisplayTo = sharedPreferences.getString("displayTo", "Vietnamese").toString()
+        intentLanguageTo = sharedPreferences.getString("languageTo", TranslateLanguage.VIETNAMESE).toString()
+        intentFlagTo = sharedPreferences.getInt("flagTo", R.drawable.ic_flag_vietnamese)
     }
 
     //    Gallery
@@ -220,7 +216,7 @@ class TakePhotoActivity : AppCompatActivity() {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/PhotoTranslate")
             }
         }
 
@@ -241,7 +237,7 @@ class TakePhotoActivity : AppCompatActivity() {
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val pathName = "/storage/emulated/0/Pictures/CameraX-Image/$name.jpg"
+                    val pathName = "/storage/emulated/0/Pictures/PhotoTranslate/$name.jpg"
                     val intent = Intent(this@TakePhotoActivity, ShowPhotoActivity::class.java)
                     intent.putExtra("from", "Camera")
                     intent.putExtra("pathimage", pathName)

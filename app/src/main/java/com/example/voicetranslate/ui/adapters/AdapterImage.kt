@@ -1,9 +1,9 @@
 package com.example.voicetranslate.ui.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.voicetranslate.R
@@ -15,14 +15,14 @@ class AdapterImage(var listener: OnItemClickListener) :
     RecyclerView.Adapter<AdapterImage.MyViewHolder>() {
 
     var imageList = emptyList<Image>()
-    var selectAllList = ArrayList<Image>()
-    private var quantity: Int = 0
+    var quantity = ArrayList<Image>()
+    var checkColor = false
 
     interface OnItemClickListener {
 
         fun onItemClick(image: Image)
-        fun onLongClick(time: String)
-        fun onUnDeleteClick(time: String)
+        fun onLongClick(image: Image)
+        fun onUnDeleteClick(image: Image)
     }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {}
@@ -42,36 +42,48 @@ class AdapterImage(var listener: OnItemClickListener) :
             listener.onItemClick(currentItem)
         }
 
+        if (checkColor){
+            holder.itemView.item.setBackgroundResource(R.color.longPress)
+            holder.itemView.btn_check.visibility = View.VISIBLE
+            holder.itemView.btn_show.visibility = View.GONE
+        }else{
+            holder.itemView.item.setBackgroundResource(R.color.white)
+            holder.itemView.btn_check.visibility = View.GONE
+            holder.itemView.btn_show.visibility = View.VISIBLE
+        }
+
         holder.itemView.item.setOnLongClickListener {
-            if (quantity == 0){
+            if (quantity.size == 0){
+                quantity.add(currentItem)
                 holder.itemView.item.setBackgroundResource(R.color.longPress)
                 holder.itemView.btn_check.visibility = View.VISIBLE
                 holder.itemView.btn_show.visibility = View.GONE
 
-                quantity++
-                listener.onLongClick(currentItem.time)
+                listener.onLongClick(currentItem)
             }
+            Log.d("abc", "${quantity.size} & $currentItem")
             true
         }
 
         holder.itemView.item.setOnClickListener {
-            if (quantity >0){
-                if (holder.itemView.btn_show.isVisible){
+            if (quantity.size > 0){
+                if (!quantity.contains(currentItem)){
                     holder.itemView.item.setBackgroundResource(R.color.longPress)
                     holder.itemView.btn_check.visibility = View.VISIBLE
                     holder.itemView.btn_show.visibility = View.GONE
 
-                    quantity++
+                    quantity.add(currentItem)
                 }
                 else{
                     holder.itemView.item.setBackgroundResource(R.color.white)
                     holder.itemView.btn_check.visibility = View.GONE
                     holder.itemView.btn_show.visibility = View.VISIBLE
 
-                    quantity--
+                    quantity.remove(currentItem)
                 }
-                listener.onUnDeleteClick(currentItem.time)
+                listener.onUnDeleteClick(currentItem)
             }
+            Log.d("abc", "${quantity.size} & $currentItem")
         }
     }
 
@@ -85,13 +97,13 @@ class AdapterImage(var listener: OnItemClickListener) :
     }
 
     fun selectedAll(){
-        selectAllList.clear()
-        selectAllList.addAll(imageList)
+        quantity.clear()
+        quantity.addAll(imageList)
         notifyDataSetChanged()
     }
 
     fun clearSelectedAll(){
-        selectAllList.clear()
+        quantity.clear()
         notifyDataSetChanged()
     }
 }

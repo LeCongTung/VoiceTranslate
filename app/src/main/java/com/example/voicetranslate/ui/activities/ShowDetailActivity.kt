@@ -14,8 +14,8 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.voicetranslate.R
-import com.example.voicetranslate.models.Pin
-import com.example.voicetranslate.ui.viewmodels.PinViewModel
+import com.example.voicetranslate.models.Image
+import com.example.voicetranslate.ui.viewmodels.ImageViewModel
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
@@ -42,13 +42,14 @@ class ShowDetailActivity : AppCompatActivity() {
     private var intentList: Boolean = true
     private lateinit var intentTime: String
 
-    private lateinit var pinViewModel: PinViewModel
+    private lateinit var imageViewModel: ImageViewModel
     private var uri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_detail)
 
+        imageViewModel = ViewModelProvider(this).get(ImageViewModel::class.java)
         getData()
         detectFrom()
 
@@ -103,7 +104,6 @@ class ShowDetailActivity : AppCompatActivity() {
         intent.putExtra("flagTo", intentFlagTo)
         setResult(Activity.RESULT_OK, intent)
         finish()
-        overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -142,10 +142,10 @@ class ShowDetailActivity : AppCompatActivity() {
         else
             displayImageGallery()
 
-        if (intentList){
-            btn_pinAct.setImageResource(R.drawable.ic_unpin)
-        }else
+        if (!intentList){
             btn_pinAct.setImageResource(R.drawable.ic_pin)
+        }else
+            btn_pinAct.setImageResource(R.drawable.ic_unpin)
     }
 
     private fun displayImageCamera(){
@@ -258,18 +258,26 @@ class ShowDetailActivity : AppCompatActivity() {
     }
 
     private fun deleteData(){
-        pinViewModel = ViewModelProvider(this).get(PinViewModel::class.java)
         intentList = if (intentList){
-            val pin = Pin(intentTime, intentPathImage, intentDisplayFrom, intentLanguageFrom, intentFlagFrom, intentDisplayTo, intentLanguageTo, intentFlagTo, intentFrom)
-            pinViewModel.insert(pin)
+            insertPin()
             btn_pinAct.setImageResource(R.drawable.ic_pin)
             false
         }
         else{
+            deletePin()
             btn_pinAct.setImageResource(R.drawable.ic_unpin)
-            pinViewModel.deleteByTime(intentTime)
             true
         }
+    }
+
+    private fun insertPin(){
+        val pinImage = Image(intentTime, intentPathImage, intentDisplayFrom, intentLanguageFrom, intentFlagFrom, intentDisplayTo, intentLanguageTo, intentFlagTo, intentFrom, 1)
+        imageViewModel.update(pinImage)
+    }
+
+    private fun deletePin(){
+        val pinImage = Image(intentTime, intentPathImage, intentDisplayFrom, intentLanguageFrom, intentFlagFrom, intentDisplayTo, intentLanguageTo, intentFlagTo, intentFrom, 0)
+        imageViewModel.update(pinImage)
     }
 
     companion object Screenshot {

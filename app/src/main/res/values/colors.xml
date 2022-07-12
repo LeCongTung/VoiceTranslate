@@ -4,7 +4,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red">#FF0606</color>
-    <color name="green">#32970D</color>
+    <color name="orange">#D37A51</color>
+    <color name="green">#40AF33</color>
 
     <!--    basic color-->
     <color name="backgroundColor">#f2f2f2</color>

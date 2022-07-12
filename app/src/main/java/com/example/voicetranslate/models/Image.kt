@@ -13,5 +13,15 @@ data class Image(
     val toLang: String,
     val toLangeUse: String,
     val toFlagLang: Int,
+    val type: String,
+    val pinned: Int
+)
+
+@Entity(tableName = "Saved")
+data class Saved(
+    @PrimaryKey val id: String,
+    val language: String,
+    val image: Int,
+    val time: String,
     val type: String
 )
