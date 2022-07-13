@@ -42,82 +42,65 @@
             android:textSize="20sp" />
     </RelativeLayout>
 
-    <LinearLayout
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/controller"
         android:layout_marginTop="30dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/title_recent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:layout_marginStart="30dp"
-            android:fontFamily="@font/nunito_medium"
-            android:text="@string/title_recently"
-            android:textColor="@color/word"
-            android:textSize="18sp" />
-
-        <androidx.core.widget.NestedScrollView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/title_recent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="30dp"
+                android:fontFamily="@font/nunito_medium"
+                android:text="@string/title_recently"
+                android:textColor="@color/word"
+                android:textSize="18sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_item_recent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/list_item_recent"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
 
-                    android:layout_marginTop="10dp"
-                    android:background="@color/white"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                tools:listitem="@layout/item_language" />
 
-                    android:overScrollMode="never"
-                    android:nestedScrollingEnabled="false"
-                    android:scrollbars="none"
-                    tools:listitem="@layout/item_language" />
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+            <TextView
+                android:id="@+id/title_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
-        <TextView
-            android:id="@+id/title_all"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+                android:layout_marginVertical="20dp"
+                android:layout_marginStart="30dp"
+                android:fontFamily="@font/nunito_medium"
+                android:text="@string/title_alllanguages"
+                android:textColor="@color/word"
+                android:textSize="18sp" />
 
-            android:layout_marginVertical="20dp"
-            android:layout_marginStart="30dp"
-            android:fontFamily="@font/nunito_medium"
-            android:text="@string/title_alllanguages"
-            android:textColor="@color/word"
-            android:textSize="18sp" />
-
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/list_item"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-
-                    android:background="@color/white"
-                    android:overScrollMode="never"
-                    android:nestedScrollingEnabled="false"
-                    android:scrollbars="none"
-                    tools:listitem="@layout/item_language" />
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
-
-
-    </LinearLayout>
+                android:background="@color/white"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                tools:listitem="@layout/item_language" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </RelativeLayout>

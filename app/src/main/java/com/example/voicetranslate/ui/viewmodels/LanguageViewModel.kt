@@ -28,12 +28,4 @@ class LanguageViewModel(application: Application): AndroidViewModel(application)
             repository.insert(language)
         }
     }
-
-    fun countRow(): Int{
-        var x: Int = 0
-        viewModelScope.launch(Dispatchers.IO){
-            x = repository.countRow()
-        }
-        return x
-    }
 }

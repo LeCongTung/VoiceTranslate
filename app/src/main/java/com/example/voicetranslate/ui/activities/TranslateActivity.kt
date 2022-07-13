@@ -21,8 +21,6 @@ import kotlinx.android.synthetic.main.activity_translate.*
 
 class TranslateActivity : AppCompatActivity() {
 
-    private val RECORD_SPEECH_TEXT = 102
-
     private lateinit var value: String
     private lateinit var intentDisplayFrom: String
     private lateinit var intentLanguageFrom: String
@@ -77,7 +75,6 @@ class TranslateActivity : AppCompatActivity() {
                 translateValue(valueFrom.text.toString(), intentLanguageFrom, intentLanguageTo)
                 val view: View? = this.currentFocus
                 hideKeyboard(this, view!!)
-                true
             }
             false
         }
@@ -128,7 +125,6 @@ class TranslateActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-
         val intent = Intent()
         intent.putExtra("displayFrom", intentDisplayFrom)
         intent.putExtra("languageFrom", intentLanguageFrom)

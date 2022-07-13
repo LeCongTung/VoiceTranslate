@@ -8,7 +8,6 @@ import android.graphics.PorterDuff
 import android.os.Bundle
 import android.os.Handler
 import android.speech.RecognizerIntent
-import android.speech.SpeechRecognizer
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -32,8 +31,6 @@ import java.util.*
 
 class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener,
     AdapterPin.OnItemClickListener {
-
-    private val RECORD_SPEECH_TEXT = 102
 
     private lateinit var intentDisplayFrom: String
     private lateinit var intentLanguageFrom: String
@@ -121,9 +118,9 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener,
         }
 
         btn_edit.setOnClickListener {
-            if (btn_delete.isGone)
+            if (btn_delete.isGone) {
                 displayNav(true)
-            else {
+            } else {
                 displayNav(false)
                 if (isListRecent) {
                     getImage()
@@ -190,10 +187,10 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener,
                 }
             }
 
-            requestCode == RECORD_SPEECH_TEXT && resultCode == Activity.RESULT_OK -> {
+            requestCode == 102 && resultCode == Activity.RESULT_OK -> {
                 val result = data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                 val intent = Intent(this, TranslateActivity::class.java)
-                intent.putExtra("value", result?.get(0).toString())
+                intent.putExtra("value", result!![0])
                 intent.putExtra("displayFrom", intentDisplayFrom)
                 intent.putExtra("languageFrom", intentLanguageFrom)
                 intent.putExtra("flagFrom", intentFlagFrom)
@@ -233,20 +230,12 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener,
     }
 
     private fun speechText(voice: String?, display: String) {
-        if (!SpeechRecognizer.isRecognitionAvailable(this))
-
-            Log.e("error", "Error")
-        else {
-
-            val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-            i.putExtra(
-                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
-            )
-            i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.forLanguageTag(voice.toString()))
-            i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say something in $display!")
-            startActivityForResult(i, RECORD_SPEECH_TEXT)
-        }
+        val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+//        i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.forLanguageTag(voice.toString()))
+        i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+        i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say something in $display!")
+        startActivityForResult(i, 102)
     }
 
     private fun displayMenu(isMenu: Boolean) {
@@ -282,6 +271,9 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener,
                 ContextCompat.getColor(this, R.color.disable),
                 PorterDuff.Mode.SRC_IN
             )
+
+            adapterImage.isChoose = true
+            adapterPin.isChoose = true
         } else {
 //            False: Hide edit layout, comeback default layout
             btn_edit.setImageResource(R.drawable.ic_edit)
@@ -294,6 +286,9 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener,
                 ContextCompat.getColor(this, R.color.enable),
                 PorterDuff.Mode.SRC_IN
             )
+
+            adapterImage.isChoose = false
+            adapterPin.isChoose = false
         }
 
         if (adapterImage.quantity.isNotEmpty() || adapterPin.quantity.isNotEmpty()) {
@@ -353,18 +348,6 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener,
                         getImage()
                     }
                     ItemTouchHelper.RIGHT -> {
-//                        val pinImage = Image(
-//                            adapterImage.imageList[viewHolder.adapterPosition].time,
-//                            adapterImage.imageList[viewHolder.adapterPosition].pathImage,
-//                            adapterImage.imageList[viewHolder.adapterPosition].fromLang,
-//                            adapterImage.imageList[viewHolder.adapterPosition].fromLangeUse,
-//                            adapterImage.imageList[viewHolder.adapterPosition].fromFlagLang,
-//                            adapterImage.imageList[viewHolder.adapterPosition].toLang,
-//                            adapterImage.imageList[viewHolder.adapterPosition].toLangeUse,
-//                            adapterImage.imageList[viewHolder.adapterPosition].toFlagLang,
-//                            adapterImage.imageList[viewHolder.adapterPosition].type,
-//                            1
-//                        )
                         imageViewModel.updatePinByTime(adapterImage.imageList[viewHolder.adapterPosition].time)
                         adapterImage.quantity.clear()
                         displayNav(false)
@@ -380,18 +363,6 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener,
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
-//                        val unpinImage = Image(
-//                            adapterPin.pinList[viewHolder.adapterPosition].time,
-//                            adapterPin.pinList[viewHolder.adapterPosition].pathImage,
-//                            adapterPin.pinList[viewHolder.adapterPosition].fromLang,
-//                            adapterPin.pinList[viewHolder.adapterPosition].fromLangeUse,
-//                            adapterPin.pinList[viewHolder.adapterPosition].fromFlagLang,
-//                            adapterPin.pinList[viewHolder.adapterPosition].toLang,
-//                            adapterPin.pinList[viewHolder.adapterPosition].toLangeUse,
-//                            adapterPin.pinList[viewHolder.adapterPosition].toFlagLang,
-//                            adapterPin.pinList[viewHolder.adapterPosition].type,
-//                            0
-//                        )
                         imageViewModel.updateUnPinByTime(adapterPin.pinList[viewHolder.adapterPosition].time)
                         adapterPin.quantity.clear()
                         displayNav(true)
@@ -460,7 +431,7 @@ class GalleryActivity : AppCompatActivity(), AdapterImage.OnItemClickListener,
             adapterImage.checkColor = false
             adapterImage.quantity.clear()
         } else {
-            for (i in adapterPin.quantity){
+            for (i in adapterPin.quantity) {
                 imageViewModel.updateUnPinByTime(i.time)
             }
 

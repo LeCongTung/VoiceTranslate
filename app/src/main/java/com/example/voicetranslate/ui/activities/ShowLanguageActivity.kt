@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -112,7 +111,6 @@ class ShowLanguageActivity : AppCompatActivity(), AdapterLanguageRecently.onItem
         getRecently()
         getLanguage()
         displayLanguageUsed()
-        getQuantities()
 
         val current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
@@ -271,7 +269,8 @@ class ShowLanguageActivity : AppCompatActivity(), AdapterLanguageRecently.onItem
         intent.putExtra("displayTo", intentDisplayTo)
         intent.putExtra("languageTo", detectLanguage(intentDisplayTo))
         intent.putExtra("flagTo", detectFlag(intentDisplayTo))
-        startActivityForResult(intent, 333)
+        startActivity(intent)
+        finish()
         overridePendingTransition(R.anim.slide_blur, R.anim.slide_blur)
     }
 
@@ -282,13 +281,7 @@ class ShowLanguageActivity : AppCompatActivity(), AdapterLanguageRecently.onItem
             intentDisplayTo = language.language
 
         val languageSaved = Saved("$intentTypeChoice.${language.language}", language.language, detectFlag(language.language),time ,intentTypeChoice)
-        languageViewModel.insert(languageSaved)
-        saveRecent()
-
-        if (intentAbort == "abort")
-            useOneTime()
-        else
-            onBackPressed()
+        savedLanguageUseRecently(languageSaved)
     }
 
     override fun onItemClick(language: Language) {
@@ -297,18 +290,18 @@ class ShowLanguageActivity : AppCompatActivity(), AdapterLanguageRecently.onItem
         else
             intentDisplayTo = language.language!!
 
-        val languageSaved = Saved("$intentTypeChoice.${language.language}", language.language, detectFlag(language.language!!),time , intentTypeChoice)
-        languageViewModel.insert(languageSaved)
+        val languageSaved = Saved("$intentTypeChoice.${language.language}", language.language, detectFlag(language.language),time , intentTypeChoice)
+        savedLanguageUseRecently(languageSaved)
+    }
+
+    private fun savedLanguageUseRecently(languageSave: Saved){
+        languageViewModel.insert(languageSave)
         saveRecent()
+        displayLanguageUsed()
 
         if (intentAbort == "abort")
             useOneTime()
         else
             onBackPressed()
-    }
-
-    private fun getQuantities(){
-        val number = languageViewModel.countRow()
-        Log.d("abc", number.toString())
     }
 }

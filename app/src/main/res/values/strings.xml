@@ -19,7 +19,7 @@
     <!--    Translate-->
     <string name="title_translate_text">Text to text translate</string>
     <string name="title_translate_voice">Speech to text translate</string>
-    <string name="title_translate_viewall">View all text</string>
+    <string name="title_translate_viewall">View scanned text</string>
 
     <!--    Show Photo-->
     <string name="title_crop">Crop Image</string>

@@ -150,7 +150,11 @@ class ShowDetailActivity : AppCompatActivity() {
 
     private fun displayImageCamera(){
         uri = Uri.parse(File(intentPathImage).toString())
-        convertImageToTextFromBitmap(intentPathImage)
+        try {
+            convertImageToTextFromBitmap(intentPathImage)
+        }catch (e: Exception){
+            convertImageToTextFromURI(uri)
+        }
         imageView.setImageURI(uri)
     }
 

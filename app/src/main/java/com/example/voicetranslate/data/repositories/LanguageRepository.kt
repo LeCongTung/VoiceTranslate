@@ -11,8 +11,4 @@ class LanguageRepository(private val languageDAO: LanguageDAO) {
     fun insert(language: Saved){
         languageDAO.insert(language)
     }
-
-    fun countRow(): Int{
-        return languageDAO.countRow()
-    }
 }

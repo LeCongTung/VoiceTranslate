@@ -3,7 +3,6 @@ package com.example.voicetranslate.ui.activities
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -122,6 +121,7 @@ class ShowPhotoActivity : AppCompatActivity() {
         }
 
         btn_crop.setOnClickListener {
+            Log.d("link", uri.toString())
             launchImageCrop(uri!!)
             displayMoreDismiss(false)
         }
@@ -169,11 +169,15 @@ class ShowPhotoActivity : AppCompatActivity() {
             requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE -> {
                 val result = CropImage.getActivityResult(data)
                 if (resultCode == Activity.RESULT_OK) {
+                    uri = result.uri
                     Glide.with(this)
-                        .load(result.uri)
+                        .load(uri)
                         .into(imageView)
                     convertImageToTextFromURIAfterCrop(result.uri)
-                    uri = result.uri
+                    val current = LocalDateTime.now()
+                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+                    time = current.format(formatter)
+                    insert(time, uri.toString())
                     btn_pin.setImageResource(R.drawable.ic_unpin)
                     isPin = false
                 }
@@ -203,8 +207,8 @@ class ShowPhotoActivity : AppCompatActivity() {
     }
 
     private fun displayImageCamera(){
-        uri = Uri.parse(File(intentPathImage).toString())
-        convertImageToTextFromBitmap(intentPathImage)
+        uri = Uri.fromFile(File(intentPathImage))
+        convertImageToTextFromURI(uri)
         imageView.setImageURI(uri)
     }
 
@@ -249,34 +253,10 @@ class ShowPhotoActivity : AppCompatActivity() {
                 valueAfterDetect.text = it.text
                 if (valueAfterDetect.text.toString() != ""){
                     valueAfterDetect.visibility = View.VISIBLE
-                    val current = LocalDateTime.now()
-                    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                    time = current.format(formatter)
-                    insert(time, imageUri.toString())
                 }
                 else
                     show("No text found")
             }.addOnFailureListener {
-                show("Cant get data from this image")
-            }
-    }
-
-    private fun convertImageToTextFromBitmap(file: String) {
-        val bitmap = BitmapFactory.decodeFile(File(file).absolutePath)
-        valueAfterDetect.visibility = View.INVISIBLE
-        styleLanguage(intentDisplayFrom)
-        val image = InputImage.fromBitmap(bitmap, 0)
-        textRecognizer.process(image)
-            .addOnSuccessListener { visionText ->
-                valueAfterDetect.text = visionText.text
-                if (valueAfterDetect.text.toString() != ""){
-                    valueAfterDetect.visibility = View.VISIBLE
-                    insert(time, intentPathImage)
-                }
-                else
-                    show("No text found")
-            }
-            .addOnFailureListener {
                 show("Cant get data from this image")
             }
     }

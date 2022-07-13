@@ -16,6 +16,7 @@ class AdapterPin(var listener: OnItemClickListener) :
     var pinList = emptyList<Image>()
     var quantity = ArrayList<Image>()
     var checkColor = false
+    var isChoose = false
 
     interface OnItemClickListener {
 
@@ -64,7 +65,7 @@ class AdapterPin(var listener: OnItemClickListener) :
         }
 
         holder.itemView.item.setOnClickListener {
-            if (quantity.size >0){
+            if (isChoose){
                 if (!quantity.contains(currentItem)){
                     holder.itemView.item.setBackgroundResource(R.color.longPress)
                     holder.itemView.btn_check.visibility = View.VISIBLE
